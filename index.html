@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>PЯIVATE FLOOR Reservation</title>
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+  <style>
+    :root {
+      --ruby: #d61f26;
+      --ruby-dark: #9f1117;
+      --black: #080808;
+      --card: rgba(10, 10, 10, 0.82);
+      --white: #ffffff;
+      --text: #f5f5f5;
+      --muted: #b9b9b9;
+      --line: rgba(255, 255, 255, 0.14);
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Canva Sans", Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 34%),
+        linear-gradient(135deg, #7b090e 0%, var(--ruby) 42%, #4b0508 100%);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.12), rgba(0,0,0,.82)),
+        repeating-linear-gradient(
+          90deg,
+          rgba(255,255,255,.03) 0px,
+          rgba(255,255,255,.03) 1px,
+          transparent 1px,
+          transparent 80px
+        );
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 22px 16px 42px;
+    }
+
+    .hero {
+      border-radius: 28px;
+      padding: 30px 18px 26px;
+      margin-bottom: 18px;
+      text-align: center;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,.20), rgba(0,0,0,.72)),
+        radial-gradient(circle at 50% 0%, rgba(255,255,255,.18), transparent 42%),
+        rgba(0,0,0,.34);
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: var(--shadow);
+    }
+
+    .logo {
+      color: var(--white);
+      font-size: clamp(30px, 8vw, 46px);
+      line-height: 1;
+      font-weight: 600;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      text-shadow: 0 8px 26px rgba(0,0,0,.45);
+    }
+
+    .logo small {
+      display: block;
+      margin-top: 12px;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,.82);
+      font-weight: 400;
+    }
+
+    .title-box {
+      margin-top: 26px;
+    }
+
+    .title-box h1 {
+      font-size: 30px;
+      letter-spacing: 2px;
+      color: var(--white);
+    }
+
+    .title-line {
+      width: 54px;
+      height: 3px;
+      margin: 13px auto 14px;
+      background: var(--white);
+      border-radius: 99px;
+    }
+
+    .title-box p {
+      font-size: 14px;
+      color: rgba(255,255,255,.82);
+      line-height: 1.6;
+    }
+
+    .form-card {
+      padding: 16px;
+      border-radius: 26px;
+      background: rgba(0,0,0,.50);
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .line-status {
+      margin-bottom: 14px;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.45);
+      border: 1px solid rgba(255,255,255,.18);
+      color: white;
+      font-size: 13px;
+      line-height: 1.5;
+      word-break: break-all;
+    }
+
+    .field {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 13px;
+    }
+
+    .field-head {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 11px;
+    }
+
+    .icon {
+      width: 21px;
+      height: 21px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ruby);
+      flex: 0 0 auto;
+    }
+
+    label {
+      display: block;
+      color: var(--white);
+      font-size: 13px;
+      letter-spacing: 1.2px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .required {
+      color: var(--ruby);
+      margin-left: 3px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.48);
+      color: var(--white);
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+      outline: none;
+      font-family: inherit;
+      transition: .2s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: rgba(255,255,255,.45);
+      box-shadow: 0 0 0 3px rgba(255,255,255,.08);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(255,255,255,.42);
+    }
+
+    input[type="date"] {
+      color-scheme: dark;
+    }
+
+    textarea {
+      min-height: 88px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
+    }
+
+    .time-btn {
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.50);
+      color: var(--white);
+      border-radius: 12px;
+      padding: 13px 6px;
+      font-size: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: .18s ease;
+      user-select: none;
+    }
+
+    .time-btn.active {
+      background: var(--ruby);
+      border-color: var(--ruby);
+      box-shadow: 0 10px 24px rgba(214,31,38,.35);
+      transform: translateY(-1px);
+    }
+
+    .policy {
+      margin: 14px 0 17px;
+      display: grid;
+      grid-template-columns: 30px 1fr;
+      gap: 12px;
+      align-items: start;
+      color: rgba(255,255,255,.86);
+      line-height: 1.55;
+      font-size: 13px;
+    }
+
+    .policy input {
+      width: 28px;
+      height: 28px;
+      accent-color: var(--ruby);
+      margin-top: 2px;
+    }
+
+    .policy strong {
+      display: block;
+      color: var(--white);
+      font-size: 15px;
+      margin-bottom: 3px;
+      letter-spacing: 1px;
+    }
+
+    .reserve-btn {
+      width: 100%;
+      border: 0;
+      border-radius: 16px;
+      padding: 17px 16px;
+      background: linear-gradient(135deg, var(--ruby), #f02b32 45%, var(--ruby-dark));
+      color: white;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      cursor: pointer;
+      box-shadow: 0 16px 32px rgba(214,31,38,.35);
+      transition: .18s ease;
+    }
+
+    .reserve-btn:disabled {
+      opacity: .58;
+      cursor: not-allowed;
+    }
+
+    .success-box {
+      display: none;
+      padding: 26px 18px;
+      text-align: center;
+      border-radius: 24px;
+      background: rgba(0,0,0,.55);
+      border: 1px solid rgba(255,255,255,.20);
+      box-shadow: var(--shadow);
+    }
+
+    .success-icon {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,.72);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      color: var(--white);
+    }
+
+    .success-box h2 {
+      font-size: 28px;
+      line-height: 1.15;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .success-box p {
+      color: rgba(255,255,255,.82);
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .summary {
+      margin-top: 18px;
+      padding: 15px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      text-align: left;
+      font-size: 14px;
+      line-height: 1.8;
+      word-break: break-word;
+    }
+
+    .footer {
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255,255,255,.26);
+      text-align: center;
+      color: rgba(255,255,255,.78);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .footer-pill {
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+
+    .toast {
+      position: fixed;
+      left: 16px;
+      right: 16px;
+      bottom: 18px;
+      max-width: 520px;
+      margin: auto;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.88);
+      color: white;
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: var(--shadow);
+      display: none;
+      z-index: 99;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .loading {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.76);
+      backdrop-filter: blur(8px);
+      z-index: 90;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .spinner {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 3px solid rgba(255,255,255,.20);
+      border-top-color: white;
+      margin: 0 auto 14px;
+      animation: spin .8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 430px) {
+      .page {
+        padding: 14px 12px 32px;
+      }
+
+      .hero {
+        border-radius: 24px;
+        padding: 26px 14px 22px;
+      }
+
+      .logo {
+        font-size: 30px;
+        letter-spacing: 2.4px;
+      }
+
+      .title-box h1 {
+        font-size: 26px;
+      }
+
+      .form-card {
+        padding: 12px;
+        border-radius: 22px;
+      }
+
+      .field {
+        padding: 14px;
+      }
+
+      .time-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <section class="hero">
+      <div class="logo">
+        PЯIVATE FLOOR
+        <small>EXCLUSIVE DINING EXPERIENCE</small>
+      </div>
+
+      <div class="title-box">
+        <h1>RESERVATION</h1>
+        <div class="title-line"></div>
+        <p>กรุณากรอกข้อมูลสำหรับการจองโต๊ะ</p>
+      </div>
+    </section>
+
+    <section class="form-card" id="formCard">
+
+      <div class="line-status" id="lineStatus">
+        กำลังเชื่อมต่อ LINE...
+      </div>
+
+      <form id="bookingForm">
+
+        <div class="field">
+          <div class="field-head">
+            <span class="icon">📅</span>
+            <label>DATE <span class="required">*</span></label>
+          </div>
+          <input type="date" id="date" required>
+        </div>
+
+        <div class="field">
+          <div class="field-head">
+            <span class="icon">🕖</span>
+            <label>TIME <span class="required">*</span></label>
+          </div>
+
+          <div class="time-grid">
+            <div class="time-btn active" data-time="7:00 PM">7:00 PM</div>
+            <div class="time-btn" data-time="7:30 PM">7:30 PM</div>
+            <div class="time-btn" data-time="8:00 PM">8:00 PM</div>
+            <div class="time-btn" data-time="8:30 PM">8:30 PM</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-head">
+            <span class="icon">👤</span>
+            <label>NAME <span class="required">*</span></label>
+          </div>
+          <input type="text" id="name" placeholder="ชื่อผู้จอง" required>
+        </div>
+
+        <div class="field">
+          <div class="field-head">
+            <span class="icon">👥</span>
+            <label>NUMBER OF GUESTS <span class="required">*</span></label>
+          </div>
+
+          <select id="guests" required>
+            <option value="">เลือกจำนวนแขก</option>
+            <option value="1">1 คน</option>
+            <option value="2">2 คน</option>
+            <option value="3">3 คน</option>
+            <option value="4">4 คน</option>
+            <option value="5">5 คน</option>
+            <option value="6">6 คน</option>
+            <option value="7">7 คน</option>
+            <option value="8">8 คน</option>
+            <option value="9">9 คน</option>
+            <option value="10">10 คน</option>
+            <option value="11+">มากกว่า 10 คน</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <div class="field-head">
+            <span class="icon">☎️</span>
+            <label>PHONE NUMBER <span class="required">*</span></label>
+          </div>
+          <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์" required>
+        </div>
+
+        <div class="field">
+          <div class="field-head">
+            <span class="icon">✎</span>
+            <label>YOUR NOTES</label>
+          </div>
+          <textarea id="notes" placeholder="หมายเหตุเพิ่มเติม เช่น วันเกิด, โซนที่ต้องการ, ข้อความเพิ่มเติม"></textarea>
+        </div>
+
+        <label class="policy">
+          <input type="checkbox" id="agree" required>
+          <span>
+            <strong>GOT IT!</strong>
+            Smart casual attire is appreciated.<br>
+            Please arrive by 8:30 PM. Running late? Message or call us — we’ll hold your table if it’s still available.<br>
+            ข้อมูลของท่านจะถูกเก็บเป็นความลับตาม PDPA
+          </span>
+        </label>
+
+        <button type="submit" class="reserve-btn" id="submitBtn">
+          RESERVE NOW
+        </button>
+      </form>
+    </section>
+
+    <section class="success-box" id="successBox">
+      <div class="success-icon">✓</div>
+      <h2>RESERVATION<br>COMPLETED!</h2>
+      <p>การจองของคุณเสร็จสมบูรณ์แล้ว</p>
+
+      <div class="summary" id="summaryBox"></div>
+
+      <button class="reserve-btn" style="margin-top:18px;" onclick="resetForm()">
+        BACK TO HOME
+      </button>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-row">
+        <div class="footer-pill">☎ 02-160-5678</div>
+        <div class="footer-pill">LINE @privatefloor</div>
+      </div>
+      <div>THANK YOU FOR CHOOSING PЯIVATE FLOOR</div>
+      <div>WE LOOK FORWARD TO SERVING YOU</div>
+    </footer>
+
+  </div>
+
+  <div class="loading" id="loading">
+    <div>
+      <div class="spinner"></div>
+      กำลังบันทึกการจอง...
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const LIFF_ID = "2010532980-aTUcLXbx";
+
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyLzz4DhmkVzFcNHx3-udeHT8mPwyZCGX5Vvn95TFSs70DeQipIIptCE1aD_1cQ6XDL/exec";
+
+    let selectedTime = "7:00 PM";
+    let lineUserId = "";
+    let lineDisplayName = "";
+
+    const $ = (id) => document.getElementById(id);
+
+    document.addEventListener("DOMContentLoaded", async function () {
+      setMinDate();
+      setupTimeButtons();
+      setupForm();
+      await initLiff();
+    });
+
+    async function initLiff() {
+      const statusBox = $("lineStatus");
+
+      try {
+        if (typeof liff === "undefined") {
+          statusBox.innerHTML = "❌ ไม่พบ LIFF SDK";
+          return;
+        }
+
+        statusBox.innerHTML = "กำลังเริ่ม LIFF...";
+
+        await liff.init({
+          liffId: LIFF_ID
+        });
+
+        if (!liff.isLoggedIn()) {
+          statusBox.innerHTML = "กำลัง Login LINE...";
+          liff.login({
+            redirectUri: window.location.href
+          });
+          return;
+        }
+
+        const profile = await liff.getProfile();
+
+        lineUserId = profile.userId || "";
+        lineDisplayName = profile.displayName || "";
+
+        if (lineUserId) {
+          statusBox.innerHTML =
+            "✅ เชื่อมต่อ LINE สำเร็จ<br>" +
+            "LINE User ID: " + lineUserId + "<br>" +
+            "Name: " + lineDisplayName;
+        } else {
+          statusBox.innerHTML = "❌ ยังไม่ได้ LINE User ID";
+        }
+
+      } catch (err) {
+        statusBox.innerHTML = "❌ LIFF Error: " + (err.message || err);
+      }
+    }
+
+    function setMinDate() {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, "0");
+      const dd = String(today.getDate()).padStart(2, "0");
+      $("date").min = `${yyyy}-${mm}-${dd}`;
+    }
+
+    function setupTimeButtons() {
+      document.querySelectorAll(".time-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          document.querySelectorAll(".time-btn").forEach(function (b) {
+            b.classList.remove("active");
+          });
+
+          btn.classList.add("active");
+          selectedTime = btn.dataset.time;
+        });
+      });
+    }
+
+    function setupForm() {
+      $("bookingForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        if (!$("agree").checked) {
+          showToast("กรุณาติ๊ก Got it! ก่อนทำการจอง");
+          return;
+        }
+
+        if (!lineUserId) {
+          await initLiff();
+        }
+
+        if (!lineUserId) {
+          showToast("ยังไม่ได้ LINE User ID กรุณาเปิดผ่าน LIFF ใน LINE");
+          return;
+        }
+
+        const data = {
+          date: $("date").value,
+          time: selectedTime,
+          name: $("name").value.trim(),
+          guests: $("guests").value,
+          phone: $("phone").value.trim(),
+          notes: $("notes").value.trim(),
+          userId: lineUserId
+        };
+
+        if (!data.date || !data.time || !data.name || !data.guests || !data.phone) {
+          showToast("กรุณากรอกข้อมูลให้ครบถ้วน");
+          return;
+        }
+
+        submitBooking(data);
+      });
+    }
+
+    function submitBooking(data) {
+      setLoading(true);
+
+      $("submitBtn").disabled = true;
+      $("submitBtn").innerText = "SENDING...";
+
+      const callbackName = "pvfCallback_" + Date.now();
+
+      window[callbackName] = function (res) {
+        delete window[callbackName];
+
+        setLoading(false);
+
+        if (!res || !res.success) {
+          $("submitBtn").disabled = false;
+          $("submitBtn").innerText = "RESERVE NOW";
+          showToast("เกิดข้อผิดพลาด: " + (res && res.message ? res.message : "Unknown error"));
+          return;
+        }
+
+        $("formCard").style.display = "none";
+        $("successBox").style.display = "block";
+
+        $("summaryBox").innerHTML = `
+          <div><b>Booking ID:</b> ${res.bookingId || "-"}</div>
+          <div><b>Name:</b> ${escapeHtml(data.name)}</div>
+          <div><b>Date:</b> ${formatDate(data.date)}</div>
+          <div><b>Time:</b> ${escapeHtml(data.time)}</div>
+          <div><b>Guests:</b> ${escapeHtml(data.guests)}</div>
+          <div><b>Phone:</b> ${escapeHtml(data.phone)}</div>
+          <div><b>LINE User ID:</b> ${escapeHtml(data.userId)}</div>
+        `;
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+
+      const params = new URLSearchParams({
+        action: "saveBooking",
+        callback: callbackName,
+        date: data.date,
+        time: data.time,
+        name: data.name,
+        guests: data.guests,
+        phone: data.phone,
+        notes: data.notes,
+        userId: data.userId
+      });
+
+      const script = document.createElement("script");
+      script.src = BACKEND_URL + "?" + params.toString();
+
+      script.onerror = function () {
+        delete window[callbackName];
+        setLoading(false);
+        $("submitBtn").disabled = false;
+        $("submitBtn").innerText = "RESERVE NOW";
+        showToast("เชื่อมต่อ Backend ไม่สำเร็จ");
+      };
+
+      document.body.appendChild(script);
+    }
+
+    function resetForm() {
+      $("bookingForm").reset();
+
+      selectedTime = "7:00 PM";
+
+      document.querySelectorAll(".time-btn").forEach(function (b) {
+        b.classList.remove("active");
+      });
+
+      document.querySelector(".time-btn[data-time='7:00 PM']").classList.add("active");
+
+      $("formCard").style.display = "block";
+      $("successBox").style.display = "none";
+
+      $("submitBtn").disabled = false;
+      $("submitBtn").innerText = "RESERVE NOW";
+
+      setMinDate();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function setLoading(show) {
+      $("loading").style.display = show ? "flex" : "none";
+    }
+
+    function showToast(message) {
+      const toast = $("toast");
+      toast.innerText = message;
+      toast.style.display = "block";
+
+      setTimeout(function () {
+        toast.style.display = "none";
+      }, 3500);
+    }
+
+    function formatDate(dateText) {
+      if (!dateText) return "-";
+
+      const d = new Date(dateText + "T00:00:00");
+      const day = String(d.getDate()).padStart(2, "0");
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const year = d.getFullYear();
+
+      return `${day}/${month}/${year}`;
+    }
+
+    function escapeHtml(text) {
+      if (!text) return "";
+      return String(text)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+  </script>
+</body>
+</html>
