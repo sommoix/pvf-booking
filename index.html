@@ -118,6 +118,30 @@
       line-height: 1.6;
     }
 
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .tab-btn {
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.42);
+      color: white;
+      border-radius: 16px;
+      padding: 14px 10px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+    }
+
+    .tab-btn.active {
+      background: var(--ruby);
+      border-color: var(--ruby);
+    }
+
     .form-card {
       padding: 16px;
       border-radius: 26px;
@@ -154,16 +178,6 @@
       margin-bottom: 11px;
     }
 
-    .icon {
-      width: 21px;
-      height: 21px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--ruby);
-      flex: 0 0 auto;
-    }
-
     label {
       display: block;
       color: var(--white);
@@ -190,14 +204,6 @@
       font-size: 16px;
       outline: none;
       font-family: inherit;
-      transition: .2s ease;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: rgba(255,255,255,.45);
-      box-shadow: 0 0 0 3px rgba(255,255,255,.08);
     }
 
     input::placeholder,
@@ -230,7 +236,6 @@
       font-size: 14px;
       text-align: center;
       cursor: pointer;
-      transition: .18s ease;
       user-select: none;
     }
 
@@ -238,7 +243,6 @@
       background: var(--ruby);
       border-color: var(--ruby);
       box-shadow: 0 10px 24px rgba(214,31,38,.35);
-      transform: translateY(-1px);
     }
 
     .policy {
@@ -280,7 +284,17 @@
       letter-spacing: 2px;
       cursor: pointer;
       box-shadow: 0 16px 32px rgba(214,31,38,.35);
-      transition: .18s ease;
+    }
+
+    .reserve-btn.secondary {
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.18);
+      box-shadow: none;
+      margin-top: 10px;
+    }
+
+    .reserve-btn.danger {
+      background: linear-gradient(135deg, #7b090e, var(--ruby), #7b090e);
     }
 
     .reserve-btn:disabled {
@@ -458,7 +472,12 @@
       </div>
     </section>
 
-    <section class="form-card" id="formCard">
+    <div class="tabs">
+      <button class="tab-btn active" id="tabBooking" onclick="showTab('booking')">จองโต๊ะ</button>
+      <button class="tab-btn" id="tabManage" onclick="showTab('manage')">จัดการ Booking</button>
+    </div>
+
+    <section class="form-card" id="bookingCard">
 
       <div class="line-status" id="lineStatus">
         กำลังเชื่อมต่อ LINE...
@@ -468,7 +487,7 @@
 
         <div class="field">
           <div class="field-head">
-            <span class="icon">📅</span>
+            <span>📅</span>
             <label>DATE <span class="required">*</span></label>
           </div>
           <input type="date" id="date" required>
@@ -476,7 +495,7 @@
 
         <div class="field">
           <div class="field-head">
-            <span class="icon">🕖</span>
+            <span>🕖</span>
             <label>TIME <span class="required">*</span></label>
           </div>
 
@@ -490,7 +509,7 @@
 
         <div class="field">
           <div class="field-head">
-            <span class="icon">👤</span>
+            <span>👤</span>
             <label>NAME <span class="required">*</span></label>
           </div>
           <input type="text" id="name" placeholder="ชื่อผู้จอง" required>
@@ -498,7 +517,7 @@
 
         <div class="field">
           <div class="field-head">
-            <span class="icon">👥</span>
+            <span>👥</span>
             <label>NUMBER OF GUESTS <span class="required">*</span></label>
           </div>
 
@@ -520,7 +539,7 @@
 
         <div class="field">
           <div class="field-head">
-            <span class="icon">☎️</span>
+            <span>☎️</span>
             <label>PHONE NUMBER <span class="required">*</span></label>
           </div>
           <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์" required>
@@ -528,7 +547,7 @@
 
         <div class="field">
           <div class="field-head">
-            <span class="icon">✎</span>
+            <span>✎</span>
             <label>YOUR NOTES</label>
           </div>
           <textarea id="notes" placeholder="หมายเหตุเพิ่มเติม เช่น วันเกิด, โซนที่ต้องการ, ข้อความเพิ่มเติม"></textarea>
@@ -550,14 +569,40 @@
       </form>
     </section>
 
+    <section class="form-card" id="manageCard" style="display:none;">
+      <div class="field">
+        <div class="field-head">
+          <span>🎫</span>
+          <label>BOOKING ID <span class="required">*</span></label>
+        </div>
+        <input type="text" id="cancelBookingId" placeholder="เช่น PVF7KQ2A" maxlength="9">
+      </div>
+
+      <div class="field">
+        <div class="field-head">
+          <span>☎️</span>
+          <label>PHONE NUMBER <span class="required">*</span></label>
+        </div>
+        <input type="tel" id="cancelPhone" placeholder="เบอร์โทรที่ใช้จอง">
+      </div>
+
+      <button class="reserve-btn danger" id="cancelBtn" onclick="cancelBookingNow()">
+        CANCEL BOOKING
+      </button>
+
+      <button class="reserve-btn secondary" onclick="showTab('booking')">
+        BACK TO RESERVATION
+      </button>
+    </section>
+
     <section class="success-box" id="successBox">
-      <div class="success-icon">✓</div>
-      <h2>RESERVATION<br>COMPLETED!</h2>
-      <p>การจองของคุณเสร็จสมบูรณ์แล้ว</p>
+      <div class="success-icon" id="successIcon">✓</div>
+      <h2 id="successTitle">RESERVATION<br>COMPLETED!</h2>
+      <p id="successText">การจองของคุณเสร็จสมบูรณ์แล้ว</p>
 
       <div class="summary" id="summaryBox"></div>
 
-      <button class="reserve-btn" style="margin-top:18px;" onclick="resetForm()">
+      <button class="reserve-btn" style="margin-top:18px;" onclick="resetAll()">
         BACK TO HOME
       </button>
     </section>
@@ -576,7 +621,7 @@
   <div class="loading" id="loading">
     <div>
       <div class="spinner"></div>
-      กำลังบันทึกการจอง...
+      กำลังดำเนินการ...
     </div>
   </div>
 
@@ -642,6 +687,15 @@
       }
     }
 
+    function showTab(tab) {
+      $("bookingCard").style.display = tab === "booking" ? "block" : "none";
+      $("manageCard").style.display = tab === "manage" ? "block" : "none";
+      $("successBox").style.display = "none";
+
+      $("tabBooking").classList.toggle("active", tab === "booking");
+      $("tabManage").classList.toggle("active", tab === "manage");
+    }
+
     function setMinDate() {
       const today = new Date();
       const yyyy = today.getFullYear();
@@ -701,27 +755,19 @@
     }
 
     function submitBooking(data) {
-      setLoading(true);
-
-      $("submitBtn").disabled = true;
-      $("submitBtn").innerText = "SENDING...";
-
-      const callbackName = "pvfCallback_" + Date.now();
-
-      window[callbackName] = function (res) {
-        delete window[callbackName];
-
-        setLoading(false);
-
+      callBackend("saveBooking", data, function (res) {
         if (!res || !res.success) {
-          $("submitBtn").disabled = false;
-          $("submitBtn").innerText = "RESERVE NOW";
           showToast("เกิดข้อผิดพลาด: " + (res && res.message ? res.message : "Unknown error"));
           return;
         }
 
-        $("formCard").style.display = "none";
+        $("bookingCard").style.display = "none";
+        $("manageCard").style.display = "none";
         $("successBox").style.display = "block";
+
+        $("successIcon").innerText = "✓";
+        $("successTitle").innerHTML = "RESERVATION<br>COMPLETED!";
+        $("successText").innerText = "การจองของคุณเสร็จสมบูรณ์แล้ว";
 
         $("summaryBox").innerHTML = `
           <div><b>Booking ID:</b> ${res.bookingId || "-"}</div>
@@ -734,18 +780,79 @@
         `;
 
         window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
+    function cancelBookingNow() {
+      const bookingId = $("cancelBookingId").value.trim().toUpperCase();
+      const phone = $("cancelPhone").value.trim();
+
+      if (!bookingId || !phone) {
+        showToast("กรุณากรอก Booking ID และเบอร์โทร");
+        return;
+      }
+
+      if (!confirm("ยืนยันยกเลิก Booking " + bookingId + " ใช่ไหม?")) {
+        return;
+      }
+
+      const data = {
+        bookingId: bookingId,
+        phone: phone,
+        userId: lineUserId || ""
+      };
+
+      callBackend("cancelBooking", data, function (res) {
+        if (!res || !res.success) {
+          showToast(res && res.message ? res.message : "ยกเลิกไม่สำเร็จ");
+          return;
+        }
+
+        $("bookingCard").style.display = "none";
+        $("manageCard").style.display = "none";
+        $("successBox").style.display = "block";
+
+        $("successIcon").innerText = "!";
+        $("successTitle").innerHTML = "BOOKING<br>CANCELLED";
+        $("successText").innerText = res.message || "ยกเลิกการจองสำเร็จ";
+
+        $("summaryBox").innerHTML = `
+          <div><b>Booking ID:</b> ${escapeHtml(bookingId)}</div>
+          <div><b>Status:</b> Cancelled</div>
+          <div><b>Phone:</b> ${escapeHtml(phone)}</div>
+        `;
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
+    function callBackend(action, data, onSuccess) {
+      setLoading(true);
+
+      $("submitBtn").disabled = true;
+      $("cancelBtn").disabled = true;
+
+      const callbackName = "pvfCallback_" + Date.now();
+
+      window[callbackName] = function (res) {
+        delete window[callbackName];
+        setLoading(false);
+
+        $("submitBtn").disabled = false;
+        $("cancelBtn").disabled = false;
+        $("submitBtn").innerText = "RESERVE NOW";
+        $("cancelBtn").innerText = "CANCEL BOOKING";
+
+        onSuccess(res);
       };
 
       const params = new URLSearchParams({
-        action: "saveBooking",
-        callback: callbackName,
-        date: data.date,
-        time: data.time,
-        name: data.name,
-        guests: data.guests,
-        phone: data.phone,
-        notes: data.notes,
-        userId: data.userId
+        action: action,
+        callback: callbackName
+      });
+
+      Object.keys(data).forEach(function (key) {
+        params.append(key, data[key]);
       });
 
       const script = document.createElement("script");
@@ -754,16 +861,20 @@
       script.onerror = function () {
         delete window[callbackName];
         setLoading(false);
+
         $("submitBtn").disabled = false;
-        $("submitBtn").innerText = "RESERVE NOW";
+        $("cancelBtn").disabled = false;
+
         showToast("เชื่อมต่อ Backend ไม่สำเร็จ");
       };
 
       document.body.appendChild(script);
     }
 
-    function resetForm() {
+    function resetAll() {
       $("bookingForm").reset();
+      $("cancelBookingId").value = "";
+      $("cancelPhone").value = "";
 
       selectedTime = "7:00 PM";
 
@@ -773,11 +884,13 @@
 
       document.querySelector(".time-btn[data-time='7:00 PM']").classList.add("active");
 
-      $("formCard").style.display = "block";
       $("successBox").style.display = "none";
+      showTab("booking");
 
       $("submitBtn").disabled = false;
+      $("cancelBtn").disabled = false;
       $("submitBtn").innerText = "RESERVE NOW";
+      $("cancelBtn").innerText = "CANCEL BOOKING";
 
       setMinDate();
       window.scrollTo({ top: 0, behavior: "smooth" });
