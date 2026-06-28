@@ -780,6 +780,66 @@
         border-radius: 18px;
       }
     }
+
+    .date-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.date-placeholder {
+  position: absolute;
+  left: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--placeholder);
+  font-size: 20px;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity .15s ease;
+}
+
+.date-wrap.has-value .date-placeholder {
+  opacity: 0;
+}
+
+.date-wrap input[type="date"] {
+  color: transparent;
+}
+
+.date-wrap.has-value input[type="date"],
+.date-wrap input[type="date"]:focus {
+  color: #fff;
+}
+
+@media (max-width: 720px) {
+  .date-placeholder {
+    left: 18px;
+    font-size: 16px;
+  }
+}
+
+    function setupDatePlaceholders() {
+  bindDatePlaceholder("date");
+  bindDatePlaceholder("editDate");
+}
+
+function bindDatePlaceholder(inputId) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+
+  const wrap = input.closest(".date-wrap");
+  if (!wrap) return;
+
+  const update = () => {
+    wrap.classList.toggle("has-value", !!input.value);
+  };
+
+  input.addEventListener("change", update);
+  input.addEventListener("input", update);
+  input.addEventListener("blur", update);
+  update();
+}
+    
   </style>
 </head>
 <body>
@@ -811,7 +871,10 @@
             <span class="icon">📅</span>
             <span>DATE <span class="required">*</span></span>
           </div>
-          <input type="date" id="date" required />
+          <div class="date-wrap">
+  <input type="date" id="date" required />
+  <span class="date-placeholder" id="datePlaceholder">วันที่ต้องการจอง</span>
+</div>
         </div>
 
         <div class="field">
@@ -963,7 +1026,10 @@
             <span class="icon">📅</span>
             <span>DATE <span class="required">*</span></span>
           </div>
-          <input type="date" id="editDate" />
+          <div class="date-wrap">
+  <input type="date" id="editDate" />
+  <span class="date-placeholder" id="editDatePlaceholder">วันที่ต้องการจอง</span>
+</div>
         </div>
 
         <div class="field">
@@ -1000,7 +1066,7 @@
             <span class="icon">☎️</span>
             <span>PHONE NUMBER <span class="required">*</span></span>
           </div>
-          <input type="tel" id="editPhone" />
+          <input type="tel" id="editPhone" placeholder="เบอร์โทรศัพท์" />
         </div>
 
         <div class="field">
@@ -1067,6 +1133,7 @@
 
     document.addEventListener("DOMContentLoaded", async () => {
       setMinDate();
+      setupDatePlaceholders();
       setupTabs();
       setupTimeButtons("#timeGrid .time-btn", false);
       setupTimeButtons("#editTimeGrid .edit-time-btn", true);
