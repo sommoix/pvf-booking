@@ -846,6 +846,35 @@
   transform: translateY(-1px);
 }
 
+
+.field-error {
+  border-color: rgba(255, 120, 126, 0.9) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 0 0 3px rgba(255, 80, 88, 0.22),
+    0 12px 28px rgba(214,31,38,0.22) !important;
+}
+
+.agree-error {
+  border-color: rgba(255, 120, 126, 0.9) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 0 0 3px rgba(255, 80, 88, 0.22),
+    0 12px 28px rgba(214,31,38,0.22) !important;
+}
+
+.shake-soft {
+  animation: shakeSoft .28s ease;
+}
+
+@keyframes shakeSoft {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-3px); }
+  100% { transform: translateX(0); }
+}
+    
     
   </style>
 </head>
@@ -1297,66 +1326,167 @@
     }
 
     function setupBookingForm() {
-      $("bookingForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
+  $("bookingForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        if (!$("agree").checked) {
-          showToast("กรุณาติ๊กยืนยันเงื่อนไขก่อนทำการจอง");
-          return;
-        }
+    const validation = validateBookingForm();
 
-        const guestsValue = $("guests").value === "custom"
-          ? $("customGuests").value.trim()
-          : $("guests").value;
-
-        const bookingData = {
-          date: $("date").value,
-          time: selectedTime,
-          name: $("name").value.trim(),
-          guests: guestsValue,
-          phone: $("phone").value.trim(),
-          notes: $("notes").value.trim(),
-          userId: lineUserId || "NO_LINE_USER_ID"
-        };
-
-        if (!bookingData.date || !bookingData.time || !bookingData.name || !bookingData.guests || !bookingData.phone) {
-          showToast("กรุณากรอกข้อมูลให้ครบถ้วน");
-          return;
-        }
-
-        try {
-          setLoading(true);
-
-          const res = await callBackend({
-            action: "createBooking",
-            data: bookingData
-          });
-
-          if (!res || res.success === false) {
-            throw new Error(res && res.message ? res.message : "ไม่สามารถจองได้");
-          }
-
-          $("bookingSection").style.display = "none";
-          $("successBox").style.display = "block";
-
-          $("summaryBox").innerHTML = `
-            <div><b>Booking ID:</b> ${escapeHtml(res.bookingId || "-")}</div>
-            <div><b>Name:</b> ${escapeHtml(bookingData.name)}</div>
-            <div><b>Date:</b> ${escapeHtml(formatDate(bookingData.date))}</div>
-            <div><b>Time:</b> ${escapeHtml(bookingData.time)}</div>
-            <div><b>Guests:</b> ${escapeHtml(bookingData.guests)}</div>
-            <div><b>Phone:</b> ${escapeHtml(bookingData.phone)}</div>
-          `;
-
-          window.scrollTo({ top: 0, behavior: "smooth" });
-
-        } catch (err) {
-          showToast("เกิดข้อผิดพลาด: " + (err.message || err));
-        } finally {
-          setLoading(false);
-        }
-      });
+    if (!validation.ok) {
+      showToast(validation.message);
+      scrollToMissingField(validation.target);
+      return;
     }
+
+    const guestsValue = $("guests").value === "custom"
+      ? $("customGuests").value.trim()
+      : $("guests").value;
+
+    const bookingData = {
+      date: $("date").value,
+      time: selectedTime,
+      name: $("name").value.trim(),
+      guests: guestsValue,
+      phone: $("phone").value.trim(),
+      notes: $("notes").value.trim(),
+      userId: lineUserId || "NO_LINE_USER_ID"
+    };
+
+    try {
+      setLoading(true);
+
+      const res = await callBackend({
+        action: "createBooking",
+        data: bookingData
+      });
+
+      if (!res || res.success === false) {
+        throw new Error(res && res.message ? res.message : "ไม่สามารถจองได้");
+      }
+
+      $("bookingSection").style.display = "none";
+      $("successBox").style.display = "block";
+
+      $("summaryBox").innerHTML = `
+        <div><b>Booking ID:</b> ${escapeHtml(res.bookingId || "-")}</div>
+        <div><b>Name:</b> ${escapeHtml(bookingData.name)}</div>
+        <div><b>Date:</b> ${escapeHtml(formatDate(bookingData.date))}</div>
+        <div><b>Time:</b> ${escapeHtml(bookingData.time)}</div>
+        <div><b>Guests:</b> ${escapeHtml(bookingData.guests)}</div>
+        <div><b>Phone:</b> ${escapeHtml(bookingData.phone)}</div>
+      `;
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+    } catch (err) {
+      showToast("เกิดข้อผิดพลาด: " + (err.message || err));
+    } finally {
+      setLoading(false);
+    }
+  });
+}
+
+function validateBookingForm() {
+  clearBookingErrors();
+
+  const checks = [
+    {
+      id: "date",
+      target: $("date").closest(".field"),
+      message: "กรุณาเลือกวันที่ต้องการจอง"
+    },
+    {
+      id: "name",
+      target: $("name").closest(".field"),
+      message: "กรุณากรอกชื่อผู้จอง"
+    },
+    {
+      id: "guests",
+      target: $("guests").closest(".field"),
+      message: "กรุณาเลือกจำนวนแขก"
+    },
+    {
+      id: "phone",
+      target: $("phone").closest(".field"),
+      message: "กรุณากรอกเบอร์โทรศัพท์"
+    }
+  ];
+
+  for (const item of checks) {
+    const el = $(item.id);
+    if (!el || !String(el.value || "").trim()) {
+      markError(item.target);
+      return {
+        ok: false,
+        target: item.target,
+        message: item.message
+      };
+    }
+  }
+
+  if ($("guests").value === "custom" && !$("customGuests").value.trim()) {
+    const target = $("customGuests").closest(".field");
+    markError(target);
+    return {
+      ok: false,
+      target: target,
+      message: "กรุณาระบุจำนวนแขก"
+    };
+  }
+
+  if (!$("agree").checked) {
+    const target = $("agree").closest(".notes-card");
+    markAgreeError(target);
+    return {
+      ok: false,
+      target: target,
+      message: "PLEASE READ OUR NOTES AND CHECK GOT IT! (อ่านเงื่อนไขแล้วกดรับทราบด้วยนะครับ)"
+    };
+  }
+
+  return {
+    ok: true,
+    target: null,
+    message: ""
+  };
+}
+
+function clearBookingErrors() {
+  document.querySelectorAll(".field-error").forEach(el => {
+    el.classList.remove("field-error", "shake-soft");
+  });
+
+  document.querySelectorAll(".agree-error").forEach(el => {
+    el.classList.remove("agree-error", "shake-soft");
+  });
+}
+
+function markError(target) {
+  if (!target) return;
+  target.classList.add("field-error", "shake-soft");
+}
+
+function markAgreeError(target) {
+  if (!target) return;
+  target.classList.add("agree-error", "shake-soft");
+}
+
+function scrollToMissingField(target) {
+  if (!target) return;
+
+  setTimeout(() => {
+    target.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+
+    const input = target.querySelector("input, select, textarea");
+    if (input && input.type !== "checkbox") {
+      setTimeout(() => {
+        input.focus({ preventScroll: true });
+      }, 420);
+    }
+  }, 80);
+}
 
     function setupManage() {
       $("findBookingBtn").addEventListener("click", async () => {
