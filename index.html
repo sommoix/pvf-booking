@@ -1,30 +1,34 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>PЯIVATE FLOOR Reservation</title>
 
+  <!-- LIFF SDK -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
   <style>
     :root {
       --ruby: #d61f26;
-      --ruby-light: #ff3138;
-      --ruby-soft: #ef3a40;
-      --ruby-dark: #8f090f;
-      --black: #050505;
-      --card: rgba(10, 10, 10, 0.72);
-      --card2: rgba(22, 3, 4, 0.76);
+      --ruby-bright: #ef4b4f;
+      --ruby-dark: #8f0d14;
+      --black: #090909;
+      --black-soft: rgba(0, 0, 0, 0.42);
+      --card: rgba(22, 5, 6, 0.72);
+      --card-2: rgba(18, 5, 6, 0.88);
       --white: #ffffff;
-      --text: #f8f8f8;
-      --muted: rgba(255,255,255,.72);
-      --soft: rgba(255,255,255,.08);
-      --line: rgba(255, 255, 255, 0.18);
-      --shadow: 0 24px 70px rgba(0, 0, 0, 0.36);
-      --radius: 20px;
-      --green: #4dff88;
-      --gray: rgba(255,255,255,.48);
+      --text: rgba(255,255,255,0.96);
+      --muted: rgba(255,255,255,0.78);
+      --line: rgba(255,255,255,0.15);
+      --soft-line: rgba(255,255,255,0.08);
+      --green: #5cff83;
+      --gray: #d3d3d3;
+      --shadow: 0 18px 44px rgba(0,0,0,0.28);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+      --radius-sm: 14px;
     }
 
     * {
@@ -41,228 +45,230 @@
     body {
       min-height: 100vh;
       color: var(--text);
-      font-family: "Canva Sans", Arial, Helvetica, sans-serif;
+      font-family: "Canva Sans", "Arial", "Helvetica Neue", sans-serif;
       background:
-        radial-gradient(circle at 50% -10%, rgba(255,255,255,.26) 0%, rgba(255,255,255,0) 32%),
-        radial-gradient(circle at 100% 10%, rgba(255,255,255,.13) 0%, rgba(255,255,255,0) 28%),
-        linear-gradient(145deg, #9e0d14 0%, var(--ruby) 42%, #7a070d 100%);
+        radial-gradient(circle at 20% 0%, rgba(255,255,255,0.18), transparent 28%),
+        radial-gradient(circle at 85% 15%, rgba(255,255,255,0.12), transparent 24%),
+        linear-gradient(135deg, #b31217 0%, #d61f26 44%, #7e090f 100%);
       overflow-x: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background:
-        linear-gradient(to bottom, rgba(0,0,0,.04), rgba(0,0,0,.72)),
-        repeating-linear-gradient(
-          90deg,
-          rgba(255,255,255,.05) 0px,
-          rgba(255,255,255,.05) 1px,
-          transparent 1px,
-          transparent 76px
-        );
-      pointer-events: none;
-      z-index: -1;
     }
 
     .page {
       width: 100%;
-      max-width: 560px;
+      max-width: 860px;
       margin: 0 auto;
-      padding: 22px 16px 42px;
+      padding: 24px 16px 40px;
     }
 
     .hero {
       position: relative;
       overflow: hidden;
-      border-radius: 32px;
-      padding: 34px 18px 30px;
+      border-radius: 34px;
+      padding: 34px 20px 28px;
       margin-bottom: 18px;
       text-align: center;
       background:
-        linear-gradient(to bottom, rgba(0,0,0,.08), rgba(0,0,0,.68)),
-        radial-gradient(circle at 50% 0%, rgba(255,255,255,.24), transparent 46%),
-        rgba(8,0,0,.38);
-      border: 1px solid rgba(255,255,255,.24);
+        linear-gradient(to bottom, rgba(255,255,255,0.06), rgba(0,0,0,0.36)),
+        linear-gradient(135deg, rgba(0,0,0,0.36), rgba(0,0,0,0.62));
+      border: 1px solid rgba(255,255,255,0.18);
       box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
     }
 
     .hero::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,.13), transparent 38%, rgba(0,0,0,.25));
+      background: radial-gradient(circle at top center, rgba(255,255,255,0.12), transparent 42%);
       pointer-events: none;
-    }
-
-    .hero > * {
-      position: relative;
-      z-index: 1;
     }
 
     .logo {
       color: var(--white);
-      font-size: clamp(34px, 8.4vw, 50px);
+      font-size: clamp(34px, 6vw, 64px);
       line-height: 1;
       font-weight: 600;
-      letter-spacing: 4px;
+      letter-spacing: 5px;
       text-transform: uppercase;
-      text-shadow: 0 10px 28px rgba(0,0,0,.48);
+      text-shadow: 0 8px 26px rgba(0,0,0,0.28);
+      word-break: keep-all;
+      position: relative;
+      z-index: 1;
     }
 
     .title-box {
-      margin-top: 28px;
+      margin-top: 12px; /* ขยับ RƎSERVATION เข้าใกล้ PЯIVATE FLOOR */
+      position: relative;
+      z-index: 1;
     }
 
     .title-box h1 {
-      font-size: 30px;
-      letter-spacing: 3px;
-      color: var(--white);
+      font-size: clamp(30px, 5vw, 54px);
       font-weight: 400;
+      letter-spacing: 4px;
+      color: var(--white);
+      line-height: 1.05;
       text-transform: uppercase;
     }
 
     .title-line {
-      width: 58px;
-      height: 3px;
-      margin: 14px auto 15px;
-      background: var(--white);
-      border-radius: 99px;
-      opacity: .9;
+      width: 118px;
+      max-width: 28vw;
+      height: 6px;
+      margin: 14px auto 16px;
+      background: rgba(255,255,255,0.96);
+      border-radius: 999px;
     }
 
     .title-box p {
-      font-size: 14px;
-      color: rgba(255,255,255,.84);
+      font-size: 15px;
+      color: rgba(255,255,255,0.9);
       line-height: 1.6;
     }
 
     .tabs {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 12px;
+      gap: 18px;
+      margin-bottom: 16px;
     }
 
     .tab-btn {
-      border: 1px solid rgba(255,255,255,.20);
-      background: rgba(0,0,0,.32);
-      color: white;
-      border-radius: 20px;
-      padding: 15px 10px;
-      font-size: 14px;
-      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(65, 8, 10, 0.35);
+      color: var(--white);
+      border-radius: 28px;
+      padding: 18px 16px;
+      font-size: clamp(18px, 3vw, 24px);
+      font-weight: 600;
       letter-spacing: 1px;
       cursor: pointer;
-      box-shadow: 0 10px 26px rgba(0,0,0,.18);
+      transition: .2s ease;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
     }
 
     .tab-btn.active {
-      background: linear-gradient(135deg, var(--ruby), var(--ruby-light));
-      border-color: rgba(255,255,255,.20);
-      box-shadow: 0 14px 34px rgba(214,31,38,.34);
+      background: linear-gradient(135deg, var(--ruby-bright), #de393d 50%, #c7272e);
+      border-color: rgba(255,255,255,0.16);
+      box-shadow: 0 12px 26px rgba(214,31,38,0.28);
     }
 
-    .system-status {
-      margin-bottom: 14px;
-      padding: 10px 13px;
-      border-radius: 999px;
+    .status-pill {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      background: rgba(0,0,0,.32);
-      border: 1px solid rgba(255,255,255,.15);
-      font-size: 12px;
-      letter-spacing: .4px;
-      color: rgba(255,255,255,.72);
+      gap: 10px;
+      padding: 14px 18px;
+      margin-bottom: 18px;
+      border-radius: 999px;
+      background: rgba(38, 8, 9, 0.42);
+      border: 1px solid rgba(255,255,255,0.14);
+      font-size: 15px;
+      color: rgba(255,255,255,0.92);
+      box-shadow: var(--shadow);
     }
 
     .status-dot {
-      width: 8px;
-      height: 8px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       background: var(--gray);
-      box-shadow: 0 0 0 4px rgba(255,255,255,.06);
+      box-shadow: 0 0 0 6px rgba(255,255,255,0.06);
+      flex: 0 0 auto;
     }
 
-    .system-status.connected .status-dot {
+    .status-pill.connected .status-dot {
       background: var(--green);
-      box-shadow: 0 0 0 4px rgba(77,255,136,.10), 0 0 18px rgba(77,255,136,.48);
+      box-shadow: 0 0 0 6px rgba(92,255,131,0.12);
     }
 
-    .system-status.connected .status-text {
+    .status-pill.connected .status-value {
       color: var(--green);
+      font-weight: 700;
     }
 
-    .system-status.disconnected .status-text {
-      color: var(--gray);
+    .status-pill.disconnected .status-value {
+      color: rgba(255,255,255,0.65);
+      font-weight: 600;
     }
 
-    .form-card {
+    .panel {
+      display: none;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    .form-card,
+    .success-box,
+    .manage-result-box {
       padding: 16px;
       border-radius: 30px;
-      background: rgba(0,0,0,.38);
-      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(40, 7, 8, 0.36);
+      border: 1px solid rgba(255,255,255,0.14);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(16px);
-    }
-
-    .booking-result {
-      display: none;
-      margin-bottom: 14px;
-      padding: 13px;
-      border-radius: 16px;
-      background: rgba(214,31,38,.18);
-      border: 1px solid rgba(255,255,255,.18);
-      color: white;
-      font-size: 13px;
-      line-height: 1.6;
-      word-break: break-all;
+      backdrop-filter: blur(10px);
     }
 
     .field {
-      background:
-        linear-gradient(145deg, rgba(255,255,255,.055), rgba(255,255,255,0)),
-        var(--card);
+      background: linear-gradient(135deg, rgba(14, 3, 4, 0.9), rgba(33, 7, 8, 0.76));
       border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 16px;
-      margin-bottom: 13px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+      border-radius: 26px;
+      padding: 18px;
+      margin-bottom: 15px;
+      overflow: hidden;
     }
 
     .field-head {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .field-body {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .icon {
+      width: 30px;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #ff6d71;
+      flex: 0 0 auto;
+      font-size: 26px;
     }
 
     label {
       display: block;
       color: var(--white);
-      font-size: 13px;
-      letter-spacing: 1.4px;
+      font-size: clamp(16px, 2.5vw, 18px);
+      letter-spacing: 2px;
       font-weight: 700;
       text-transform: uppercase;
     }
 
     .required {
-      color: var(--ruby-light);
-      margin-left: 3px;
+      color: #ff4f58;
+      margin-left: 4px;
     }
 
     input,
     select,
     textarea {
+      display: block;
       width: 100%;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.46);
+      max-width: 100%;
+      min-width: 0;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.7);
       color: var(--white);
-      border-radius: 14px;
-      padding: 15px;
-      font-size: 16px;
+      border-radius: 18px;
+      padding: 18px 18px;
+      font-size: clamp(18px, 4vw, 19px);
       outline: none;
       font-family: inherit;
       transition: .18s ease;
@@ -271,243 +277,278 @@
     input:focus,
     select:focus,
     textarea:focus {
-      border-color: rgba(255,255,255,.48);
-      box-shadow: 0 0 0 4px rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,0.42);
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.06);
     }
 
     input::placeholder,
     textarea::placeholder {
-      color: rgba(255,255,255,.38);
+      color: rgba(255,255,255,0.34);
     }
 
     input[type="date"] {
       color-scheme: dark;
+      overflow: hidden; /* แก้ date ล้นขอบ */
     }
 
     textarea {
-      min-height: 88px;
+      min-height: 118px;
       resize: vertical;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
-    .custom-guests {
+    .guest-extra {
       display: none;
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
     .time-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 9px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
     }
 
-    .time-btn,
-    .edit-time-btn {
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.46);
+    .time-btn {
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.74);
       color: var(--white);
-      border-radius: 14px;
-      padding: 13px 6px;
-      font-size: 14px;
+      border-radius: 18px;
+      padding: 20px 10px;
+      font-size: clamp(18px, 3.5vw, 20px);
       text-align: center;
       cursor: pointer;
+      transition: .18s ease;
       user-select: none;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
     }
 
-    .time-btn.active,
-    .edit-time-btn.active {
-      background: linear-gradient(135deg, var(--ruby), var(--ruby-light));
-      border-color: rgba(255,255,255,.18);
-      box-shadow: 0 12px 28px rgba(214,31,38,.38);
+    .time-btn.active {
+      background: linear-gradient(135deg, var(--ruby-bright), #ef5b5e 55%, #df373d);
+      border-color: rgba(255,255,255,0.08);
+      box-shadow: 0 10px 22px rgba(239,75,79,0.18);
+      transform: translateY(-1px);
     }
 
-    .our-notes {
-      margin: 18px 0 14px;
+    .notes-box {
+      margin: 14px 0 17px;
+      padding: 18px;
       border-radius: 24px;
-      overflow: hidden;
-      background:
-        linear-gradient(145deg, rgba(255,255,255,.09), rgba(255,255,255,0)),
-        rgba(0,0,0,.42);
-      border: 1px solid rgba(255,255,255,.18);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+      background: linear-gradient(135deg, rgba(20,4,5,0.92), rgba(43,8,9,0.74));
+      border: 1px solid rgba(255,255,255,0.12);
     }
 
-    .our-notes-head {
-      padding: 16px 16px 12px;
-      border-bottom: 1px solid rgba(255,255,255,.12);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .our-notes-head h3 {
-      font-size: 15px;
+    .notes-box h3 {
+      font-size: 22px;
       letter-spacing: 2px;
-      font-weight: 700;
-      color: white;
+      margin-bottom: 14px;
+      color: #fff;
+      text-transform: uppercase;
     }
 
-    .note-list {
-      padding: 15px 16px 6px;
+    .notes-list {
       display: grid;
       gap: 14px;
+      margin-bottom: 16px;
     }
 
     .note-item {
-      display: grid;
-      grid-template-columns: 22px 1fr;
-      gap: 10px;
-      line-height: 1.55;
+      padding-left: 18px;
+      position: relative;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.92);
     }
 
-    .note-bullet {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--ruby), var(--ruby-light));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      margin-top: 1px;
-      box-shadow: 0 8px 18px rgba(214,31,38,.32);
+    .note-item::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #ff6d71;
+      font-size: 22px;
+      line-height: 1;
     }
 
-    .note-en {
-      color: white;
-      font-size: 13px;
+    .note-item .en {
+      display: block;
+      font-size: 15px;
       font-weight: 600;
+      color: #fff;
     }
 
-    .note-th {
-      color: rgba(255,255,255,.72);
-      font-size: 13px;
+    .note-item .th {
+      display: block;
       margin-top: 4px;
+      font-size: 15px;
+      color: rgba(255,255,255,0.84);
     }
 
-    .got-it-row {
-      margin-top: 12px;
-      padding: 14px 16px 16px;
-      border-top: 1px solid rgba(255,255,255,.12);
+    .agree-box {
       display: grid;
       grid-template-columns: 34px 1fr;
-      gap: 12px;
-      align-items: center;
+      gap: 14px;
+      align-items: start;
     }
 
-    .got-it-row input {
+    .agree-box input[type="checkbox"] {
       width: 30px;
       height: 30px;
-      accent-color: var(--ruby);
+      accent-color: var(--ruby-bright);
+      margin-top: 3px;
     }
 
-    .got-it-row strong {
+    .agree-box strong {
       display: block;
-      color: white;
-      font-size: 15px;
-      letter-spacing: 1.5px;
+      font-size: 18px;
+      line-height: 1.35;
+      color: #fff;
+      letter-spacing: 1px;
+      text-transform: uppercase;
     }
 
-    .got-it-row span {
-      color: rgba(255,255,255,.62);
-      font-size: 12px;
-      line-height: 1.4;
+    .agree-box .th-text {
+      display: block;
+      margin-top: 4px;
+      color: rgba(255,255,255,0.92);
+      font-size: 16px;
+      line-height: 1.45;
     }
 
-    .reserve-btn {
+    .btn {
       width: 100%;
       border: 0;
-      border-radius: 18px;
-      padding: 18px 16px;
-      background: linear-gradient(135deg, var(--ruby), var(--ruby-light) 48%, var(--ruby-dark));
+      border-radius: 22px;
+      padding: 20px 18px;
+      background: linear-gradient(135deg, #f25d61, #eb484d 50%, #cf2c32);
       color: white;
       font-family: inherit;
-      font-size: 16px;
+      font-size: clamp(18px, 4vw, 22px);
       font-weight: 800;
-      letter-spacing: 2.4px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
       cursor: pointer;
-      box-shadow: 0 18px 36px rgba(214,31,38,.38);
-      margin-top: 8px;
+      box-shadow: 0 16px 30px rgba(214,31,38,0.2);
+      transition: .18s ease;
     }
 
-    .reserve-btn.secondary {
-      background: rgba(255,255,255,.10);
-      border: 1px solid rgba(255,255,255,.20);
+    .btn:active {
+      transform: scale(.985);
+    }
+
+    .btn:disabled {
+      opacity: .58;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn.secondary {
+      background: linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.08));
+      border: 1px solid rgba(255,255,255,0.14);
       box-shadow: none;
     }
 
-    .reserve-btn.danger {
-      background: linear-gradient(135deg, #7b090e, var(--ruby), #7b090e);
+    .btn.dark {
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(0,0,0,0.35));
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: none;
     }
 
-    .reserve-btn:disabled {
-      opacity: .58;
-      cursor: not-allowed;
-    }
-
-    .edit-box {
-      display: none;
-      margin-top: 18px;
-      padding-top: 14px;
-      border-top: 1px solid rgba(255,255,255,.16);
+    .btn-group {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 10px;
     }
 
     .success-box {
       display: none;
-      padding: 28px 18px;
       text-align: center;
-      border-radius: 28px;
-      background: rgba(0,0,0,.48);
-      border: 1px solid rgba(255,255,255,.20);
-      box-shadow: var(--shadow);
     }
 
     .success-icon {
-      width: 76px;
-      height: 76px;
-      margin: 0 auto 16px;
+      width: 86px;
+      height: 86px;
+      margin: 0 auto 18px;
       border-radius: 50%;
-      border: 2px solid rgba(255,255,255,.72);
+      border: 2px solid rgba(255,255,255,0.7);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 42px;
+      font-size: 46px;
       color: var(--white);
     }
 
     .success-box h2 {
-      font-size: 28px;
-      line-height: 1.15;
-      margin-bottom: 12px;
+      font-size: clamp(30px, 5vw, 42px);
+      line-height: 1.1;
+      margin-bottom: 10px;
       letter-spacing: 1px;
     }
 
     .success-box p {
-      color: rgba(255,255,255,.82);
+      color: rgba(255,255,255,0.84);
       line-height: 1.7;
-      font-size: 14px;
+      font-size: 15px;
     }
 
     .summary {
-      margin-top: 18px;
-      padding: 15px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.12);
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
       text-align: left;
+      font-size: 15px;
+      line-height: 1.95;
+    }
+
+    .summary b {
+      color: var(--white);
+    }
+
+    .manage-result-box {
+      display: none;
+      margin-top: 16px;
+    }
+
+    .manage-hint {
+      margin-bottom: 14px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.84);
+      text-align: center;
+    }
+
+    .booking-info-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .mini-pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
       font-size: 14px;
-      line-height: 1.8;
-      word-break: break-word;
+    }
+
+    .danger-text {
+      margin-top: 8px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.8);
+      text-align: center;
     }
 
     .footer {
-      margin-top: 22px;
-      padding-top: 18px;
-      border-top: 1px solid rgba(255,255,255,.26);
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.22);
       text-align: center;
-      color: rgba(255,255,255,.78);
-      font-size: 12px;
-      line-height: 1.8;
+      color: rgba(255,255,255,0.82);
+      font-size: 13px;
+      line-height: 1.85;
     }
 
     .footer-row {
@@ -515,14 +556,44 @@
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
 
     .footer-pill {
-      padding: 7px 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
       border-radius: 999px;
-      background: rgba(0,0,0,.24);
-      border: 1px solid rgba(255,255,255,.15);
+      background: rgba(22, 7, 8, 0.48);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--white);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .footer-pill svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+      flex: 0 0 auto;
+    }
+
+    .footer-title {
+      font-size: 17px;
+      color: #fff;
+      margin-bottom: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .footer-title strong {
+      font-weight: 800;
+    }
+
+    .footer-subtitle {
+      font-size: 17px;
+      color: rgba(255,255,255,0.96);
+      letter-spacing: 0.5px;
     }
 
     .toast {
@@ -530,25 +601,25 @@
       left: 16px;
       right: 16px;
       bottom: 18px;
-      max-width: 520px;
+      max-width: 560px;
       margin: auto;
-      padding: 14px 16px;
-      border-radius: 16px;
-      background: rgba(0,0,0,.90);
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(0,0,0,0.88);
       color: white;
-      border: 1px solid rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,0.14);
       box-shadow: var(--shadow);
       display: none;
       z-index: 99;
-      font-size: 14px;
-      line-height: 1.5;
+      font-size: 15px;
+      line-height: 1.55;
     }
 
     .loading {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,.76);
+      background: rgba(0,0,0,0.76);
       backdrop-filter: blur(8px);
       z-index: 90;
       align-items: center;
@@ -557,11 +628,17 @@
       padding: 20px;
     }
 
+    .loading-inner {
+      color: white;
+      font-size: 15px;
+      letter-spacing: 1px;
+    }
+
     .spinner {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      border: 3px solid rgba(255,255,255,.20);
+      border: 3px solid rgba(255,255,255,0.20);
       border-top-color: white;
       margin: 0 auto 14px;
       animation: spin .8s linear infinite;
@@ -571,14 +648,82 @@
       to { transform: rotate(360deg); }
     }
 
-    @media (max-width: 430px) {
-      .page { padding: 14px 12px 32px; }
-      .hero { border-radius: 26px; padding: 30px 14px 25px; }
-      .logo { font-size: 31px; letter-spacing: 2.6px; }
-      .title-box h1 { font-size: 26px; }
-      .form-card { padding: 12px; border-radius: 24px; }
-      .field { padding: 14px; }
-      .time-grid { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 640px) {
+      .page {
+        padding: 18px 14px 34px;
+      }
+
+      .hero {
+        padding: 26px 16px 22px;
+        border-radius: 28px;
+      }
+
+      .logo {
+        font-size: 36px;
+        letter-spacing: 3px;
+      }
+
+      .title-box {
+        margin-top: 10px;
+      }
+
+      .title-box h1 {
+        font-size: 30px;
+        letter-spacing: 3px;
+      }
+
+      .tabs {
+        gap: 12px;
+      }
+
+      .tab-btn {
+        padding: 16px 10px;
+        font-size: 16px;
+      }
+
+      .field {
+        padding: 16px;
+        border-radius: 22px;
+      }
+
+      .field-head {
+        margin-bottom: 12px;
+      }
+
+      label {
+        font-size: 15px;
+      }
+
+      input,
+      select,
+      textarea {
+        font-size: 17px;
+        padding: 16px 16px;
+      }
+
+      .time-grid {
+        gap: 12px;
+      }
+
+      .time-btn {
+        padding: 17px 8px;
+        font-size: 17px;
+      }
+
+      .btn {
+        font-size: 18px;
+        padding: 18px 14px;
+        letter-spacing: 3px;
+      }
+
+      .footer-row {
+        gap: 8px;
+      }
+
+      .footer-pill {
+        font-size: 13px;
+        padding: 9px 12px;
+      }
     }
   </style>
 </head>
@@ -586,6 +731,7 @@
 <body>
   <div class="page">
 
+    <!-- HERO -->
     <section class="hero">
       <div class="logo">PЯIVATE FLOOR</div>
 
@@ -596,687 +742,521 @@
       </div>
     </section>
 
+    <!-- TABS -->
     <div class="tabs">
-      <button class="tab-btn active" id="tabBooking" onclick="showTab('booking')">จองโต๊ะ</button>
-      <button class="tab-btn" id="tabManage" onclick="showTab('manage')">จัดการ Booking</button>
+      <button type="button" class="tab-btn active" id="tabBookingBtn">Booking</button>
+      <button type="button" class="tab-btn" id="tabManageBtn">Manage Booking</button>
     </div>
 
-    <div class="system-status disconnected" id="lineStatus">
+    <!-- LINE STATUS -->
+    <div class="status-pill disconnected" id="lineStatusPill">
       <span class="status-dot"></span>
-      <span>Line Status: <b class="status-text">Disconnected</b></span>
+      <span>Line Status: <span class="status-value" id="lineStatusText">Disconnected</span></span>
     </div>
 
-    <section class="form-card" id="bookingCard">
-      <form id="bookingForm">
+    <!-- BOOKING PANEL -->
+    <section class="panel active" id="bookingPanel">
+      <section class="form-card" id="formCard">
+        <form id="bookingForm">
 
-        <div class="field">
-          <div class="field-head">
-            <span>📅</span>
-            <label>DATE <span class="required">*</span></label>
-          </div>
-          <input type="date" id="date" required>
-        </div>
-
-        <div class="field">
-          <div class="field-head">
-            <span>🕖</span>
-            <label>TIME <span class="required">*</span></label>
-          </div>
-
-          <div class="time-grid">
-            <div class="time-btn active" data-time="7:00 PM">7:00 PM</div>
-            <div class="time-btn" data-time="7:30 PM">7:30 PM</div>
-            <div class="time-btn" data-time="8:00 PM">8:00 PM</div>
-            <div class="time-btn" data-time="8:30 PM">8:30 PM</div>
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="field-head">
-            <span>👤</span>
-            <label>NAME <span class="required">*</span></label>
-          </div>
-          <input type="text" id="name" placeholder="ชื่อผู้จอง" required>
-        </div>
-
-        <div class="field">
-          <div class="field-head">
-            <span>👥</span>
-            <label>NUMBER OF GUESTS <span class="required">*</span></label>
-          </div>
-
-          <select id="guests" required>
-            <option value="">เลือกจำนวนแขก</option>
-            <option value="1">1 คน</option>
-            <option value="2">2 คน</option>
-            <option value="3">3 คน</option>
-            <option value="4">4 คน</option>
-            <option value="5">5 คน</option>
-            <option value="6">6 คน</option>
-            <option value="7">7 คน</option>
-            <option value="8">8 คน</option>
-            <option value="9">9 คน</option>
-            <option value="custom">ระบุจำนวนเอง</option>
-          </select>
-
-          <input class="custom-guests" type="number" id="guestsCustom" placeholder="ระบุจำนวนแขก" min="1" max="99">
-        </div>
-
-        <div class="field">
-          <div class="field-head">
-            <span>☎️</span>
-            <label>PHONE NUMBER <span class="required">*</span></label>
-          </div>
-          <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์" required>
-        </div>
-
-        <div class="field">
-          <div class="field-head">
-            <span>✎</span>
-            <label>YOUR NOTES</label>
-          </div>
-          <textarea id="notes" placeholder="หมายเหตุเพิ่มเติม เช่น วันเกิด, โซนที่ต้องการ, ข้อความเพิ่มเติม"></textarea>
-        </div>
-
-        <div class="our-notes">
-          <div class="our-notes-head">
-            <span>✦</span>
-            <h3>OUR NOTES</h3>
-          </div>
-
-          <div class="note-list">
-            <div class="note-item">
-              <div class="note-bullet">1</div>
-              <div>
-                <div class="note-en">Smart casual attire is appreciated.</div>
-                <div class="note-th">อย่าลืมแต่งกายให้สวยและหล่อก่อนออกจากบ้านนะครับ</div>
-              </div>
+          <div class="field">
+            <div class="field-head">
+              <span class="icon">📅</span>
+              <label for="date">Date <span class="required">*</span></label>
             </div>
-
-            <div class="note-item">
-              <div class="note-bullet">2</div>
-              <div>
-                <div class="note-en">Please arrive by 8:30 PM. Running late? Message or call us—we’ll hold your table if it’s still available.</div>
-                <div class="note-th">หากมาช้าเกิน 20.30 น. ทัก/โทรเข้ามาแจ้ง ถ้าไม่มีคิววอล์คอิน ทางร้านอาจล็อคโต๊ะไว้ได้ให้ครับ</div>
-              </div>
+            <div class="field-body">
+              <input type="date" id="date" required />
             </div>
+          </div>
 
-            <div class="note-item">
-              <div class="note-bullet">3</div>
-              <div>
-                <div class="note-en">Your information will be kept confidential in accordance with the PDPA.</div>
-                <div class="note-th">ข้อมูลของท่านจะถูกเก็บเป็นความลับตามกฎหมาย PDPA ครับ</div>
+          <div class="field">
+            <div class="field-head">
+              <span class="icon">🕘</span>
+              <label>Time <span class="required">*</span></label>
+            </div>
+            <div class="time-grid" id="bookingTimeGrid">
+              <div class="time-btn active" data-time="7:00 PM">7:00 PM</div>
+              <div class="time-btn" data-time="7:30 PM">7:30 PM</div>
+              <div class="time-btn" data-time="8:00 PM">8:00 PM</div>
+              <div class="time-btn" data-time="8:30 PM">8:30 PM</div>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="field-head">
+              <span class="icon">👤</span>
+              <label for="name">Name <span class="required">*</span></label>
+            </div>
+            <div class="field-body">
+              <input type="text" id="name" placeholder="ชื่อผู้จอง" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="field-head">
+              <span class="icon">👥</span>
+              <label for="guests">Number of Guests <span class="required">*</span></label>
+            </div>
+            <div class="field-body">
+              <select id="guests" required>
+                <option value="">เลือกจำนวนแขก</option>
+                <option value="1">1 คน</option>
+                <option value="2">2 คน</option>
+                <option value="3">3 คน</option>
+                <option value="4">4 คน</option>
+                <option value="5">5 คน</option>
+                <option value="6">6 คน</option>
+                <option value="7">7 คน</option>
+                <option value="8">8 คน</option>
+                <option value="9">9 คน</option>
+                <option value="_custom">ระบุจำนวนเอง</option>
+              </select>
+
+              <div class="guest-extra" id="guestExtraWrap">
+                <input type="number" id="guestCustom" min="1" max="99" placeholder="ระบุจำนวนแขก" />
               </div>
             </div>
           </div>
 
-          <label class="got-it-row">
-            <input type="checkbox" id="agree" required>
-            <div>
-              <strong>GOT IT!</strong>
-              <span>กรุณาติ๊กเพื่อรับทราบเงื่อนไขก่อนยืนยันการจอง</span>
+          <div class="field">
+            <div class="field-head">
+              <span class="icon">☎️</span>
+              <label for="phone">Phone Number <span class="required">*</span></label>
             </div>
-          </label>
-        </div>
+            <div class="field-body">
+              <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์" required />
+            </div>
+          </div>
 
-        <button type="submit" class="reserve-btn" id="submitBtn">
-          RESERVE NOW
-        </button>
-      </form>
+          <div class="field">
+            <div class="field-head">
+              <span class="icon">✎</span>
+              <label for="notes">Your Notes</label>
+            </div>
+            <div class="field-body">
+              <textarea id="notes" placeholder="หมายเหตุเพิ่มเติม เช่น วันเกิด, โซนที่ต้องการ, ข้อความเพิ่มเติม"></textarea>
+            </div>
+          </div>
+
+          <div class="notes-box">
+            <h3>Our Notes</h3>
+
+            <div class="notes-list">
+              <div class="note-item">
+                <span class="en">Smart casual attire is appreciated.</span>
+                <span class="th">อย่าลืมแต่งกายให้สวยและหล่อก่อนออกจากบ้านนะครับ</span>
+              </div>
+
+              <div class="note-item">
+                <span class="en">Please arrive by 8:30 PM. Running late? Message or call us—we’ll hold your table if it’s still available.</span>
+                <span class="th">หากมาช้าเกิน 20.30 น. ทัก/โทรเข้ามาแจ้ง ถ้าไม่มีคิววอล์คอิน ทางร้านอาจล็อคโต๊ะไว้ได้ให้ครับ</span>
+              </div>
+
+              <div class="note-item">
+                <span class="en">Your information will be kept confidential in accordance with the PDPA.</span>
+                <span class="th">ข้อมูลของท่านจะถูกเก็บเป็นความลับตามกฎหมาย PDPA ครับ</span>
+              </div>
+            </div>
+
+            <label class="agree-box">
+              <input type="checkbox" id="agree" required />
+              <span>
+                <strong>UNDERSTOOD AND AGREED!</strong>
+                <span class="th-text">รับทราบเงื่อนไขและยืนยันการจอง</span>
+              </span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn" id="submitBtn">Reserve Now</button>
+        </form>
+      </section>
+
+      <section class="success-box" id="successBox">
+        <div class="success-icon">✓</div>
+        <h2>RƎSERVATION<br />COMPLETED!</h2>
+        <p>การจองของคุณเสร็จสมบูรณ์แล้ว</p>
+
+        <div class="summary" id="summaryBox"></div>
+
+        <div class="btn-group">
+          <button class="btn secondary" type="button" onclick="resetBookingForm()">
+            Back to Booking
+          </button>
+        </div>
+      </section>
     </section>
 
-    <section class="form-card" id="manageCard" style="display:none;">
+    <!-- MANAGE PANEL -->
+    <section class="panel" id="managePanel">
+      <section class="form-card">
+        <p class="manage-hint">
+          สำหรับจัดการ Booking กรุณากรอก <b>Booking ID</b> และ <b>Phone Number</b><br />
+          เพื่อค้นหาและแก้ไขรายการจองของคุณ
+        </p>
 
-      <div class="field">
-        <div class="field-head">
-          <span>🎫</span>
-          <label>BOOKING ID <span class="required">*</span></label>
-        </div>
-        <input type="text" id="manageBookingId" placeholder="เช่น PVF7KQ2A" maxlength="9">
-      </div>
-
-      <div class="field">
-        <div class="field-head">
-          <span>☎️</span>
-          <label>PHONE NUMBER <span class="required">*</span></label>
-        </div>
-        <input type="tel" id="managePhone" placeholder="เบอร์โทรที่ใช้จอง">
-      </div>
-
-      <button class="reserve-btn" id="findBtn" onclick="findBookingNow()">
-        FIND BOOKING
-      </button>
-
-      <div class="booking-result" id="bookingResult"></div>
-
-      <div class="edit-box" id="editBox">
-
-        <div class="field">
-          <div class="field-head">
-            <span>📅</span>
-            <label>NEW DATE <span class="required">*</span></label>
-          </div>
-          <input type="date" id="editDate">
-        </div>
-
-        <div class="field">
-          <div class="field-head">
-            <span>🕖</span>
-            <label>NEW TIME <span class="required">*</span></label>
+        <form id="manageSearchForm">
+          <div class="field">
+            <div class="field-head">
+              <span class="icon">🎫</span>
+              <label for="manageBookingId">Booking ID <span class="required">*</span></label>
+            </div>
+            <div class="field-body">
+              <input type="text" id="manageBookingId" placeholder="เช่น PVF7KQ2A" required />
+            </div>
           </div>
 
-          <div class="time-grid">
-            <div class="edit-time-btn" data-time="7:00 PM">7:00 PM</div>
-            <div class="edit-time-btn" data-time="7:30 PM">7:30 PM</div>
-            <div class="edit-time-btn" data-time="8:00 PM">8:00 PM</div>
-            <div class="edit-time-btn" data-time="8:30 PM">8:30 PM</div>
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="field-head">
-            <span>👥</span>
-            <label>NEW NUMBER OF GUESTS <span class="required">*</span></label>
+          <div class="field">
+            <div class="field-head">
+              <span class="icon">☎️</span>
+              <label for="managePhone">Phone Number <span class="required">*</span></label>
+            </div>
+            <div class="field-body">
+              <input type="tel" id="managePhone" placeholder="เบอร์โทรที่ใช้จอง" required />
+            </div>
           </div>
 
-          <select id="editGuests">
-            <option value="">เลือกจำนวนแขก</option>
-            <option value="1">1 คน</option>
-            <option value="2">2 คน</option>
-            <option value="3">3 คน</option>
-            <option value="4">4 คน</option>
-            <option value="5">5 คน</option>
-            <option value="6">6 คน</option>
-            <option value="7">7 คน</option>
-            <option value="8">8 คน</option>
-            <option value="9">9 คน</option>
-            <option value="custom">ระบุจำนวนเอง</option>
-          </select>
-
-          <input class="custom-guests" type="number" id="editGuestsCustom" placeholder="ระบุจำนวนแขก" min="1" max="99">
-        </div>
-
-        <div class="field">
-          <div class="field-head">
-            <span>✎</span>
-            <label>NEW NOTES</label>
+          <div class="btn-group">
+            <button type="submit" class="btn">Find Booking</button>
           </div>
-          <textarea id="editNotes" placeholder="แก้ไขหมายเหตุ"></textarea>
-        </div>
+        </form>
 
-        <button class="reserve-btn" id="updateBtn" onclick="updateBookingNow()">
-          UPDATE BOOKING
-        </button>
+        <section class="manage-result-box" id="manageResultBox">
+          <div class="booking-info-bar">
+            <div class="mini-pill" id="infoBookingId">Booking ID: -</div>
+            <div class="mini-pill" id="infoBookingStatus">Status: -</div>
+          </div>
 
-        <button class="reserve-btn danger" id="cancelBtn" onclick="cancelBookingNow()">
-          CANCEL BOOKING
-        </button>
+          <form id="manageEditForm">
+            <div class="field">
+              <div class="field-head">
+                <span class="icon">📅</span>
+                <label for="editDate">Date <span class="required">*</span></label>
+              </div>
+              <div class="field-body">
+                <input type="date" id="editDate" required />
+              </div>
+            </div>
 
-        <button class="reserve-btn secondary" onclick="showTab('booking')">
-          BACK TO RESERVATION
-        </button>
-      </div>
+            <div class="field">
+              <div class="field-head">
+                <span class="icon">🕘</span>
+                <label>Time <span class="required">*</span></label>
+              </div>
+              <div class="time-grid" id="manageTimeGrid">
+                <div class="time-btn active" data-time="7:00 PM">7:00 PM</div>
+                <div class="time-btn" data-time="7:30 PM">7:30 PM</div>
+                <div class="time-btn" data-time="8:00 PM">8:00 PM</div>
+                <div class="time-btn" data-time="8:30 PM">8:30 PM</div>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="field-head">
+                <span class="icon">👤</span>
+                <label for="editName">Name <span class="required">*</span></label>
+              </div>
+              <div class="field-body">
+                <input type="text" id="editName" required />
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="field-head">
+                <span class="icon">👥</span>
+                <label for="editGuests">Number of Guests <span class="required">*</span></label>
+              </div>
+              <div class="field-body">
+                <select id="editGuests" required>
+                  <option value="">เลือกจำนวนแขก</option>
+                  <option value="1">1 คน</option>
+                  <option value="2">2 คน</option>
+                  <option value="3">3 คน</option>
+                  <option value="4">4 คน</option>
+                  <option value="5">5 คน</option>
+                  <option value="6">6 คน</option>
+                  <option value="7">7 คน</option>
+                  <option value="8">8 คน</option>
+                  <option value="9">9 คน</option>
+                  <option value="_custom">ระบุจำนวนเอง</option>
+                </select>
+
+                <div class="guest-extra" id="editGuestExtraWrap">
+                  <input type="number" id="editGuestCustom" min="1" max="99" placeholder="ระบุจำนวนแขก" />
+                </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="field-head">
+                <span class="icon">☎️</span>
+                <label for="editPhone">Phone Number <span class="required">*</span></label>
+              </div>
+              <div class="field-body">
+                <input type="tel" id="editPhone" required />
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="field-head">
+                <span class="icon">✎</span>
+                <label for="editNotes">Your Notes</label>
+              </div>
+              <div class="field-body">
+                <textarea id="editNotes" placeholder="แก้ไขหมายเหตุได้ที่นี่"></textarea>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button type="submit" class="btn">Update Booking</button>
+              <button type="button" class="btn dark" id="cancelBookingBtn">Cancel Booking</button>
+              <button type="button" class="btn secondary" id="backToManageSearchBtn">Back to Search</button>
+            </div>
+
+            <div class="danger-text">
+              หากต้องการยกเลิก กรุณาตรวจสอบ Booking ID และเบอร์โทรให้ถูกต้องก่อนกดยืนยัน
+            </div>
+          </form>
+        </section>
+      </section>
     </section>
 
-    <section class="success-box" id="successBox">
-      <div class="success-icon" id="successIcon">✓</div>
-      <h2 id="successTitle">RƎSERVATION<br>COMPLETED!</h2>
-      <p id="successText">การจองของคุณเสร็จสมบูรณ์แล้ว</p>
-
-      <div class="summary" id="summaryBox"></div>
-
-      <button class="reserve-btn" style="margin-top:18px;" onclick="resetAll()">
-        BACK TO HOME
-      </button>
-    </section>
-
+    <!-- FOOTER -->
     <footer class="footer">
       <div class="footer-row">
-        <div class="footer-pill">☎ 02-160-5678</div>
-        <div class="footer-pill">LINE @privatefloor</div>
+        <div class="footer-pill">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24c1.08.36 2.23.56 3.4.56a1 1 0 0 1 1 1V21a1 1 0 0 1-1 1C10.3 22 2 13.7 2 3a1 1 0 0 1 1-1h4.5a1 1 0 0 1 1 1c0 1.17.2 2.32.56 3.4a1 1 0 0 1-.24 1l-2.22 2.4z"></path>
+          </svg>
+          <span>095-454-6596</span>
+        </div>
+
+        <div class="footer-pill">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.7 4.1A10.7 10.7 0 0 0 12 1C6 1 1 4.9 1 9.8c0 2.8 1.6 5.3 4 7l-1.2 4.2c-.07.24.2.45.42.31l4.97-3.09c.92.24 1.87.36 2.83.36 6 0 11-3.9 11-8.8 0-2.1-.91-4.06-2.3-5.78z"></path>
+          </svg>
+          <span>@898taold</span>
+        </div>
+
+        <div class="footer-pill">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5.2A4.8 4.8 0 1 0 16.8 12 4.8 4.8 0 0 0 12 7.2zm0 8A3.2 3.2 0 1 1 15.2 12 3.2 3.2 0 0 1 12 15.2zM18.2 5.6a1.2 1.2 0 1 0 1.2 1.2 1.2 1.2 0 0 0-1.2-1.2z"></path>
+          </svg>
+          <span>@private.fl.bkk</span>
+        </div>
+
+        <div class="footer-pill">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M14.7 3.5c1.14 1.35 2.5 2.14 4.3 2.25v3.14a7.75 7.75 0 0 1-3.82-1.02v6.36a5.54 5.54 0 1 1-5.54-5.54c.29 0 .56.03.84.08v3.18a2.58 2.58 0 1 0 1.74 2.44V2h2.48z"></path>
+          </svg>
+          <span>@private.floor.bkk</span>
+        </div>
       </div>
-      <div>THANK YOU FOR CHOOSING PЯIVATE FLOOR</div>
-      <div>WE LOOK FORWARD TO SERVING YOU</div>
+
+      <div class="footer-title">THANK YOU FOR CHOOSING <strong>PЯIVATE FLOOR</strong></div>
+      <div class="footer-subtitle">WE LOOK FORWARD TO SƎRVING YOU</div>
     </footer>
+
   </div>
 
   <div class="loading" id="loading">
-    <div>
+    <div class="loading-inner">
       <div class="spinner"></div>
-      กำลังดำเนินการ...
+      <div id="loadingText">กำลังดำเนินการ...</div>
     </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
   <script>
-    const LIFF_ID = "2010532980-aTUcLXbx";
+    /* =========================
+       CONFIG
+    ========================= */
     const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyLzz4DhmkVzFcNHx3-udeHT8mPwyZCGX5Vvn95TFSs70DeQipIIptCE1aD_1cQ6XDL/exec";
+    const LIFF_ID = "2010532980-aTUcLXbx";
 
+    /* =========================
+       STATE
+    ========================= */
     let selectedTime = "7:00 PM";
-    let selectedEditTime = "";
+    let manageSelectedTime = "7:00 PM";
     let lineUserId = "";
     let lineDisplayName = "";
-    let currentBooking = null;
+    let currentManageBookingId = "";
+    let currentManagePhone = "";
 
     const $ = (id) => document.getElementById(id);
 
     document.addEventListener("DOMContentLoaded", async function () {
+      bindTabs();
       setMinDate();
-      setupTimeButtons();
-      setupEditTimeButtons();
-      setupGuestControls();
-      setupForm();
-      await initLiff();
+      setupTimeButtons("bookingTimeGrid", "booking");
+      setupTimeButtons("manageTimeGrid", "manage");
+      setupGuestSelector("guests", "guestExtraWrap", "guestCustom");
+      setupGuestSelector("editGuests", "editGuestExtraWrap", "editGuestCustom");
+      setupBookingForm();
+      setupManageSearch();
+      setupManageEdit();
+      bindManageButtons();
+
+      await initLiffSafe();
     });
 
-    async function initLiff() {
-      try {
-        if (typeof liff === "undefined") {
-          setLineStatus(false);
-          return;
-        }
+    /* =========================
+       TABS
+    ========================= */
+    function bindTabs() {
+      $("tabBookingBtn").addEventListener("click", function () {
+        $("tabBookingBtn").classList.add("active");
+        $("tabManageBtn").classList.remove("active");
+        $("bookingPanel").classList.add("active");
+        $("managePanel").classList.remove("active");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
 
-        await liff.init({ liffId: LIFF_ID });
+      $("tabManageBtn").addEventListener("click", function () {
+        $("tabManageBtn").classList.add("active");
+        $("tabBookingBtn").classList.remove("active");
+        $("managePanel").classList.add("active");
+        $("bookingPanel").classList.remove("active");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
+    /* =========================
+       LINE STATUS
+    ========================= */
+    async function initLiffSafe() {
+      if (!LIFF_ID) {
+        updateLineStatus(false);
+        return;
+      }
+
+      if (typeof liff === "undefined") {
+        updateLineStatus(false);
+        return;
+      }
+
+      try {
+        await liff.init({ liffId: LIFF_ID, withLoginOnExternalBrowser: true });
 
         if (!liff.isLoggedIn()) {
-          setLineStatus(false);
-          liff.login({ redirectUri: window.location.href });
+          updateLineStatus(false);
           return;
         }
 
         const profile = await liff.getProfile();
-
         lineUserId = profile.userId || "";
         lineDisplayName = profile.displayName || "";
-
-        setLineStatus(!!lineUserId);
+        updateLineStatus(!!lineUserId);
 
       } catch (err) {
-        setLineStatus(false);
+        console.log("LIFF init error:", err);
+        updateLineStatus(false);
       }
     }
 
-    function setLineStatus(isConnected) {
-      const box = $("lineStatus");
-      const text = box.querySelector(".status-text");
+    function updateLineStatus(isConnected) {
+      const pill = $("lineStatusPill");
+      const text = $("lineStatusText");
 
-      box.classList.toggle("connected", isConnected);
-      box.classList.toggle("disconnected", !isConnected);
-
-      text.innerText = isConnected ? "Connected" : "Disconnected";
+      if (isConnected) {
+        pill.classList.remove("disconnected");
+        pill.classList.add("connected");
+        text.textContent = "Connected";
+      } else {
+        pill.classList.remove("connected");
+        pill.classList.add("disconnected");
+        text.textContent = "Disconnected";
+      }
     }
 
-    function showTab(tab) {
-      $("bookingCard").style.display = tab === "booking" ? "block" : "none";
-      $("manageCard").style.display = tab === "manage" ? "block" : "none";
-      $("successBox").style.display = "none";
-
-      $("tabBooking").classList.toggle("active", tab === "booking");
-      $("tabManage").classList.toggle("active", tab === "manage");
-    }
-
+    /* =========================
+       COMMON UI
+    ========================= */
     function setMinDate() {
       const today = new Date();
       const yyyy = today.getFullYear();
       const mm = String(today.getMonth() + 1).padStart(2, "0");
       const dd = String(today.getDate()).padStart(2, "0");
-      const minDate = `${yyyy}-${mm}-${dd}`;
-
-      $("date").min = minDate;
-      $("editDate").min = minDate;
+      $("date").min = `${yyyy}-${mm}-${dd}`;
+      $("editDate").min = `${yyyy}-${mm}-${dd}`;
     }
 
-    function setupGuestControls() {
-      $("guests").addEventListener("change", function () {
-        $("guestsCustom").style.display = $("guests").value === "custom" ? "block" : "none";
+    function setupTimeButtons(gridId, type) {
+      document.querySelectorAll(`#${gridId} .time-btn`).forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          document.querySelectorAll(`#${gridId} .time-btn`).forEach(function (b) {
+            b.classList.remove("active");
+          });
+
+          btn.classList.add("active");
+
+          if (type === "booking") {
+            selectedTime = btn.dataset.time;
+          } else {
+            manageSelectedTime = btn.dataset.time;
+          }
+        });
       });
+    }
 
-      $("editGuests").addEventListener("change", function () {
-        $("editGuestsCustom").style.display = $("editGuests").value === "custom" ? "block" : "none";
+    function setActiveTime(gridId, timeValue) {
+      document.querySelectorAll(`#${gridId} .time-btn`).forEach(function (btn) {
+        btn.classList.toggle("active", btn.dataset.time === timeValue);
       });
     }
 
-    function getGuestValue() {
-      if ($("guests").value === "custom") {
-        return $("guestsCustom").value.trim();
-      }
-      return $("guests").value;
+    function setupGuestSelector(selectId, wrapId, inputId) {
+      const select = $(selectId);
+      const wrap = $(wrapId);
+      const input = $(inputId);
+
+      select.addEventListener("change", function () {
+        if (select.value === "_custom") {
+          wrap.style.display = "block";
+          input.required = true;
+        } else {
+          wrap.style.display = "none";
+          input.required = false;
+          input.value = "";
+        }
+      });
     }
 
-    function getEditGuestValue() {
-      if ($("editGuests").value === "custom") {
-        return $("editGuestsCustom").value.trim();
+    function getGuestValue(selectId, inputId) {
+      const select = $(selectId);
+      const input = $(inputId);
+
+      if (select.value === "_custom") {
+        return (input.value || "").trim();
       }
-      return $("editGuests").value;
+
+      return (select.value || "").trim();
     }
 
-    function setGuestControl(value) {
-      const normalOptions = ["1","2","3","4","5","6","7","8","9"];
+    function setGuestValue(selectId, wrapId, inputId, value) {
+      const select = $(selectId);
+      const wrap = $(wrapId);
+      const input = $(inputId);
+      const strValue = String(value || "").trim();
 
-      if (normalOptions.includes(String(value))) {
-        $("editGuests").value = String(value);
-        $("editGuestsCustom").value = "";
-        $("editGuestsCustom").style.display = "none";
+      const available = Array.from(select.options).map(o => o.value);
+
+      if (available.includes(strValue)) {
+        select.value = strValue;
+        wrap.style.display = "none";
+        input.required = false;
+        input.value = "";
       } else {
-        $("editGuests").value = "custom";
-        $("editGuestsCustom").value = value || "";
-        $("editGuestsCustom").style.display = "block";
+        select.value = "_custom";
+        wrap.style.display = "block";
+        input.required = true;
+        input.value = strValue;
       }
     }
 
-    function setupTimeButtons() {
-      document.querySelectorAll(".time-btn").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          document.querySelectorAll(".time-btn").forEach(function (b) {
-            b.classList.remove("active");
-          });
-
-          btn.classList.add("active");
-          selectedTime = btn.dataset.time;
-        });
-      });
-    }
-
-    function setupEditTimeButtons() {
-      document.querySelectorAll(".edit-time-btn").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          document.querySelectorAll(".edit-time-btn").forEach(function (b) {
-            b.classList.remove("active");
-          });
-
-          btn.classList.add("active");
-          selectedEditTime = btn.dataset.time;
-        });
-      });
-    }
-
-    function setupForm() {
-      $("bookingForm").addEventListener("submit", async function (e) {
-        e.preventDefault();
-
-        if (!$("agree").checked) {
-          showToast("กรุณาติ๊ก Got it! ก่อนทำการจอง");
-          return;
-        }
-
-        if (!lineUserId) {
-          await initLiff();
-        }
-
-        if (!lineUserId) {
-          showToast("ระบบยังไม่เชื่อมต่อ LINE กรุณาเปิดผ่าน LINE อีกครั้ง");
-          return;
-        }
-
-        const data = {
-          date: $("date").value,
-          time: selectedTime,
-          name: $("name").value.trim(),
-          guests: getGuestValue(),
-          phone: $("phone").value.trim(),
-          notes: $("notes").value.trim(),
-          userId: lineUserId
-        };
-
-        if (!data.date || !data.time || !data.name || !data.guests || !data.phone) {
-          showToast("กรุณากรอกข้อมูลให้ครบถ้วน");
-          return;
-        }
-
-        submitBooking(data);
-      });
-    }
-
-    function submitBooking(data) {
-      callBackend("saveBooking", data, function (res) {
-        if (!res || !res.success) {
-          showToast("เกิดข้อผิดพลาด: " + (res && res.message ? res.message : "Unknown error"));
-          return;
-        }
-
-        $("bookingCard").style.display = "none";
-        $("manageCard").style.display = "none";
-        $("successBox").style.display = "block";
-
-        $("successIcon").innerText = "✓";
-        $("successTitle").innerHTML = "RƎSERVATION<br>COMPLETED!";
-        $("successText").innerText = "การจองของคุณเสร็จสมบูรณ์แล้ว";
-
-        $("summaryBox").innerHTML = `
-          <div><b>Booking ID:</b> ${escapeHtml(res.bookingId || "-")}</div>
-          <div><b>Name:</b> ${escapeHtml(data.name)}</div>
-          <div><b>Date:</b> ${formatDate(data.date)}</div>
-          <div><b>Time:</b> ${escapeHtml(data.time)}</div>
-          <div><b>Guests:</b> ${escapeHtml(data.guests)}</div>
-          <div><b>Phone:</b> ${escapeHtml(data.phone)}</div>
-        `;
-
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-    }
-
-    function findBookingNow() {
-      const bookingId = $("manageBookingId").value.trim().toUpperCase();
-      const phone = $("managePhone").value.trim();
-
-      if (!bookingId || !phone) {
-        showToast("กรุณากรอก Booking ID และเบอร์โทร");
-        return;
-      }
-
-      callBackend("getBooking", { bookingId, phone }, function (res) {
-        if (!res || !res.success) {
-          $("bookingResult").style.display = "block";
-          $("bookingResult").innerHTML = "❌ " + escapeHtml(res && res.message ? res.message : "ไม่พบ Booking");
-          $("editBox").style.display = "none";
-          currentBooking = null;
-          return;
-        }
-
-        currentBooking = res.booking;
-
-        $("bookingResult").style.display = "block";
-        $("bookingResult").innerHTML = `
-          ✅ พบ Booking<br>
-          <b>Booking ID:</b> ${escapeHtml(currentBooking.bookingId)}<br>
-          <b>Name:</b> ${escapeHtml(currentBooking.name)}<br>
-          <b>Date:</b> ${formatDate(currentBooking.date)}<br>
-          <b>Time:</b> ${escapeHtml(currentBooking.time)}<br>
-          <b>Guests:</b> ${escapeHtml(currentBooking.guests)}<br>
-          <b>Status:</b> ${escapeHtml(currentBooking.status)}
-        `;
-
-        $("editDate").value = currentBooking.date || "";
-        setGuestControl(currentBooking.guests || "");
-        $("editNotes").value = currentBooking.notes || "";
-
-        selectedEditTime = currentBooking.time || "7:00 PM";
-        setEditTimeActive(selectedEditTime);
-
-        $("editBox").style.display = "block";
-
-        window.scrollTo({
-          top: $("bookingResult").offsetTop - 120,
-          behavior: "smooth"
-        });
-      });
-    }
-
-    function updateBookingNow() {
-      const bookingId = $("manageBookingId").value.trim().toUpperCase();
-      const phone = $("managePhone").value.trim();
-
-      const data = {
-        bookingId: bookingId,
-        phone: phone,
-        date: $("editDate").value,
-        time: selectedEditTime,
-        guests: getEditGuestValue(),
-        notes: $("editNotes").value.trim(),
-        userId: lineUserId || ""
-      };
-
-      if (!data.bookingId || !data.phone || !data.date || !data.time || !data.guests) {
-        showToast("กรุณากรอกข้อมูลให้ครบก่อนอัปเดต");
-        return;
-      }
-
-      if (!confirm("ยืนยันแก้ไข Booking " + data.bookingId + " ใช่ไหม?")) {
-        return;
-      }
-
-      callBackend("updateBooking", data, function (res) {
-        if (!res || !res.success) {
-          showToast(res && res.message ? res.message : "แก้ไขไม่สำเร็จ");
-          return;
-        }
-
-        $("bookingCard").style.display = "none";
-        $("manageCard").style.display = "none";
-        $("successBox").style.display = "block";
-
-        $("successIcon").innerText = "✓";
-        $("successTitle").innerHTML = "BOOKING<br>UPDATED";
-        $("successText").innerText = res.message || "แก้ไข Booking สำเร็จ";
-
-        $("summaryBox").innerHTML = `
-          <div><b>Booking ID:</b> ${escapeHtml(data.bookingId)}</div>
-          <div><b>New Date:</b> ${formatDate(data.date)}</div>
-          <div><b>New Time:</b> ${escapeHtml(data.time)}</div>
-          <div><b>Guests:</b> ${escapeHtml(data.guests)}</div>
-          <div><b>Status:</b> Updated</div>
-        `;
-
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-    }
-
-    function cancelBookingNow() {
-      const bookingId = $("manageBookingId").value.trim().toUpperCase();
-      const phone = $("managePhone").value.trim();
-
-      if (!bookingId || !phone) {
-        showToast("กรุณากรอก Booking ID และเบอร์โทร");
-        return;
-      }
-
-      if (!confirm("ยืนยันยกเลิก Booking " + bookingId + " ใช่ไหม?")) {
-        return;
-      }
-
-      const data = {
-        bookingId: bookingId,
-        phone: phone,
-        userId: lineUserId || ""
-      };
-
-      callBackend("cancelBooking", data, function (res) {
-        if (!res || !res.success) {
-          showToast(res && res.message ? res.message : "ยกเลิกไม่สำเร็จ");
-          return;
-        }
-
-        $("bookingCard").style.display = "none";
-        $("manageCard").style.display = "none";
-        $("successBox").style.display = "block";
-
-        $("successIcon").innerText = "!";
-        $("successTitle").innerHTML = "BOOKING<br>CANCELLED";
-        $("successText").innerText = res.message || "ยกเลิกการจองสำเร็จ";
-
-        $("summaryBox").innerHTML = `
-          <div><b>Booking ID:</b> ${escapeHtml(bookingId)}</div>
-          <div><b>Status:</b> Cancelled</div>
-          <div><b>Phone:</b> ${escapeHtml(phone)}</div>
-        `;
-
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-    }
-
-    function setEditTimeActive(time) {
-      document.querySelectorAll(".edit-time-btn").forEach(function (btn) {
-        btn.classList.toggle("active", btn.dataset.time === time);
-      });
-    }
-
-    function callBackend(action, data, onSuccess) {
-      setLoading(true);
-      setButtonsDisabled(true);
-
-      const callbackName = "pvfCallback_" + Date.now();
-
-      window[callbackName] = function (res) {
-        delete window[callbackName];
-        setLoading(false);
-        setButtonsDisabled(false);
-        onSuccess(res);
-      };
-
-      const params = new URLSearchParams({
-        action: action,
-        callback: callbackName
-      });
-
-      Object.keys(data).forEach(function (key) {
-        params.append(key, data[key]);
-      });
-
-      const script = document.createElement("script");
-      script.src = BACKEND_URL + "?" + params.toString();
-
-      script.onerror = function () {
-        delete window[callbackName];
-        setLoading(false);
-        setButtonsDisabled(false);
-        showToast("เชื่อมต่อ Backend ไม่สำเร็จ");
-      };
-
-      document.body.appendChild(script);
-    }
-
-    function setButtonsDisabled(disabled) {
-      ["submitBtn", "findBtn", "updateBtn", "cancelBtn"].forEach(function (id) {
-        if ($(id)) $(id).disabled = disabled;
-      });
-    }
-
-    function resetAll() {
-      $("bookingForm").reset();
-      $("manageBookingId").value = "";
-      $("managePhone").value = "";
-      $("editDate").value = "";
-      $("editGuests").value = "";
-      $("editGuestsCustom").value = "";
-      $("editGuestsCustom").style.display = "none";
-      $("editNotes").value = "";
-      $("bookingResult").style.display = "none";
-      $("editBox").style.display = "none";
-      $("guestsCustom").value = "";
-      $("guestsCustom").style.display = "none";
-
-      currentBooking = null;
-      selectedTime = "7:00 PM";
-      selectedEditTime = "";
-
-      document.querySelectorAll(".time-btn").forEach(function (b) {
-        b.classList.remove("active");
-      });
-      document.querySelector(".time-btn[data-time='7:00 PM']").classList.add("active");
-
-      document.querySelectorAll(".edit-time-btn").forEach(function (b) {
-        b.classList.remove("active");
-      });
-
-      $("successBox").style.display = "none";
-      showTab("booking");
-
-      setMinDate();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function setLoading(show) {
+    function setLoading(show, text = "กำลังดำเนินการ...") {
+      $("loadingText").innerText = text;
       $("loading").style.display = show ? "flex" : "none";
     }
 
@@ -1285,32 +1265,286 @@
       toast.innerText = message;
       toast.style.display = "block";
 
-      setTimeout(function () {
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(function () {
         toast.style.display = "none";
-      }, 3500);
+      }, 3600);
     }
 
     function formatDate(dateText) {
       if (!dateText) return "-";
-
       const d = new Date(dateText + "T00:00:00");
-      if (isNaN(d.getTime())) return dateText;
-
       const day = String(d.getDate()).padStart(2, "0");
       const month = String(d.getMonth() + 1).padStart(2, "0");
       const year = d.getFullYear();
-
       return `${day}/${month}/${year}`;
     }
 
+    function normalizeDateInput(dateText) {
+      if (!dateText) return "";
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateText)) return dateText;
+
+      const d = new Date(dateText);
+      if (!isNaN(d.getTime())) {
+        const yyyy = d.getFullYear();
+        const mm = String(d.getMonth() + 1).padStart(2, "0");
+        const dd = String(d.getDate()).padStart(2, "0");
+        return `${yyyy}-${mm}-${dd}`;
+      }
+      return "";
+    }
+
     function escapeHtml(text) {
-      if (!text) return "";
+      if (text === null || text === undefined) return "";
       return String(text)
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
         .replaceAll('"', "&quot;")
         .replaceAll("'", "&#039;");
+    }
+
+    async function callApi(payload) {
+      const res = await fetch(BACKEND_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const text = await res.text();
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        throw new Error(text || "Invalid server response");
+      }
+
+      if (!data.success) {
+        throw new Error(data.message || "Request failed");
+      }
+
+      return data;
+    }
+
+    /* =========================
+       BOOKING
+    ========================= */
+    function setupBookingForm() {
+      $("bookingForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        if (!$("agree").checked) {
+          showToast("กรุณาติ๊กยืนยันเงื่อนไขก่อนทำการจอง");
+          return;
+        }
+
+        const guestsValue = getGuestValue("guests", "guestCustom");
+
+        const data = {
+          date: $("date").value,
+          time: selectedTime,
+          name: $("name").value.trim(),
+          guests: guestsValue,
+          phone: $("phone").value.trim(),
+          notes: $("notes").value.trim(),
+          userId: lineUserId || "NO_LINE_USER_ID",
+          lineDisplayName: lineDisplayName || ""
+        };
+
+        if (!data.date || !data.time || !data.name || !data.guests || !data.phone) {
+          showToast("กรุณากรอกข้อมูลให้ครบถ้วน");
+          return;
+        }
+
+        try {
+          setLoading(true, "กำลังบันทึกการจอง...");
+          $("submitBtn").disabled = true;
+          $("submitBtn").innerText = "SENDING...";
+
+          const res = await callApi({
+            action: "createBooking",
+            data: data
+          });
+
+          $("formCard").style.display = "none";
+          $("successBox").style.display = "block";
+
+          $("summaryBox").innerHTML = `
+            <div><b>Booking ID:</b> ${escapeHtml(res.bookingId || "-")}</div>
+            <div><b>Name:</b> ${escapeHtml(data.name)}</div>
+            <div><b>Date:</b> ${formatDate(data.date)}</div>
+            <div><b>Time:</b> ${escapeHtml(data.time)}</div>
+            <div><b>Guests:</b> ${escapeHtml(data.guests)}</div>
+            <div><b>Phone:</b> ${escapeHtml(data.phone)}</div>
+          `;
+
+          window.scrollTo({ top: 0, behavior: "smooth" });
+
+        } catch (err) {
+          showToast("เกิดข้อผิดพลาด: " + (err.message || err));
+        } finally {
+          setLoading(false);
+          $("submitBtn").disabled = false;
+          $("submitBtn").innerText = "Reserve Now";
+        }
+      });
+    }
+
+    function resetBookingForm() {
+      $("bookingForm").reset();
+      $("formCard").style.display = "block";
+      $("successBox").style.display = "none";
+
+      selectedTime = "7:00 PM";
+      setActiveTime("bookingTimeGrid", selectedTime);
+
+      $("guestExtraWrap").style.display = "none";
+      $("guestCustom").value = "";
+      $("guestCustom").required = false;
+
+      setMinDate();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    /* =========================
+       MANAGE BOOKING
+    ========================= */
+    function setupManageSearch() {
+      $("manageSearchForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const bookingId = $("manageBookingId").value.trim().toUpperCase();
+        const phone = $("managePhone").value.trim();
+
+        if (!bookingId || !phone) {
+          showToast("กรุณากรอก Booking ID และเบอร์โทร");
+          return;
+        }
+
+        try {
+          setLoading(true, "กำลังค้นหา Booking...");
+          const res = await callApi({
+            action: "getBooking",
+            bookingId: bookingId,
+            phone: phone
+          });
+
+          const booking = res.booking || {};
+          currentManageBookingId = bookingId;
+          currentManagePhone = phone;
+
+          fillManageForm(bookingId, booking);
+          $("manageResultBox").style.display = "block";
+          window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+
+        } catch (err) {
+          showToast("ค้นหาไม่สำเร็จ: " + (err.message || err));
+        } finally {
+          setLoading(false);
+        }
+      });
+    }
+
+    function fillManageForm(bookingId, booking) {
+      $("infoBookingId").textContent = "Booking ID: " + (bookingId || "-");
+      $("infoBookingStatus").textContent = "Status: " + (booking.status || "Pending");
+
+      $("editDate").value = normalizeDateInput(booking.date);
+      $("editName").value = booking.name || "";
+      $("editPhone").value = booking.phone || currentManagePhone || "";
+      $("editNotes").value = booking.notes || "";
+
+      manageSelectedTime = booking.time || "7:00 PM";
+      setActiveTime("manageTimeGrid", manageSelectedTime);
+
+      setGuestValue("editGuests", "editGuestExtraWrap", "editGuestCustom", booking.guests || "");
+    }
+
+    function setupManageEdit() {
+      $("manageEditForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        if (!currentManageBookingId || !currentManagePhone) {
+          showToast("ไม่พบข้อมูล Booking ที่กำลังแก้ไข");
+          return;
+        }
+
+        const guestsValue = getGuestValue("editGuests", "editGuestCustom");
+
+        const data = {
+          date: $("editDate").value,
+          time: manageSelectedTime,
+          name: $("editName").value.trim(),
+          guests: guestsValue,
+          phone: $("editPhone").value.trim(),
+          notes: $("editNotes").value.trim()
+        };
+
+        if (!data.date || !data.time || !data.name || !data.guests || !data.phone) {
+          showToast("กรุณากรอกข้อมูลให้ครบถ้วน");
+          return;
+        }
+
+        try {
+          setLoading(true, "กำลังอัปเดต Booking...");
+          await callApi({
+            action: "updateBooking",
+            bookingId: currentManageBookingId,
+            phone: currentManagePhone,
+            data: data
+          });
+
+          currentManagePhone = data.phone;
+          $("managePhone").value = data.phone;
+
+          showToast("อัปเดต Booking เรียบร้อยแล้ว");
+          $("infoBookingStatus").textContent = "Status: Updated";
+
+        } catch (err) {
+          showToast("อัปเดตไม่สำเร็จ: " + (err.message || err));
+        } finally {
+          setLoading(false);
+        }
+      });
+    }
+
+    function bindManageButtons() {
+      $("cancelBookingBtn").addEventListener("click", async function () {
+        if (!currentManageBookingId || !currentManagePhone) {
+          showToast("ไม่พบข้อมูล Booking ที่ต้องการยกเลิก");
+          return;
+        }
+
+        const confirmed = confirm("ยืนยันการยกเลิก Booking นี้ใช่หรือไม่?");
+        if (!confirmed) return;
+
+        try {
+          setLoading(true, "กำลังยกเลิก Booking...");
+          await callApi({
+            action: "cancelBooking",
+            bookingId: currentManageBookingId,
+            phone: currentManagePhone
+          });
+
+          showToast("ยกเลิก Booking เรียบร้อยแล้ว");
+          $("infoBookingStatus").textContent = "Status: Cancelled";
+
+        } catch (err) {
+          showToast("ยกเลิกไม่สำเร็จ: " + (err.message || err));
+        } finally {
+          setLoading(false);
+        }
+      });
+
+      $("backToManageSearchBtn").addEventListener("click", function () {
+        $("manageResultBox").style.display = "none";
+        $("manageEditForm").reset();
+        currentManageBookingId = "";
+        currentManagePhone = "";
+      });
     }
   </script>
 </body>
