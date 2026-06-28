@@ -15,7 +15,6 @@
       --card: rgba(10, 10, 10, 0.82);
       --white: #ffffff;
       --text: #f5f5f5;
-      --muted: #b9b9b9;
       --line: rgba(255, 255, 255, 0.14);
       --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
       --radius: 18px;
@@ -151,7 +150,8 @@
       backdrop-filter: blur(14px);
     }
 
-    .line-status {
+    .line-status,
+    .booking-result {
       margin-bottom: 14px;
       padding: 12px;
       border-radius: 14px;
@@ -161,6 +161,11 @@
       font-size: 13px;
       line-height: 1.5;
       word-break: break-all;
+    }
+
+    .booking-result {
+      display: none;
+      background: rgba(214,31,38,.16);
     }
 
     .field {
@@ -227,7 +232,8 @@
       gap: 9px;
     }
 
-    .time-btn {
+    .time-btn,
+    .edit-time-btn {
       border: 1px solid rgba(255,255,255,.18);
       background: rgba(0,0,0,.50);
       color: var(--white);
@@ -239,7 +245,8 @@
       user-select: none;
     }
 
-    .time-btn.active {
+    .time-btn.active,
+    .edit-time-btn.active {
       background: var(--ruby);
       border-color: var(--ruby);
       box-shadow: 0 10px 24px rgba(214,31,38,.35);
@@ -284,13 +291,13 @@
       letter-spacing: 2px;
       cursor: pointer;
       box-shadow: 0 16px 32px rgba(214,31,38,.35);
+      margin-top: 8px;
     }
 
     .reserve-btn.secondary {
       background: rgba(255,255,255,.10);
       border: 1px solid rgba(255,255,255,.18);
       box-shadow: none;
-      margin-top: 10px;
     }
 
     .reserve-btn.danger {
@@ -300,6 +307,13 @@
     .reserve-btn:disabled {
       opacity: .58;
       cursor: not-allowed;
+    }
+
+    .edit-box {
+      display: none;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,.16);
     }
 
     .success-box {
@@ -422,36 +436,13 @@
     }
 
     @media (max-width: 430px) {
-      .page {
-        padding: 14px 12px 32px;
-      }
-
-      .hero {
-        border-radius: 24px;
-        padding: 26px 14px 22px;
-      }
-
-      .logo {
-        font-size: 30px;
-        letter-spacing: 2.4px;
-      }
-
-      .title-box h1 {
-        font-size: 26px;
-      }
-
-      .form-card {
-        padding: 12px;
-        border-radius: 22px;
-      }
-
-      .field {
-        padding: 14px;
-      }
-
-      .time-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      .page { padding: 14px 12px 32px; }
+      .hero { border-radius: 24px; padding: 26px 14px 22px; }
+      .logo { font-size: 30px; letter-spacing: 2.4px; }
+      .title-box h1 { font-size: 26px; }
+      .form-card { padding: 12px; border-radius: 22px; }
+      .field { padding: 14px; }
+      .time-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -570,12 +561,13 @@
     </section>
 
     <section class="form-card" id="manageCard" style="display:none;">
+
       <div class="field">
         <div class="field-head">
           <span>🎫</span>
           <label>BOOKING ID <span class="required">*</span></label>
         </div>
-        <input type="text" id="cancelBookingId" placeholder="เช่น PVF7KQ2A" maxlength="9">
+        <input type="text" id="manageBookingId" placeholder="เช่น PVF7KQ2A" maxlength="9">
       </div>
 
       <div class="field">
@@ -583,16 +575,82 @@
           <span>☎️</span>
           <label>PHONE NUMBER <span class="required">*</span></label>
         </div>
-        <input type="tel" id="cancelPhone" placeholder="เบอร์โทรที่ใช้จอง">
+        <input type="tel" id="managePhone" placeholder="เบอร์โทรที่ใช้จอง">
       </div>
 
-      <button class="reserve-btn danger" id="cancelBtn" onclick="cancelBookingNow()">
-        CANCEL BOOKING
+      <button class="reserve-btn" id="findBtn" onclick="findBookingNow()">
+        FIND BOOKING
       </button>
 
-      <button class="reserve-btn secondary" onclick="showTab('booking')">
-        BACK TO RESERVATION
-      </button>
+      <div class="booking-result" id="bookingResult"></div>
+
+      <div class="edit-box" id="editBox">
+
+        <div class="field">
+          <div class="field-head">
+            <span>📅</span>
+            <label>NEW DATE <span class="required">*</span></label>
+          </div>
+          <input type="date" id="editDate">
+        </div>
+
+        <div class="field">
+          <div class="field-head">
+            <span>🕖</span>
+            <label>NEW TIME <span class="required">*</span></label>
+          </div>
+
+          <div class="time-grid">
+            <div class="edit-time-btn" data-time="7:00 PM">7:00 PM</div>
+            <div class="edit-time-btn" data-time="7:30 PM">7:30 PM</div>
+            <div class="edit-time-btn" data-time="8:00 PM">8:00 PM</div>
+            <div class="edit-time-btn" data-time="8:30 PM">8:30 PM</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-head">
+            <span>👥</span>
+            <label>NEW NUMBER OF GUESTS <span class="required">*</span></label>
+          </div>
+
+          <select id="editGuests">
+            <option value="">เลือกจำนวนแขก</option>
+            <option value="1">1 คน</option>
+            <option value="2">2 คน</option>
+            <option value="3">3 คน</option>
+            <option value="4">4 คน</option>
+            <option value="5">5 คน</option>
+            <option value="6">6 คน</option>
+            <option value="7">7 คน</option>
+            <option value="8">8 คน</option>
+            <option value="9">9 คน</option>
+            <option value="10">10 คน</option>
+            <option value="11+">มากกว่า 10 คน</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <div class="field-head">
+            <span>✎</span>
+            <label>NEW NOTES</label>
+          </div>
+          <textarea id="editNotes" placeholder="แก้ไขหมายเหตุ"></textarea>
+        </div>
+
+        <button class="reserve-btn" id="updateBtn" onclick="updateBookingNow()">
+          UPDATE BOOKING
+        </button>
+
+        <button class="reserve-btn danger" id="cancelBtn" onclick="cancelBookingNow()">
+          CANCEL BOOKING
+        </button>
+
+        <button class="reserve-btn secondary" onclick="showTab('booking')">
+          BACK TO RESERVATION
+        </button>
+
+      </div>
     </section>
 
     <section class="success-box" id="successBox">
@@ -629,18 +687,20 @@
 
   <script>
     const LIFF_ID = "2010532980-aTUcLXbx";
-
     const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyLzz4DhmkVzFcNHx3-udeHT8mPwyZCGX5Vvn95TFSs70DeQipIIptCE1aD_1cQ6XDL/exec";
 
     let selectedTime = "7:00 PM";
+    let selectedEditTime = "";
     let lineUserId = "";
     let lineDisplayName = "";
+    let currentBooking = null;
 
     const $ = (id) => document.getElementById(id);
 
     document.addEventListener("DOMContentLoaded", async function () {
       setMinDate();
       setupTimeButtons();
+      setupEditTimeButtons();
       setupForm();
       await initLiff();
     });
@@ -656,15 +716,11 @@
 
         statusBox.innerHTML = "กำลังเริ่ม LIFF...";
 
-        await liff.init({
-          liffId: LIFF_ID
-        });
+        await liff.init({ liffId: LIFF_ID });
 
         if (!liff.isLoggedIn()) {
           statusBox.innerHTML = "กำลัง Login LINE...";
-          liff.login({
-            redirectUri: window.location.href
-          });
+          liff.login({ redirectUri: window.location.href });
           return;
         }
 
@@ -701,7 +757,10 @@
       const yyyy = today.getFullYear();
       const mm = String(today.getMonth() + 1).padStart(2, "0");
       const dd = String(today.getDate()).padStart(2, "0");
-      $("date").min = `${yyyy}-${mm}-${dd}`;
+      const minDate = `${yyyy}-${mm}-${dd}`;
+
+      $("date").min = minDate;
+      $("editDate").min = minDate;
     }
 
     function setupTimeButtons() {
@@ -713,6 +772,19 @@
 
           btn.classList.add("active");
           selectedTime = btn.dataset.time;
+        });
+      });
+    }
+
+    function setupEditTimeButtons() {
+      document.querySelectorAll(".edit-time-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          document.querySelectorAll(".edit-time-btn").forEach(function (b) {
+            b.classList.remove("active");
+          });
+
+          btn.classList.add("active");
+          selectedEditTime = btn.dataset.time;
         });
       });
     }
@@ -770,7 +842,7 @@
         $("successText").innerText = "การจองของคุณเสร็จสมบูรณ์แล้ว";
 
         $("summaryBox").innerHTML = `
-          <div><b>Booking ID:</b> ${res.bookingId || "-"}</div>
+          <div><b>Booking ID:</b> ${escapeHtml(res.bookingId || "-")}</div>
           <div><b>Name:</b> ${escapeHtml(data.name)}</div>
           <div><b>Date:</b> ${formatDate(data.date)}</div>
           <div><b>Time:</b> ${escapeHtml(data.time)}</div>
@@ -783,9 +855,105 @@
       });
     }
 
+    function findBookingNow() {
+      const bookingId = $("manageBookingId").value.trim().toUpperCase();
+      const phone = $("managePhone").value.trim();
+
+      if (!bookingId || !phone) {
+        showToast("กรุณากรอก Booking ID และเบอร์โทร");
+        return;
+      }
+
+      callBackend("getBooking", { bookingId, phone }, function (res) {
+        if (!res || !res.success) {
+          $("bookingResult").style.display = "block";
+          $("bookingResult").innerHTML = "❌ " + escapeHtml(res && res.message ? res.message : "ไม่พบ Booking");
+          $("editBox").style.display = "none";
+          currentBooking = null;
+          return;
+        }
+
+        currentBooking = res.booking;
+
+        $("bookingResult").style.display = "block";
+        $("bookingResult").innerHTML = `
+          ✅ พบ Booking<br>
+          <b>Booking ID:</b> ${escapeHtml(currentBooking.bookingId)}<br>
+          <b>Name:</b> ${escapeHtml(currentBooking.name)}<br>
+          <b>Date:</b> ${formatDate(currentBooking.date)}<br>
+          <b>Time:</b> ${escapeHtml(currentBooking.time)}<br>
+          <b>Guests:</b> ${escapeHtml(currentBooking.guests)}<br>
+          <b>Status:</b> ${escapeHtml(currentBooking.status)}
+        `;
+
+        $("editDate").value = currentBooking.date || "";
+        $("editGuests").value = currentBooking.guests || "";
+        $("editNotes").value = currentBooking.notes || "";
+
+        selectedEditTime = currentBooking.time || "7:00 PM";
+        setEditTimeActive(selectedEditTime);
+
+        $("editBox").style.display = "block";
+
+        window.scrollTo({
+          top: $("bookingResult").offsetTop - 120,
+          behavior: "smooth"
+        });
+      });
+    }
+
+    function updateBookingNow() {
+      const bookingId = $("manageBookingId").value.trim().toUpperCase();
+      const phone = $("managePhone").value.trim();
+
+      const data = {
+        bookingId: bookingId,
+        phone: phone,
+        date: $("editDate").value,
+        time: selectedEditTime,
+        guests: $("editGuests").value,
+        notes: $("editNotes").value.trim(),
+        userId: lineUserId || ""
+      };
+
+      if (!data.bookingId || !data.phone || !data.date || !data.time || !data.guests) {
+        showToast("กรุณากรอกข้อมูลให้ครบก่อนอัปเดต");
+        return;
+      }
+
+      if (!confirm("ยืนยันแก้ไข Booking " + data.bookingId + " ใช่ไหม?")) {
+        return;
+      }
+
+      callBackend("updateBooking", data, function (res) {
+        if (!res || !res.success) {
+          showToast(res && res.message ? res.message : "แก้ไขไม่สำเร็จ");
+          return;
+        }
+
+        $("bookingCard").style.display = "none";
+        $("manageCard").style.display = "none";
+        $("successBox").style.display = "block";
+
+        $("successIcon").innerText = "✓";
+        $("successTitle").innerHTML = "BOOKING<br>UPDATED";
+        $("successText").innerText = res.message || "แก้ไข Booking สำเร็จ";
+
+        $("summaryBox").innerHTML = `
+          <div><b>Booking ID:</b> ${escapeHtml(data.bookingId)}</div>
+          <div><b>New Date:</b> ${formatDate(data.date)}</div>
+          <div><b>New Time:</b> ${escapeHtml(data.time)}</div>
+          <div><b>Guests:</b> ${escapeHtml(data.guests)}</div>
+          <div><b>Status:</b> Updated</div>
+        `;
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+    }
+
     function cancelBookingNow() {
-      const bookingId = $("cancelBookingId").value.trim().toUpperCase();
-      const phone = $("cancelPhone").value.trim();
+      const bookingId = $("manageBookingId").value.trim().toUpperCase();
+      const phone = $("managePhone").value.trim();
 
       if (!bookingId || !phone) {
         showToast("กรุณากรอก Booking ID และเบอร์โทร");
@@ -826,23 +994,22 @@
       });
     }
 
+    function setEditTimeActive(time) {
+      document.querySelectorAll(".edit-time-btn").forEach(function (btn) {
+        btn.classList.toggle("active", btn.dataset.time === time);
+      });
+    }
+
     function callBackend(action, data, onSuccess) {
       setLoading(true);
-
-      $("submitBtn").disabled = true;
-      $("cancelBtn").disabled = true;
+      setButtonsDisabled(true);
 
       const callbackName = "pvfCallback_" + Date.now();
 
       window[callbackName] = function (res) {
         delete window[callbackName];
         setLoading(false);
-
-        $("submitBtn").disabled = false;
-        $("cancelBtn").disabled = false;
-        $("submitBtn").innerText = "RESERVE NOW";
-        $("cancelBtn").innerText = "CANCEL BOOKING";
-
+        setButtonsDisabled(false);
         onSuccess(res);
       };
 
@@ -861,36 +1028,44 @@
       script.onerror = function () {
         delete window[callbackName];
         setLoading(false);
-
-        $("submitBtn").disabled = false;
-        $("cancelBtn").disabled = false;
-
+        setButtonsDisabled(false);
         showToast("เชื่อมต่อ Backend ไม่สำเร็จ");
       };
 
       document.body.appendChild(script);
     }
 
+    function setButtonsDisabled(disabled) {
+      ["submitBtn", "findBtn", "updateBtn", "cancelBtn"].forEach(function (id) {
+        if ($(id)) $(id).disabled = disabled;
+      });
+    }
+
     function resetAll() {
       $("bookingForm").reset();
-      $("cancelBookingId").value = "";
-      $("cancelPhone").value = "";
+      $("manageBookingId").value = "";
+      $("managePhone").value = "";
+      $("editDate").value = "";
+      $("editGuests").value = "";
+      $("editNotes").value = "";
+      $("bookingResult").style.display = "none";
+      $("editBox").style.display = "none";
 
+      currentBooking = null;
       selectedTime = "7:00 PM";
+      selectedEditTime = "";
 
       document.querySelectorAll(".time-btn").forEach(function (b) {
         b.classList.remove("active");
       });
-
       document.querySelector(".time-btn[data-time='7:00 PM']").classList.add("active");
+
+      document.querySelectorAll(".edit-time-btn").forEach(function (b) {
+        b.classList.remove("active");
+      });
 
       $("successBox").style.display = "none";
       showTab("booking");
-
-      $("submitBtn").disabled = false;
-      $("cancelBtn").disabled = false;
-      $("submitBtn").innerText = "RESERVE NOW";
-      $("cancelBtn").innerText = "CANCEL BOOKING";
 
       setMinDate();
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -914,6 +1089,8 @@
       if (!dateText) return "-";
 
       const d = new Date(dateText + "T00:00:00");
+      if (isNaN(d.getTime())) return dateText;
+
       const day = String(d.getDate()).padStart(2, "0");
       const month = String(d.getMonth() + 1).padStart(2, "0");
       const year = d.getFullYear();
