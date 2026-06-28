@@ -2,644 +2,641 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>PЯIVATE FLOOR Reservation</title>
 
-  <!-- LIFF SDK -->
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
   <style>
     :root {
-      --ruby: #d61f26;
-      --ruby-bright: #ef4b4f;
-      --ruby-dark: #8f0d14;
-      --black: #090909;
-      --black-soft: rgba(0, 0, 0, 0.42);
-      --card: rgba(22, 5, 6, 0.72);
-      --card-2: rgba(18, 5, 6, 0.88);
+      --bg-red: #d61f26;
+      --bg-red-2: #ef4b52;
+      --bg-red-3: #8c0d12;
+      --glass: rgba(34, 6, 8, 0.42);
+      --glass-strong: rgba(20, 4, 5, 0.58);
+      --glass-soft: rgba(255,255,255,0.12);
+      --border: rgba(255,255,255,0.16);
       --white: #ffffff;
-      --text: rgba(255,255,255,0.96);
-      --muted: rgba(255,255,255,0.78);
-      --line: rgba(255,255,255,0.15);
-      --soft-line: rgba(255,255,255,0.08);
-      --green: #5cff83;
-      --gray: #d3d3d3;
-      --shadow: 0 18px 44px rgba(0,0,0,0.28);
-      --radius-xl: 28px;
-      --radius-lg: 22px;
-      --radius-md: 18px;
-      --radius-sm: 14px;
+      --text: rgba(255,255,255,0.95);
+      --muted: rgba(255,255,255,0.72);
+      --placeholder: rgba(255,255,255,0.38);
+      --green: #60e36d;
+      --shadow: 0 18px 40px rgba(0,0,0,0.18);
+      --shadow-soft: 0 10px 30px rgba(0,0,0,0.12);
+      --radius-xl: 34px;
+      --radius-lg: 28px;
+      --radius-md: 22px;
+      --radius-sm: 18px;
+      --radius-pill: 999px;
     }
 
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
       -webkit-tap-highlight-color: transparent;
     }
 
-    html {
-      scroll-behavior: smooth;
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 8%, rgba(255,255,255,0.14), transparent 20%),
+        radial-gradient(circle at 85% 15%, rgba(255,255,255,0.10), transparent 22%),
+        linear-gradient(135deg, var(--bg-red) 0%, var(--bg-red-2) 48%, var(--bg-red-3) 100%);
+      min-height: 100%;
     }
 
     body {
-      min-height: 100vh;
-      color: var(--text);
-      font-family: "Canva Sans", "Arial", "Helvetica Neue", sans-serif;
-      background:
-        radial-gradient(circle at 20% 0%, rgba(255,255,255,0.18), transparent 28%),
-        radial-gradient(circle at 85% 15%, rgba(255,255,255,0.12), transparent 24%),
-        linear-gradient(135deg, #b31217 0%, #d61f26 44%, #7e090f 100%);
-      overflow-x: hidden;
+      padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
     }
 
     .page {
       width: 100%;
       max-width: 860px;
       margin: 0 auto;
-      padding: 24px 16px 40px;
+      padding: 20px 18px 36px;
+    }
+
+    .brand-top {
+      text-align: center;
+      font-size: clamp(42px, 7vw, 72px);
+      font-weight: 700;
+      letter-spacing: 5px;
+      line-height: 1;
+      color: #fff;
+      margin: 8px 0 14px;
+      text-shadow: 0 10px 26px rgba(0,0,0,0.18);
     }
 
     .hero {
-      position: relative;
-      overflow: hidden;
-      border-radius: 34px;
-      padding: 34px 20px 28px;
-      margin-bottom: 18px;
-      text-align: center;
+      padding: 34px 26px 28px;
+      border-radius: var(--radius-xl);
       background:
-        linear-gradient(to bottom, rgba(255,255,255,0.06), rgba(0,0,0,0.36)),
-        linear-gradient(135deg, rgba(0,0,0,0.36), rgba(0,0,0,0.62));
-      border: 1px solid rgba(255,255,255,0.18);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
+        radial-gradient(circle at 25% 10%, rgba(255,255,255,0.14), transparent 30%),
+        linear-gradient(145deg, rgba(255,255,255,0.12), rgba(0,0,0,0.10)),
+        rgba(28, 4, 6, 0.40);
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.20),
+        inset 0 -1px 0 rgba(255,255,255,0.04),
+        var(--shadow);
+      backdrop-filter: blur(16px) saturate(130%);
+      -webkit-backdrop-filter: blur(16px) saturate(130%);
+      text-align: center;
+      margin-bottom: 18px;
     }
 
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at top center, rgba(255,255,255,0.12), transparent 42%);
-      pointer-events: none;
-    }
-
-    .logo {
-      color: var(--white);
-      font-size: clamp(34px, 6vw, 64px);
-      line-height: 1;
-      font-weight: 600;
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      text-shadow: 0 8px 26px rgba(0,0,0,0.28);
-      word-break: keep-all;
-      position: relative;
-      z-index: 1;
-    }
-
-    .title-box {
-      margin-top: 12px; /* ขยับ RƎSERVATION เข้าใกล้ PЯIVATE FLOOR */
-      position: relative;
-      z-index: 1;
-    }
-
-    .title-box h1 {
-      font-size: clamp(30px, 5vw, 54px);
-      font-weight: 400;
+    .hero-title {
+      font-size: clamp(30px, 6vw, 56px);
+      font-weight: 300;
       letter-spacing: 4px;
-      color: var(--white);
-      line-height: 1.05;
-      text-transform: uppercase;
+      margin: 0 0 18px;
+      color: #fff;
     }
 
-    .title-line {
-      width: 118px;
-      max-width: 28vw;
-      height: 6px;
-      margin: 14px auto 16px;
-      background: rgba(255,255,255,0.96);
-      border-radius: 999px;
-    }
-
-    .title-box p {
-      font-size: 15px;
-      color: rgba(255,255,255,0.9);
+    .hero-sub {
+      font-size: 20px;
       line-height: 1.6;
+      color: rgba(255,255,255,0.90);
+      margin: 0;
     }
 
     .tabs {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 18px;
+      gap: 14px;
       margin-bottom: 16px;
     }
 
     .tab-btn {
-      border: 1px solid rgba(255,255,255,0.2);
-      background: rgba(65, 8, 10, 0.35);
-      color: var(--white);
-      border-radius: 28px;
-      padding: 18px 16px;
-      font-size: clamp(18px, 3vw, 24px);
-      font-weight: 600;
-      letter-spacing: 1px;
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: var(--radius-pill);
+      min-height: 68px;
+      padding: 14px 18px;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: #fff;
       cursor: pointer;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.18), rgba(255,255,255,0.04)),
+        rgba(72, 12, 14, 0.30);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.22),
+        0 10px 24px rgba(0,0,0,0.12);
+      backdrop-filter: blur(14px) saturate(130%);
+      -webkit-backdrop-filter: blur(14px) saturate(130%);
       transition: .2s ease;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
     }
 
     .tab-btn.active {
-      background: linear-gradient(135deg, var(--ruby-bright), #de393d 50%, #c7272e);
-      border-color: rgba(255,255,255,0.16);
-      box-shadow: 0 12px 26px rgba(214,31,38,0.28);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.30), rgba(255,255,255,0.06)),
+        linear-gradient(135deg, #ff7c80, #ea4c52 50%, #c01a21);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.28),
+        0 14px 30px rgba(214,31,38,0.18);
     }
 
     .status-pill {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      padding: 14px 18px;
+      gap: 12px;
+      min-height: 64px;
+      padding: 14px 22px;
+      border-radius: var(--radius-pill);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.03)),
+        rgba(36, 5, 6, 0.40);
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: var(--shadow-soft);
       margin-bottom: 18px;
-      border-radius: 999px;
-      background: rgba(38, 8, 9, 0.42);
-      border: 1px solid rgba(255,255,255,0.14);
-      font-size: 15px;
-      color: rgba(255,255,255,0.92);
-      box-shadow: var(--shadow);
+      font-size: 18px;
+      color: rgba(255,255,255,0.86);
     }
 
     .status-dot {
-      width: 14px;
-      height: 14px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
-      background: var(--gray);
-      box-shadow: 0 0 0 6px rgba(255,255,255,0.06);
+      background: #cfcfcf;
+      box-shadow: 0 0 12px rgba(255,255,255,0.15);
       flex: 0 0 auto;
     }
 
     .status-pill.connected .status-dot {
       background: var(--green);
-      box-shadow: 0 0 0 6px rgba(92,255,131,0.12);
+      box-shadow: 0 0 18px rgba(96,227,109,0.65);
     }
 
-    .status-pill.connected .status-value {
+    .status-pill.connected .status-text strong {
       color: var(--green);
-      font-weight: 700;
     }
 
-    .status-pill.disconnected .status-value {
-      color: rgba(255,255,255,0.65);
-      font-weight: 600;
+    .status-pill.disconnected .status-text strong {
+      color: rgba(255,255,255,0.55);
     }
 
-    .panel {
-      display: none;
-    }
-
-    .panel.active {
-      display: block;
-    }
-
-    .form-card,
-    .success-box,
-    .manage-result-box {
-      padding: 16px;
-      border-radius: 30px;
-      background: rgba(40, 7, 8, 0.36);
-      border: 1px solid rgba(255,255,255,0.14);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
+    .card {
+      padding: 24px;
+      border-radius: 38px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.03)),
+        rgba(35, 5, 7, 0.28);
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.16),
+        var(--shadow);
+      backdrop-filter: blur(16px) saturate(135%);
+      -webkit-backdrop-filter: blur(16px) saturate(135%);
+      margin-bottom: 18px;
     }
 
     .field {
-      background: linear-gradient(135deg, rgba(14, 3, 4, 0.9), rgba(33, 7, 8, 0.76));
-      border: 1px solid var(--line);
-      border-radius: 26px;
-      padding: 18px;
-      margin-bottom: 15px;
-      overflow: hidden;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+        rgba(24, 2, 3, 0.52);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 34px;
+      padding: 22px;
+      margin-bottom: 16px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        0 8px 18px rgba(0,0,0,0.10);
+      overflow: visible;
     }
 
-    .field-head {
+    .field-label {
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .field-body {
-      width: 100%;
-      overflow: hidden;
-    }
-
-    .icon {
-      width: 30px;
-      height: 30px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: #ff6d71;
-      flex: 0 0 auto;
-      font-size: 26px;
-    }
-
-    label {
-      display: block;
-      color: var(--white);
-      font-size: clamp(16px, 2.5vw, 18px);
-      letter-spacing: 2px;
+      font-size: 20px;
       font-weight: 700;
-      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      color: #fff;
+    }
+
+    .field-label .icon {
+      font-size: 28px;
+      line-height: 1;
+      flex: 0 0 auto;
     }
 
     .required {
-      color: #ff4f58;
-      margin-left: 4px;
+      color: #ff6e73;
     }
 
     input,
     select,
-    textarea {
-      display: block;
-      width: 100%;
-      max-width: 100%;
-      min-width: 0;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(0,0,0,0.7);
-      color: var(--white);
-      border-radius: 18px;
-      padding: 18px 18px;
-      font-size: clamp(18px, 4vw, 19px);
-      outline: none;
+    textarea,
+    button {
       font-family: inherit;
-      transition: .18s ease;
     }
 
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: rgba(255,255,255,0.42);
-      box-shadow: 0 0 0 4px rgba(255,255,255,0.06);
+    input[type="text"],
+    input[type="tel"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      display: block;
+      min-width: 0;
+      max-width: 100%;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 28px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)),
+        rgba(6, 0, 1, 0.74);
+      color: #fff;
+      padding: 20px 22px;
+      font-size: 20px;
+      line-height: 1.35;
+      outline: none;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.06),
+        0 6px 14px rgba(0,0,0,0.10);
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="date"] {
+      overflow: hidden;
+      position: relative;
+      min-height: 94px;
+      padding-right: 24px;
+      white-space: nowrap;
+    }
+
+    input[type="date"]::-webkit-date-and-time-value {
+      text-align: center;
+      width: 100%;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      opacity: 0;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
     }
 
     input::placeholder,
     textarea::placeholder {
-      color: rgba(255,255,255,0.34);
-    }
-
-    input[type="date"] {
-      color-scheme: dark;
-      overflow: hidden; /* แก้ date ล้นขอบ */
+      color: var(--placeholder);
     }
 
     textarea {
-      min-height: 118px;
+      min-height: 150px;
       resize: vertical;
-      line-height: 1.6;
-    }
-
-    .guest-extra {
-      display: none;
-      margin-top: 12px;
     }
 
     .time-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
     }
 
     .time-btn {
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(0,0,0,0.74);
-      color: var(--white);
-      border-radius: 18px;
-      padding: 20px 10px;
-      font-size: clamp(18px, 3.5vw, 20px);
-      text-align: center;
+      min-height: 96px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 30px;
+      color: #fff;
+      font-size: 26px;
+      font-weight: 500;
       cursor: pointer;
-      transition: .18s ease;
-      user-select: none;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02)),
+        rgba(7, 0, 1, 0.85);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.10),
+        0 8px 18px rgba(0,0,0,0.10);
+      transition: .2s ease;
     }
 
     .time-btn.active {
-      background: linear-gradient(135deg, var(--ruby-bright), #ef5b5e 55%, #df373d);
-      border-color: rgba(255,255,255,0.08);
-      box-shadow: 0 10px 22px rgba(239,75,79,0.18);
-      transform: translateY(-1px);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.25), rgba(255,255,255,0.04)),
+        linear-gradient(135deg, #ff8e92, #f15a60 50%, #e0444b);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.20),
+        0 12px 22px rgba(241,90,96,0.16);
     }
 
-    .notes-box {
-      margin: 14px 0 17px;
-      padding: 18px;
-      border-radius: 24px;
-      background: linear-gradient(135deg, rgba(20,4,5,0.92), rgba(43,8,9,0.74));
-      border: 1px solid rgba(255,255,255,0.12);
+    .inline-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
     }
 
-    .notes-box h3 {
-      font-size: 22px;
+    .custom-guests {
+      display: none;
+    }
+
+    .notes-card {
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)),
+        rgba(28, 3, 5, 0.50);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 34px;
+      padding: 24px;
+      margin-bottom: 18px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        0 8px 18px rgba(0,0,0,0.10);
+    }
+
+    .notes-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 800;
       letter-spacing: 2px;
-      margin-bottom: 14px;
+      margin: 0 0 18px;
       color: #fff;
-      text-transform: uppercase;
     }
 
     .notes-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
       display: grid;
-      gap: 14px;
-      margin-bottom: 16px;
+      gap: 22px;
     }
 
-    .note-item {
-      padding-left: 18px;
-      position: relative;
-      line-height: 1.65;
-      color: rgba(255,255,255,0.92);
-    }
-
-    .note-item::before {
-      content: "•";
-      position: absolute;
-      left: 0;
-      top: 0;
-      color: #ff6d71;
-      font-size: 22px;
-      line-height: 1;
-    }
-
-    .note-item .en {
-      display: block;
-      font-size: 15px;
-      font-weight: 600;
-      color: #fff;
-    }
-
-    .note-item .th {
-      display: block;
-      margin-top: 4px;
-      font-size: 15px;
-      color: rgba(255,255,255,0.84);
-    }
-
-    .agree-box {
+    .notes-item {
       display: grid;
-      grid-template-columns: 34px 1fr;
+      grid-template-columns: 36px 1fr;
       gap: 14px;
       align-items: start;
     }
 
-    .agree-box input[type="checkbox"] {
-      width: 30px;
-      height: 30px;
-      accent-color: var(--ruby-bright);
-      margin-top: 3px;
-    }
-
-    .agree-box strong {
-      display: block;
-      font-size: 18px;
-      line-height: 1.35;
-      color: #fff;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .agree-box .th-text {
-      display: block;
-      margin-top: 4px;
-      color: rgba(255,255,255,0.92);
-      font-size: 16px;
-      line-height: 1.45;
-    }
-
-    .btn {
-      width: 100%;
-      border: 0;
-      border-radius: 22px;
-      padding: 20px 18px;
-      background: linear-gradient(135deg, #f25d61, #eb484d 50%, #cf2c32);
-      color: white;
-      font-family: inherit;
-      font-size: clamp(18px, 4vw, 22px);
-      font-weight: 800;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      cursor: pointer;
-      box-shadow: 0 16px 30px rgba(214,31,38,0.2);
-      transition: .18s ease;
-    }
-
-    .btn:active {
-      transform: scale(.985);
-    }
-
-    .btn:disabled {
-      opacity: .58;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .btn.secondary {
-      background: linear-gradient(135deg, rgba(255,255,255,0.16), rgba(255,255,255,0.08));
-      border: 1px solid rgba(255,255,255,0.14);
-      box-shadow: none;
-    }
-
-    .btn.dark {
-      background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(0,0,0,0.35));
-      border: 1px solid rgba(255,255,255,0.12);
-      box-shadow: none;
-    }
-
-    .btn-group {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-      margin-top: 10px;
-    }
-
-    .success-box {
-      display: none;
-      text-align: center;
-    }
-
-    .success-icon {
-      width: 86px;
-      height: 86px;
-      margin: 0 auto 18px;
+    .note-num {
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      border: 2px solid rgba(255,255,255,0.7);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ff6f74, #d61f26);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      box-shadow: 0 6px 14px rgba(214,31,38,0.18);
+      margin-top: 4px;
+    }
+
+    .note-en {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.55;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .note-th {
+      font-size: 20px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.92);
+    }
+
+    .agree-wrap {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .agree-check {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 52px;
+      height: 52px;
+      min-width: 52px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.18);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04)),
+        rgba(255,255,255,0.92);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.35),
+        0 8px 18px rgba(0,0,0,0.10);
+      position: relative;
+      cursor: pointer;
+      flex: 0 0 auto;
+    }
+
+    .agree-check:checked {
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.20), rgba(255,255,255,0.05)),
+        linear-gradient(135deg, #ff6f74, #d61f26);
+    }
+
+    .agree-check:checked::after {
+      content: "✓";
+      position: absolute;
+      inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 46px;
-      color: var(--white);
+      color: #fff;
+      font-size: 28px;
+      font-weight: 800;
     }
 
-    .success-box h2 {
-      font-size: clamp(30px, 5vw, 42px);
-      line-height: 1.1;
-      margin-bottom: 10px;
+    .agree-text {
+      font-size: 22px;
+      font-weight: 800;
       letter-spacing: 1px;
+      line-height: 1.35;
+      color: #fff;
     }
 
-    .success-box p {
-      color: rgba(255,255,255,0.84);
-      line-height: 1.7;
-      font-size: 15px;
+    .agree-sub {
+      display: block;
+      font-size: 20px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.92);
+      margin-top: 4px;
     }
 
-    .summary {
-      margin-top: 20px;
-      padding: 18px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.12);
-      text-align: left;
-      font-size: 15px;
-      line-height: 1.95;
+    .action-btn,
+    .secondary-btn,
+    .ghost-btn {
+      width: 100%;
+      min-height: 86px;
+      border: 0;
+      border-radius: var(--radius-pill);
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      cursor: pointer;
+      color: #fff;
+      transition: .2s ease;
     }
 
-    .summary b {
-      color: var(--white);
+    .action-btn {
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.22), rgba(255,255,255,0.04)),
+        linear-gradient(135deg, #ff8488, #f05c62 48%, #d61f26);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.24),
+        0 14px 26px rgba(214,31,38,0.18);
     }
 
+    .secondary-btn {
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.03)),
+        rgba(55, 10, 12, 0.42);
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.10);
+    }
+
+    .ghost-btn {
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02)),
+        rgba(29, 4, 6, 0.24);
+      border: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .btn-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .success-box,
+    .manage-box,
     .manage-result-box {
       display: none;
+    }
+
+    .summary-box {
+      padding: 18px 20px;
+      border-radius: 26px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)),
+        rgba(12, 0, 1, 0.55);
+      border: 1px solid rgba(255,255,255,0.12);
+      font-size: 18px;
+      line-height: 1.8;
       margin-top: 16px;
+      color: rgba(255,255,255,0.92);
     }
 
-    .manage-hint {
-      margin-bottom: 14px;
-      font-size: 15px;
-      line-height: 1.7;
-      color: rgba(255,255,255,0.84);
-      text-align: center;
-    }
-
-    .booking-info-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .mini-pill {
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.1);
-      font-size: 14px;
-    }
-
-    .danger-text {
-      margin-top: 8px;
-      font-size: 14px;
-      line-height: 1.6;
-      color: rgba(255,255,255,0.8);
-      text-align: center;
+    .summary-box b {
+      color: #fff;
     }
 
     .footer {
-      margin-top: 24px;
+      margin-top: 22px;
       padding-top: 20px;
-      border-top: 1px solid rgba(255,255,255,0.22);
+      border-top: 1px solid rgba(255,255,255,0.18);
       text-align: center;
-      color: rgba(255,255,255,0.82);
-      font-size: 13px;
-      line-height: 1.85;
     }
 
     .footer-row {
       display: flex;
-      justify-content: center;
-      gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 16px;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 18px;
     }
 
     .footer-pill {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(22, 7, 8, 0.48);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: var(--white);
-      font-size: 14px;
-      white-space: nowrap;
+      gap: 9px;
+      padding: 12px 18px;
+      border-radius: var(--radius-pill);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.03)),
+        rgba(32, 5, 7, 0.42);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: var(--shadow-soft);
+      color: #fff;
+      font-size: 18px;
+      text-decoration: none;
     }
 
-    .footer-pill svg {
-      width: 18px;
-      height: 18px;
-      fill: currentColor;
+    .footer-icon {
+      width: 20px;
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       flex: 0 0 auto;
     }
 
-    .footer-title {
-      font-size: 17px;
-      color: #fff;
-      margin-bottom: 4px;
-      letter-spacing: 0.5px;
+    .footer-thanks {
+      font-size: 18px;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.92);
     }
 
-    .footer-title strong {
+    .footer-thanks b {
       font-weight: 800;
-    }
-
-    .footer-subtitle {
-      font-size: 17px;
-      color: rgba(255,255,255,0.96);
-      letter-spacing: 0.5px;
+      color: #fff;
     }
 
     .toast {
       position: fixed;
-      left: 16px;
-      right: 16px;
-      bottom: 18px;
-      max-width: 560px;
+      left: 18px;
+      right: 18px;
+      bottom: 20px;
       margin: auto;
-      padding: 16px 18px;
-      border-radius: 18px;
-      background: rgba(0,0,0,0.88);
-      color: white;
-      border: 1px solid rgba(255,255,255,0.14);
-      box-shadow: var(--shadow);
-      display: none;
-      z-index: 99;
-      font-size: 15px;
+      max-width: 760px;
+      border-radius: 22px;
+      padding: 18px 20px;
+      background: rgba(0,0,0,0.78);
+      color: #fff;
+      font-size: 18px;
       line-height: 1.55;
+      box-shadow: 0 18px 30px rgba(0,0,0,0.20);
+      display: none;
+      z-index: 999;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
 
     .loading {
-      display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.76);
-      backdrop-filter: blur(8px);
-      z-index: 90;
+      display: none;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      padding: 20px;
+      background: rgba(0,0,0,0.42);
+      z-index: 998;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
-    .loading-inner {
-      color: white;
-      font-size: 15px;
-      letter-spacing: 1px;
+    .loading-box {
+      min-width: 220px;
+      text-align: center;
+      padding: 28px 24px;
+      border-radius: 28px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.03)),
+        rgba(25, 4, 6, 0.72);
+      border: 1px solid rgba(255,255,255,0.14);
+      color: #fff;
+      box-shadow: var(--shadow);
     }
 
     .spinner {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
+      border: 4px solid rgba(255,255,255,0.16);
+      border-top-color: #fff;
       border-radius: 50%;
-      border: 3px solid rgba(255,255,255,0.20);
-      border-top-color: white;
       margin: 0 auto 14px;
       animation: spin .8s linear infinite;
     }
@@ -648,57 +645,76 @@
       to { transform: rotate(360deg); }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 720px) {
       .page {
-        padding: 18px 14px 34px;
+        padding: 14px 14px 26px;
+      }
+
+      .brand-top {
+        font-size: 34px;
+        letter-spacing: 3px;
+        margin: 8px 0 12px;
       }
 
       .hero {
-        padding: 26px 16px 22px;
-        border-radius: 28px;
+        padding: 28px 18px 22px;
+        border-radius: 30px;
       }
 
-      .logo {
-        font-size: 36px;
+      .hero-title {
+        font-size: 28px;
         letter-spacing: 3px;
+        margin-bottom: 10px;
       }
 
-      .title-box {
-        margin-top: 10px;
-      }
-
-      .title-box h1 {
-        font-size: 30px;
-        letter-spacing: 3px;
-      }
-
-      .tabs {
-        gap: 12px;
+      .hero-sub {
+        font-size: 16px;
       }
 
       .tab-btn {
-        padding: 16px 10px;
+        min-height: 58px;
+        font-size: 18px;
+      }
+
+      .status-pill {
+        min-height: 54px;
         font-size: 16px;
+        padding: 10px 16px;
+      }
+
+      .card {
+        padding: 16px;
+        border-radius: 30px;
       }
 
       .field {
         padding: 16px;
-        border-radius: 22px;
+        border-radius: 28px;
       }
 
-      .field-head {
+      .field-label {
+        font-size: 16px;
+        gap: 10px;
         margin-bottom: 12px;
       }
 
-      label {
-        font-size: 15px;
+      .field-label .icon {
+        font-size: 22px;
       }
 
-      input,
+      input[type="text"],
+      input[type="tel"],
+      input[type="number"],
+      input[type="date"],
       select,
       textarea {
-        font-size: 17px;
-        padding: 16px 16px;
+        font-size: 16px;
+        padding: 16px 18px;
+        border-radius: 22px;
+      }
+
+      input[type="date"] {
+        min-height: 74px;
       }
 
       .time-grid {
@@ -706,476 +722,396 @@
       }
 
       .time-btn {
-        padding: 17px 8px;
-        font-size: 17px;
+        min-height: 72px;
+        font-size: 16px;
+        border-radius: 24px;
       }
 
-      .btn {
+      .notes-card {
+        padding: 18px;
+        border-radius: 28px;
+      }
+
+      .notes-title {
         font-size: 18px;
-        padding: 18px 14px;
-        letter-spacing: 3px;
       }
 
-      .footer-row {
-        gap: 8px;
+      .note-en {
+        font-size: 15px;
+      }
+
+      .note-th {
+        font-size: 14px;
+      }
+
+      .agree-check {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+      }
+
+      .agree-text {
+        font-size: 15px;
+      }
+
+      .agree-sub {
+        font-size: 14px;
+      }
+
+      .action-btn,
+      .secondary-btn,
+      .ghost-btn {
+        min-height: 70px;
+        font-size: 16px;
+        letter-spacing: 2px;
       }
 
       .footer-pill {
-        font-size: 13px;
-        padding: 9px 12px;
+        font-size: 14px;
+        padding: 10px 14px;
+      }
+
+      .footer-thanks {
+        font-size: 14px;
+      }
+
+      .toast {
+        font-size: 14px;
+        border-radius: 18px;
       }
     }
-
-
-    
   </style>
 </head>
-
 <body>
   <div class="page">
 
-    <!-- HERO -->
-    <section class="hero">
-      <div class="logo">PЯIVATE FLOOR</div>
+    <div class="brand-top">PЯIVATE FLOOR</div>
 
-      <div class="title-box">
-        <h1>RƎSERVATION</h1>
-        <div class="title-line"></div>
-        <p>กรุณากรอกข้อมูลสำหรับการจองโต๊ะ</p>
-      </div>
+    <section class="hero">
+      <h1 class="hero-title">RƎSERVATION</h1>
+      <p class="hero-sub">กรุณากรอกข้อมูลสำหรับการจองโต๊ะ</p>
     </section>
 
-    <!-- TABS -->
     <div class="tabs">
-      <button type="button" class="tab-btn active" id="tabBookingBtn">BOOKING</button>
-      <button type="button" class="tab-btn" id="tabManageBtn">MANAGE</button>
+      <button class="tab-btn active" id="bookingTabBtn" type="button">BOOKING</button>
+      <button class="tab-btn" id="manageTabBtn" type="button">MANAGE</button>
     </div>
 
-    <!-- LINE STATUS -->
     <div class="status-pill disconnected" id="lineStatusPill">
       <span class="status-dot"></span>
-      <span>Line Status: <span class="status-value" id="lineStatusText">Disconnected</span></span>
+      <span class="status-text">Line Status: <strong id="lineStatusText">Disconnected</strong></span>
     </div>
 
-    <!-- BOOKING PANEL -->
-    <section class="panel active" id="bookingPanel">
-      <section class="form-card" id="formCard">
-        <form id="bookingForm">
+    <!-- BOOKING SECTION -->
+    <section id="bookingSection" class="card">
+      <form id="bookingForm">
 
-          <div class="field">
-            <div class="field-head">
-              <span class="icon">📅</span>
-              <label for="date">Date <span class="required">*</span></label>
-            </div>
-            <div class="field-body">
-              <input type="date" id="date" required />
-            </div>
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">📅</span>
+            <span>DATE <span class="required">*</span></span>
           </div>
+          <input type="date" id="date" required />
+        </div>
 
-          <div class="field">
-            <div class="field-head">
-              <span class="icon">🕘</span>
-              <label>Time <span class="required">*</span></label>
-            </div>
-            <div class="time-grid" id="bookingTimeGrid">
-              <div class="time-btn active" data-time="7:00 PM">7:00 PM</div>
-              <div class="time-btn" data-time="7:30 PM">7:30 PM</div>
-              <div class="time-btn" data-time="8:00 PM">8:00 PM</div>
-              <div class="time-btn" data-time="8:30 PM">8:30 PM</div>
-            </div>
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">🕘</span>
+            <span>TIME <span class="required">*</span></span>
           </div>
-
-          <div class="field">
-            <div class="field-head">
-              <span class="icon">👤</span>
-              <label for="name">Name <span class="required">*</span></label>
-            </div>
-            <div class="field-body">
-              <input type="text" id="name" placeholder="ชื่อผู้จอง" required />
-            </div>
+          <div class="time-grid" id="timeGrid">
+            <button type="button" class="time-btn active" data-time="7:00 PM">7:00 PM</button>
+            <button type="button" class="time-btn" data-time="7:30 PM">7:30 PM</button>
+            <button type="button" class="time-btn" data-time="8:00 PM">8:00 PM</button>
+            <button type="button" class="time-btn" data-time="8:30 PM">8:30 PM</button>
           </div>
+        </div>
 
-          <div class="field">
-            <div class="field-head">
-              <span class="icon">👥</span>
-              <label for="guests">Number of Guests <span class="required">*</span></label>
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">👤</span>
+            <span>NAME <span class="required">*</span></span>
+          </div>
+          <input type="text" id="name" placeholder="ชื่อผู้จอง" required />
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">👥</span>
+            <span>NUMBER OF GUESTS <span class="required">*</span></span>
+          </div>
+          <div class="inline-grid">
+            <select id="guests" required>
+              <option value="">เลือกจำนวนแขก</option>
+              <option value="1">1 คน</option>
+              <option value="2">2 คน</option>
+              <option value="3">3 คน</option>
+              <option value="4">4 คน</option>
+              <option value="5">5 คน</option>
+              <option value="6">6 คน</option>
+              <option value="7">7 คน</option>
+              <option value="8">8 คน</option>
+              <option value="9">9 คน</option>
+              <option value="custom">ระบุจำนวนเอง</option>
+            </select>
+            <input type="number" min="1" id="customGuests" class="custom-guests" placeholder="ระบุจำนวนแขก" />
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">☎️</span>
+            <span>PHONE NUMBER <span class="required">*</span></span>
+          </div>
+          <input type="tel" id="phone" placeholder="095-454-6596" required />
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">✏️</span>
+            <span>YOUR NOTES</span>
+          </div>
+          <textarea id="notes" placeholder="หมายเหตุเพิ่มเติม เช่น วันเกิด, โซนที่ต้องการ, ข้อความเพิ่มเติม"></textarea>
+        </div>
+
+        <div class="notes-card">
+          <h3 class="notes-title">
+            <span class="icon">📝</span>
+            <span>OUR NOTES</span>
+          </h3>
+
+          <div class="notes-list">
+            <div class="notes-item">
+              <span class="note-num">1</span>
+              <div>
+                <div class="note-en">Smart casual attire is appreciated.</div>
+                <div class="note-th">อย่าลืมแต่งกายให้สวยและหล่อก่อนออกจากบ้านนะครับ</div>
+              </div>
             </div>
-            <div class="field-body">
-              <select id="guests" required>
-                <option value="">เลือกจำนวนแขก</option>
-                <option value="1">1 คน</option>
-                <option value="2">2 คน</option>
-                <option value="3">3 คน</option>
-                <option value="4">4 คน</option>
-                <option value="5">5 คน</option>
-                <option value="6">6 คน</option>
-                <option value="7">7 คน</option>
-                <option value="8">8 คน</option>
-                <option value="9">9 คน</option>
-                <option value="_custom">ระบุจำนวนเอง</option>
-              </select>
 
-              <div class="guest-extra" id="guestExtraWrap">
-                <input type="number" id="guestCustom" min="1" max="99" placeholder="ระบุจำนวนแขก" />
+            <div class="notes-item">
+              <span class="note-num">2</span>
+              <div>
+                <div class="note-en">Please arrive by 8:30 PM. Running late? Message or call us—we’ll hold your table if it’s still available.</div>
+                <div class="note-th">หากมาช้าเกิน 20.30 น. ทัก/โทรเข้ามาแจ้ง ถ้าไม่มีคิววอล์กอิน ทางร้านอาจล็อกโต๊ะไว้ได้ให้ครับ</div>
+              </div>
+            </div>
+
+            <div class="notes-item">
+              <span class="note-num">3</span>
+              <div>
+                <div class="note-en">Your information will be kept confidential in accordance with the PDPA.</div>
+                <div class="note-th">ข้อมูลของท่านจะถูกเก็บเป็นความลับตามกฎหมาย PDPA ครับ</div>
               </div>
             </div>
           </div>
 
-          <div class="field">
-            <div class="field-head">
-              <span class="icon">☎️</span>
-              <label for="phone">Phone Number <span class="required">*</span></label>
-            </div>
-            <div class="field-body">
-              <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์" required />
-            </div>
-          </div>
-
-          <div class="field">
-            <div class="field-head">
-              <span class="icon">✎</span>
-              <label for="notes">Your Notes</label>
-            </div>
-            <div class="field-body">
-              <textarea id="notes" placeholder="หมายเหตุเพิ่มเติม เช่น วันเกิด, โซนที่ต้องการ, ข้อความเพิ่มเติม"></textarea>
-            </div>
-          </div>
-
-          <div class="notes-box">
-            <h3>Our Notes</h3>
-
-            <div class="notes-list">
-              <div class="note-item">
-                <span class="en">Smart casual attire is appreciated.</span>
-                <span class="th">อย่าลืมแต่งกายให้สวยและหล่อก่อนออกจากบ้านนะครับ</span>
-              </div>
-
-              <div class="note-item">
-                <span class="en">Please arrive by 8:30 PM. Running late? Message or call us—we’ll hold your table if it’s still available.</span>
-                <span class="th">หากมาช้าเกิน 20.30 น. ทัก/โทรเข้ามาแจ้ง ถ้าไม่มีคิววอล์คอิน ทางร้านอาจล็อคโต๊ะไว้ได้ให้ครับ</span>
-              </div>
-
-              <div class="note-item">
-                <span class="en">Your information will be kept confidential in accordance with the PDPA.</span>
-                <span class="th">ข้อมูลของท่านจะถูกเก็บเป็นความลับตามกฎหมาย PDPA ครับ</span>
-              </div>
-            </div>
-
-            <label class="agree-box">
-              <input type="checkbox" id="agree" required />
-              <span>
-                <strong>GOT IT!</strong>
-                <span class="th-text">รับทราบเงื่อนไขและยืนยันการจอง</span>
-              </span>
+          <div class="agree-wrap">
+            <input type="checkbox" id="agree" class="agree-check" required />
+            <label for="agree" style="cursor:pointer;">
+              <span class="agree-text">UNDERSTOOD AND AGREED!</span>
+              <span class="agree-sub">รับทราบเงื่อนไขและยืนยันการจอง</span>
             </label>
           </div>
-
-          <button type="submit" class="btn" id="submitBtn">Reserve Now</button>
-        </form>
-      </section>
-
-      <section class="success-box" id="successBox">
-        <div class="success-icon">✓</div>
-        <h2>RƎSERVATION<br />COMPLETED!</h2>
-        <p>การจองของคุณเสร็จสมบูรณ์แล้ว</p>
-
-        <div class="summary" id="summaryBox"></div>
-
-        <div class="btn-group">
-          <button class="btn secondary" type="button" onclick="resetBookingForm()">
-            Back to Booking
-          </button>
         </div>
-      </section>
+
+        <button type="submit" class="action-btn" id="reserveBtn">RESERVE NOW</button>
+      </form>
     </section>
 
-    <!-- MANAGE PANEL -->
-    <section class="panel" id="managePanel">
-      <section class="form-card">
-        <p class="manage-hint">
-          สำหรับจัดการ Booking กรุณากรอก <b>Booking ID</b> และ <b>Phone Number</b><br />
-          เพื่อค้นหาและแก้ไขรายการจองของคุณ
-        </p>
+    <!-- SUCCESS -->
+    <section id="successBox" class="card success-box">
+      <div class="notes-title" style="justify-content:center; margin-bottom:12px;">
+        <span class="icon">✅</span>
+        <span>RESERVATION COMPLETED!</span>
+      </div>
+      <p style="text-align:center; margin:0; color:rgba(255,255,255,0.88);">การจองของคุณเสร็จสมบูรณ์แล้ว</p>
 
-        <form id="manageSearchForm">
-          <div class="field">
-            <div class="field-head">
-              <span class="icon">🎫</span>
-              <label for="manageBookingId">Booking ID <span class="required">*</span></label>
-            </div>
-            <div class="field-body">
-              <input type="text" id="manageBookingId" placeholder="เช่น PVF7KQ2A" required />
-            </div>
-          </div>
+      <div class="summary-box" id="summaryBox"></div>
 
-          <div class="field">
-            <div class="field-head">
-              <span class="icon">☎️</span>
-              <label for="managePhone">Phone Number <span class="required">*</span></label>
-            </div>
-            <div class="field-body">
-              <input type="tel" id="managePhone" placeholder="เบอร์โทรที่ใช้จอง" required />
-            </div>
-          </div>
-
-          <div class="btn-group">
-            <button type="submit" class="btn">Find Booking</button>
-          </div>
-        </form>
-
-        <section class="manage-result-box" id="manageResultBox">
-          <div class="booking-info-bar">
-            <div class="mini-pill" id="infoBookingId">Booking ID: -</div>
-            <div class="mini-pill" id="infoBookingStatus">Status: -</div>
-          </div>
-
-          <form id="manageEditForm">
-            <div class="field">
-              <div class="field-head">
-                <span class="icon">📅</span>
-                <label for="editDate">Date <span class="required">*</span></label>
-              </div>
-              <div class="field-body">
-                <input type="date" id="editDate" required />
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="field-head">
-                <span class="icon">🕘</span>
-                <label>Time <span class="required">*</span></label>
-              </div>
-              <div class="time-grid" id="manageTimeGrid">
-                <div class="time-btn active" data-time="7:00 PM">7:00 PM</div>
-                <div class="time-btn" data-time="7:30 PM">7:30 PM</div>
-                <div class="time-btn" data-time="8:00 PM">8:00 PM</div>
-                <div class="time-btn" data-time="8:30 PM">8:30 PM</div>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="field-head">
-                <span class="icon">👤</span>
-                <label for="editName">Name <span class="required">*</span></label>
-              </div>
-              <div class="field-body">
-                <input type="text" id="editName" required />
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="field-head">
-                <span class="icon">👥</span>
-                <label for="editGuests">Number of Guests <span class="required">*</span></label>
-              </div>
-              <div class="field-body">
-                <select id="editGuests" required>
-                  <option value="">เลือกจำนวนแขก</option>
-                  <option value="1">1 คน</option>
-                  <option value="2">2 คน</option>
-                  <option value="3">3 คน</option>
-                  <option value="4">4 คน</option>
-                  <option value="5">5 คน</option>
-                  <option value="6">6 คน</option>
-                  <option value="7">7 คน</option>
-                  <option value="8">8 คน</option>
-                  <option value="9">9 คน</option>
-                  <option value="_custom">ระบุจำนวนเอง</option>
-                </select>
-
-                <div class="guest-extra" id="editGuestExtraWrap">
-                  <input type="number" id="editGuestCustom" min="1" max="99" placeholder="ระบุจำนวนแขก" />
-                </div>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="field-head">
-                <span class="icon">☎️</span>
-                <label for="editPhone">Phone Number <span class="required">*</span></label>
-              </div>
-              <div class="field-body">
-                <input type="tel" id="editPhone" required />
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="field-head">
-                <span class="icon">✎</span>
-                <label for="editNotes">Your Notes</label>
-              </div>
-              <div class="field-body">
-                <textarea id="editNotes" placeholder="แก้ไขหมายเหตุได้ที่นี่"></textarea>
-              </div>
-            </div>
-
-            <div class="btn-group">
-              <button type="submit" class="btn">Update Booking</button>
-              <button type="button" class="btn dark" id="cancelBookingBtn">Cancel Booking</button>
-              <button type="button" class="btn secondary" id="backToManageSearchBtn">Back to Search</button>
-            </div>
-
-            <div class="danger-text">
-              หากต้องการยกเลิก กรุณาตรวจสอบ Booking ID และเบอร์โทรให้ถูกต้องก่อนกดยืนยัน
-            </div>
-          </form>
-        </section>
-      </section>
+      <div class="btn-stack" style="margin-top:16px;">
+        <button class="secondary-btn" type="button" id="backHomeBtn">BACK TO RESERVATION</button>
+      </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-      <div class="footer-row">
-        <div class="footer-pill">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24c1.08.36 2.23.56 3.4.56a1 1 0 0 1 1 1V21a1 1 0 0 1-1 1C10.3 22 2 13.7 2 3a1 1 0 0 1 1-1h4.5a1 1 0 0 1 1 1c0 1.17.2 2.32.56 3.4a1 1 0 0 1-.24 1l-2.22 2.4z"></path>
-          </svg>
-          <span>095-454-6596</span>
+    <!-- MANAGE -->
+    <section id="manageSection" class="card manage-box">
+      <div class="field">
+        <div class="field-label">
+          <span class="icon">🎫</span>
+          <span>BOOKING ID <span class="required">*</span></span>
         </div>
-
-        <div class="footer-pill">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20.7 4.1A10.7 10.7 0 0 0 12 1C6 1 1 4.9 1 9.8c0 2.8 1.6 5.3 4 7l-1.2 4.2c-.07.24.2.45.42.31l4.97-3.09c.92.24 1.87.36 2.83.36 6 0 11-3.9 11-8.8 0-2.1-.91-4.06-2.3-5.78z"></path>
-          </svg>
-          <span>@898taold</span>
-        </div>
-
-        <div class="footer-pill">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5.2A4.8 4.8 0 1 0 16.8 12 4.8 4.8 0 0 0 12 7.2zm0 8A3.2 3.2 0 1 1 15.2 12 3.2 3.2 0 0 1 12 15.2zM18.2 5.6a1.2 1.2 0 1 0 1.2 1.2 1.2 1.2 0 0 0-1.2-1.2z"></path>
-          </svg>
-          <span>@private.fl.bkk</span>
-        </div>
-
-        <div class="footer-pill">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M14.7 3.5c1.14 1.35 2.5 2.14 4.3 2.25v3.14a7.75 7.75 0 0 1-3.82-1.02v6.36a5.54 5.54 0 1 1-5.54-5.54c.29 0 .56.03.84.08v3.18a2.58 2.58 0 1 0 1.74 2.44V2h2.48z"></path>
-          </svg>
-          <span>@private.floor.bkk</span>
-        </div>
+        <input type="text" id="manageBookingId" placeholder="เช่น PЯ12A3B4" />
       </div>
 
-      <div class="footer-title">THANK YOU FOR CHOOSING <strong>PЯIVATE FLOOR</strong></div>
-      <div class="footer-subtitle">WE LOOK FORWARD TO SƎRVING YOU</div>
+      <div class="field">
+        <div class="field-label">
+          <span class="icon">☎️</span>
+          <span>PHONE NUMBER <span class="required">*</span></span>
+        </div>
+        <input type="tel" id="managePhone" placeholder="เบอร์โทรที่ใช้จอง" />
+      </div>
+
+      <div class="btn-stack">
+        <button class="action-btn" type="button" id="findBookingBtn">FIND BOOKING</button>
+        <button class="ghost-btn" type="button" id="backToBookingBtn">BACK TO RESERVATION</button>
+      </div>
+
+      <div id="manageResultBox" class="manage-result-box" style="margin-top:18px;">
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">📅</span>
+            <span>DATE <span class="required">*</span></span>
+          </div>
+          <input type="date" id="editDate" />
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">🕘</span>
+            <span>TIME <span class="required">*</span></span>
+          </div>
+          <div class="time-grid" id="editTimeGrid">
+            <button type="button" class="time-btn edit-time-btn" data-time="7:00 PM">7:00 PM</button>
+            <button type="button" class="time-btn edit-time-btn" data-time="7:30 PM">7:30 PM</button>
+            <button type="button" class="time-btn edit-time-btn" data-time="8:00 PM">8:00 PM</button>
+            <button type="button" class="time-btn edit-time-btn" data-time="8:30 PM">8:30 PM</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">👤</span>
+            <span>NAME <span class="required">*</span></span>
+          </div>
+          <input type="text" id="editName" />
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">👥</span>
+            <span>NUMBER OF GUESTS <span class="required">*</span></span>
+          </div>
+          <input type="number" id="editGuests" min="1" />
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">☎️</span>
+            <span>PHONE NUMBER <span class="required">*</span></span>
+          </div>
+          <input type="tel" id="editPhone" />
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">✏️</span>
+            <span>YOUR NOTES</span>
+          </div>
+          <textarea id="editNotes"></textarea>
+        </div>
+
+        <div class="btn-stack">
+          <button class="action-btn" type="button" id="updateBookingBtn">UPDATE BOOKING</button>
+          <button class="secondary-btn" type="button" id="cancelBookingBtn">CANCEL BOOKING</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-row">
+        <a class="footer-pill" href="tel:0954546596">
+          <span class="footer-icon">☎️</span>
+          <span>095-454-6596</span>
+        </a>
+        <a class="footer-pill" href="https://line.me/R/ti/p/@898taold" target="_blank">
+          <span class="footer-icon">💬</span>
+          <span>@898taold</span>
+        </a>
+        <a class="footer-pill" href="https://instagram.com/private.fl.bkk" target="_blank">
+          <span class="footer-icon">📷</span>
+          <span>@private.fl.bkk</span>
+        </a>
+        <a class="footer-pill" href="https://www.tiktok.com/@private.floor.bkk" target="_blank">
+          <span class="footer-icon">🎵</span>
+          <span>@private.floor.bkk</span>
+        </a>
+      </div>
+
+      <div class="footer-thanks">
+        THANK YOU FOR CHOOSING <b>PЯIVATE FLOOR</b><br />
+        WE LOOK FORWARD TO SƎRVING YOU
+      </div>
     </footer>
-
-  </div>
-
-  <div class="loading" id="loading">
-    <div class="loading-inner">
-      <div class="spinner"></div>
-      <div id="loadingText">กำลังดำเนินการ...</div>
-    </div>
   </div>
 
   <div class="toast" id="toast"></div>
 
+  <div class="loading" id="loading">
+    <div class="loading-box">
+      <div class="spinner"></div>
+      <div>กำลังดำเนินการ...</div>
+    </div>
+  </div>
+
   <script>
-    /* =========================
-       CONFIG
-    ========================= */
     const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyLzz4DhmkVzFcNHx3-udeHT8mPwyZCGX5Vvn95TFSs70DeQipIIptCE1aD_1cQ6XDL/exec";
     const LIFF_ID = "2010532980-aTUcLXbx";
 
-    /* =========================
-       STATE
-    ========================= */
     let selectedTime = "7:00 PM";
-    let manageSelectedTime = "7:00 PM";
+    let editSelectedTime = "7:00 PM";
     let lineUserId = "";
-    let lineDisplayName = "";
     let currentManageBookingId = "";
-    let currentManagePhone = "";
 
     const $ = (id) => document.getElementById(id);
 
-    document.addEventListener("DOMContentLoaded", async function () {
-      bindTabs();
+    document.addEventListener("DOMContentLoaded", async () => {
       setMinDate();
-      setupTimeButtons("bookingTimeGrid", "booking");
-      setupTimeButtons("manageTimeGrid", "manage");
-      setupGuestSelector("guests", "guestExtraWrap", "guestCustom");
-      setupGuestSelector("editGuests", "editGuestExtraWrap", "editGuestCustom");
+      setupTabs();
+      setupTimeButtons("#timeGrid .time-btn", false);
+      setupTimeButtons("#editTimeGrid .edit-time-btn", true);
+      setupGuests();
       setupBookingForm();
-      setupManageSearch();
-      setupManageEdit();
-      bindManageButtons();
+      setupManage();
+      setupBackButtons();
 
-      await initLiffSafe();
+      await initLiff();
     });
 
-    /* =========================
-       TABS
-    ========================= */
-    function bindTabs() {
-      $("tabBookingBtn").addEventListener("click", function () {
-        $("tabBookingBtn").classList.add("active");
-        $("tabManageBtn").classList.remove("active");
-        $("bookingPanel").classList.add("active");
-        $("managePanel").classList.remove("active");
+    function setupTabs() {
+      $("bookingTabBtn").addEventListener("click", () => showSection("booking"));
+      $("manageTabBtn").addEventListener("click", () => showSection("manage"));
+    }
+
+    function showSection(type) {
+      const isBooking = type === "booking";
+      $("bookingTabBtn").classList.toggle("active", isBooking);
+      $("manageTabBtn").classList.toggle("active", !isBooking);
+
+      $("bookingSection").style.display = isBooking ? "block" : "none";
+      $("manageSection").style.display = isBooking ? "none" : "block";
+      $("successBox").style.display = "none";
+    }
+
+    function setupBackButtons() {
+      $("backHomeBtn").addEventListener("click", () => {
+        $("successBox").style.display = "none";
+        $("bookingSection").style.display = "block";
+        $("bookingForm").reset();
+        $("agree").checked = false;
+        selectedTime = "7:00 PM";
+        document.querySelectorAll("#timeGrid .time-btn").forEach(btn => btn.classList.remove("active"));
+        document.querySelector('#timeGrid .time-btn[data-time="7:00 PM"]').classList.add("active");
+        setMinDate();
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
 
-      $("tabManageBtn").addEventListener("click", function () {
-        $("tabManageBtn").classList.add("active");
-        $("tabBookingBtn").classList.remove("active");
-        $("managePanel").classList.add("active");
-        $("bookingPanel").classList.remove("active");
+      $("backToBookingBtn").addEventListener("click", () => {
+        showSection("booking");
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
     }
 
-    /* =========================
-       LINE STATUS
-    ========================= */
-    async function initLiffSafe() {
-      if (!LIFF_ID) {
-        updateLineStatus(false);
-        return;
-      }
-
-      if (typeof liff === "undefined") {
-        updateLineStatus(false);
-        return;
-      }
-
-      try {
-        await liff.init({ liffId: LIFF_ID, withLoginOnExternalBrowser: true });
-
-        if (!liff.isLoggedIn()) {
-          updateLineStatus(false);
-          return;
-        }
-
-        const profile = await liff.getProfile();
-        lineUserId = profile.userId || "";
-        lineDisplayName = profile.displayName || "";
-        updateLineStatus(!!lineUserId);
-
-      } catch (err) {
-        console.log("LIFF init error:", err);
-        updateLineStatus(false);
-      }
-    }
-
-    function updateLineStatus(isConnected) {
-      const pill = $("lineStatusPill");
-      const text = $("lineStatusText");
-
-      if (isConnected) {
-        pill.classList.remove("disconnected");
-        pill.classList.add("connected");
-        text.textContent = "Connected";
-      } else {
-        pill.classList.remove("connected");
-        pill.classList.add("disconnected");
-        text.textContent = "Disconnected";
-      }
-    }
-
-    /* =========================
-       COMMON UI
-    ========================= */
     function setMinDate() {
       const today = new Date();
       const yyyy = today.getFullYear();
@@ -1185,158 +1121,66 @@
       $("editDate").min = `${yyyy}-${mm}-${dd}`;
     }
 
-    function setupTimeButtons(gridId, type) {
-      document.querySelectorAll(`#${gridId} .time-btn`).forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          document.querySelectorAll(`#${gridId} .time-btn`).forEach(function (b) {
-            b.classList.remove("active");
-          });
-
+    function setupTimeButtons(selector, isEdit) {
+      document.querySelectorAll(selector).forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(selector).forEach(b => b.classList.remove("active"));
           btn.classList.add("active");
-
-          if (type === "booking") {
-            selectedTime = btn.dataset.time;
+          if (isEdit) {
+            editSelectedTime = btn.dataset.time;
           } else {
-            manageSelectedTime = btn.dataset.time;
+            selectedTime = btn.dataset.time;
           }
         });
       });
     }
 
-    function setActiveTime(gridId, timeValue) {
-      document.querySelectorAll(`#${gridId} .time-btn`).forEach(function (btn) {
-        btn.classList.toggle("active", btn.dataset.time === timeValue);
+    function setupGuests() {
+      $("guests").addEventListener("change", () => {
+        const isCustom = $("guests").value === "custom";
+        $("customGuests").style.display = isCustom ? "block" : "none";
+        $("customGuests").required = isCustom;
+        if (!isCustom) $("customGuests").value = "";
       });
     }
 
-    function setupGuestSelector(selectId, wrapId, inputId) {
-      const select = $(selectId);
-      const wrap = $(wrapId);
-      const input = $(inputId);
-
-      select.addEventListener("change", function () {
-        if (select.value === "_custom") {
-          wrap.style.display = "block";
-          input.required = true;
-        } else {
-          wrap.style.display = "none";
-          input.required = false;
-          input.value = "";
-        }
-      });
-    }
-
-    function getGuestValue(selectId, inputId) {
-      const select = $(selectId);
-      const input = $(inputId);
-
-      if (select.value === "_custom") {
-        return (input.value || "").trim();
-      }
-
-      return (select.value || "").trim();
-    }
-
-    function setGuestValue(selectId, wrapId, inputId, value) {
-      const select = $(selectId);
-      const wrap = $(wrapId);
-      const input = $(inputId);
-      const strValue = String(value || "").trim();
-
-      const available = Array.from(select.options).map(o => o.value);
-
-      if (available.includes(strValue)) {
-        select.value = strValue;
-        wrap.style.display = "none";
-        input.required = false;
-        input.value = "";
-      } else {
-        select.value = "_custom";
-        wrap.style.display = "block";
-        input.required = true;
-        input.value = strValue;
-      }
-    }
-
-    function setLoading(show, text = "กำลังดำเนินการ...") {
-      $("loadingText").innerText = text;
-      $("loading").style.display = show ? "flex" : "none";
-    }
-
-    function showToast(message) {
-      const toast = $("toast");
-      toast.innerText = message;
-      toast.style.display = "block";
-
-      clearTimeout(showToast._timer);
-      showToast._timer = setTimeout(function () {
-        toast.style.display = "none";
-      }, 3600);
-    }
-
-    function formatDate(dateText) {
-      if (!dateText) return "-";
-      const d = new Date(dateText + "T00:00:00");
-      const day = String(d.getDate()).padStart(2, "0");
-      const month = String(d.getMonth() + 1).padStart(2, "0");
-      const year = d.getFullYear();
-      return `${day}/${month}/${year}`;
-    }
-
-    function normalizeDateInput(dateText) {
-      if (!dateText) return "";
-      if (/^\d{4}-\d{2}-\d{2}$/.test(dateText)) return dateText;
-
-      const d = new Date(dateText);
-      if (!isNaN(d.getTime())) {
-        const yyyy = d.getFullYear();
-        const mm = String(d.getMonth() + 1).padStart(2, "0");
-        const dd = String(d.getDate()).padStart(2, "0");
-        return `${yyyy}-${mm}-${dd}`;
-      }
-      return "";
-    }
-
-    function escapeHtml(text) {
-      if (text === null || text === undefined) return "";
-      return String(text)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    async function callApi(payload) {
-      const res = await fetch(BACKEND_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8"
-        },
-        body: JSON.stringify(payload)
-      });
-
-      const text = await res.text();
-
-      let data;
+    async function initLiff() {
       try {
-        data = JSON.parse(text);
-      } catch (e) {
-        throw new Error(text || "Invalid server response");
-      }
+        if (typeof liff === "undefined") {
+          updateLineStatus(false);
+          return;
+        }
 
-      if (!data.success) {
-        throw new Error(data.message || "Request failed");
-      }
+        await liff.init({
+          liffId: LIFF_ID,
+          withLoginOnExternalBrowser: true
+        });
 
-      return data;
+        if (!liff.isLoggedIn()) {
+          updateLineStatus(false);
+          return;
+        }
+
+        const profile = await liff.getProfile();
+        lineUserId = profile?.userId || "";
+        updateLineStatus(!!lineUserId);
+      } catch (err) {
+        console.log(err);
+        updateLineStatus(false);
+      }
     }
 
-    /* =========================
-       BOOKING
-    ========================= */
+    function updateLineStatus(connected) {
+      const pill = $("lineStatusPill");
+      const text = $("lineStatusText");
+
+      pill.classList.remove("connected", "disconnected");
+      pill.classList.add(connected ? "connected" : "disconnected");
+      text.textContent = connected ? "Connected" : "Disconnected";
+    }
+
     function setupBookingForm() {
-      $("bookingForm").addEventListener("submit", async function (e) {
+      $("bookingForm").addEventListener("submit", async (e) => {
         e.preventDefault();
 
         if (!$("agree").checked) {
@@ -1344,82 +1188,57 @@
           return;
         }
 
-        const guestsValue = getGuestValue("guests", "guestCustom");
+        const guestsValue = $("guests").value === "custom"
+          ? $("customGuests").value.trim()
+          : $("guests").value;
 
-        const data = {
+        const payload = {
+          action: "createBooking",
           date: $("date").value,
           time: selectedTime,
           name: $("name").value.trim(),
           guests: guestsValue,
           phone: $("phone").value.trim(),
           notes: $("notes").value.trim(),
-          userId: lineUserId || "NO_LINE_USER_ID",
-          lineDisplayName: lineDisplayName || ""
+          userId: lineUserId || ""
         };
 
-        if (!data.date || !data.time || !data.name || !data.guests || !data.phone) {
+        if (!payload.date || !payload.time || !payload.name || !payload.guests || !payload.phone) {
           showToast("กรุณากรอกข้อมูลให้ครบถ้วน");
           return;
         }
 
         try {
-          setLoading(true, "กำลังบันทึกการจอง...");
-          $("submitBtn").disabled = true;
-          $("submitBtn").innerText = "SENDING...";
+          setLoading(true);
 
-          const res = await callApi({
-            action: "createBooking",
-            data: data
-          });
+          const res = await callBackend(payload);
 
-          $("formCard").style.display = "none";
+          if (!res || res.success === false) {
+            throw new Error(res?.message || "ไม่สามารถจองได้");
+          }
+
+          $("bookingSection").style.display = "none";
           $("successBox").style.display = "block";
-
           $("summaryBox").innerHTML = `
             <div><b>Booking ID:</b> ${escapeHtml(res.bookingId || "-")}</div>
-            <div><b>Name:</b> ${escapeHtml(data.name)}</div>
-            <div><b>Date:</b> ${formatDate(data.date)}</div>
-            <div><b>Time:</b> ${escapeHtml(data.time)}</div>
-            <div><b>Guests:</b> ${escapeHtml(data.guests)}</div>
-            <div><b>Phone:</b> ${escapeHtml(data.phone)}</div>
+            <div><b>Name:</b> ${escapeHtml(payload.name)}</div>
+            <div><b>Date:</b> ${escapeHtml(formatDate(payload.date))}</div>
+            <div><b>Time:</b> ${escapeHtml(payload.time)}</div>
+            <div><b>Guests:</b> ${escapeHtml(payload.guests)}</div>
+            <div><b>Phone:</b> ${escapeHtml(payload.phone)}</div>
           `;
-
           window.scrollTo({ top: 0, behavior: "smooth" });
-
         } catch (err) {
           showToast("เกิดข้อผิดพลาด: " + (err.message || err));
         } finally {
           setLoading(false);
-          $("submitBtn").disabled = false;
-          $("submitBtn").innerText = "Reserve Now";
         }
       });
     }
 
-    function resetBookingForm() {
-      $("bookingForm").reset();
-      $("formCard").style.display = "block";
-      $("successBox").style.display = "none";
-
-      selectedTime = "7:00 PM";
-      setActiveTime("bookingTimeGrid", selectedTime);
-
-      $("guestExtraWrap").style.display = "none";
-      $("guestCustom").value = "";
-      $("guestCustom").required = false;
-
-      setMinDate();
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    /* =========================
-       MANAGE BOOKING
-    ========================= */
-    function setupManageSearch() {
-      $("manageSearchForm").addEventListener("submit", async function (e) {
-        e.preventDefault();
-
-        const bookingId = $("manageBookingId").value.trim().toUpperCase();
+    function setupManage() {
+      $("findBookingBtn").addEventListener("click", async () => {
+        const bookingId = $("manageBookingId").value.trim();
         const phone = $("managePhone").value.trim();
 
         if (!bookingId || !phone) {
@@ -1428,126 +1247,158 @@
         }
 
         try {
-          setLoading(true, "กำลังค้นหา Booking...");
-          const res = await callApi({
+          setLoading(true);
+          const res = await callBackend({
             action: "getBooking",
-            bookingId: bookingId,
-            phone: phone
+            bookingId,
+            phone
           });
 
-          const booking = res.booking || {};
+          if (!res || res.success === false || !res.booking) {
+            throw new Error(res?.message || "ไม่พบข้อมูลการจอง");
+          }
+
           currentManageBookingId = bookingId;
-          currentManagePhone = phone;
 
-          fillManageForm(bookingId, booking);
           $("manageResultBox").style.display = "block";
-          window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+          $("editDate").value = res.booking.date || "";
+          $("editName").value = res.booking.name || "";
+          $("editGuests").value = res.booking.guests || "";
+          $("editPhone").value = res.booking.phone || "";
+          $("editNotes").value = res.booking.notes || "";
 
+          editSelectedTime = res.booking.time || "7:00 PM";
+          document.querySelectorAll("#editTimeGrid .edit-time-btn").forEach(btn => {
+            btn.classList.toggle("active", btn.dataset.time === editSelectedTime);
+          });
+
+          showToast("พบข้อมูลการจองแล้ว");
         } catch (err) {
-          showToast("ค้นหาไม่สำเร็จ: " + (err.message || err));
+          $("manageResultBox").style.display = "none";
+          showToast("เกิดข้อผิดพลาด: " + (err.message || err));
         } finally {
           setLoading(false);
         }
       });
-    }
 
-    function fillManageForm(bookingId, booking) {
-      $("infoBookingId").textContent = "Booking ID: " + (bookingId || "-");
-      $("infoBookingStatus").textContent = "Status: " + (booking.status || "Pending");
-
-      $("editDate").value = normalizeDateInput(booking.date);
-      $("editName").value = booking.name || "";
-      $("editPhone").value = booking.phone || currentManagePhone || "";
-      $("editNotes").value = booking.notes || "";
-
-      manageSelectedTime = booking.time || "7:00 PM";
-      setActiveTime("manageTimeGrid", manageSelectedTime);
-
-      setGuestValue("editGuests", "editGuestExtraWrap", "editGuestCustom", booking.guests || "");
-    }
-
-    function setupManageEdit() {
-      $("manageEditForm").addEventListener("submit", async function (e) {
-        e.preventDefault();
-
-        if (!currentManageBookingId || !currentManagePhone) {
-          showToast("ไม่พบข้อมูล Booking ที่กำลังแก้ไข");
-          return;
-        }
-
-        const guestsValue = getGuestValue("editGuests", "editGuestCustom");
-
-        const data = {
-          date: $("editDate").value,
-          time: manageSelectedTime,
-          name: $("editName").value.trim(),
-          guests: guestsValue,
-          phone: $("editPhone").value.trim(),
-          notes: $("editNotes").value.trim()
-        };
-
-        if (!data.date || !data.time || !data.name || !data.guests || !data.phone) {
-          showToast("กรุณากรอกข้อมูลให้ครบถ้วน");
+      $("updateBookingBtn").addEventListener("click", async () => {
+        if (!currentManageBookingId) {
+          showToast("ไม่พบ Booking ที่ต้องการแก้ไข");
           return;
         }
 
         try {
-          setLoading(true, "กำลังอัปเดต Booking...");
-          await callApi({
+          setLoading(true);
+          const res = await callBackend({
             action: "updateBooking",
             bookingId: currentManageBookingId,
-            phone: currentManagePhone,
-            data: data
+            phone: $("managePhone").value.trim(),
+            date: $("editDate").value,
+            time: editSelectedTime,
+            name: $("editName").value.trim(),
+            guests: $("editGuests").value.trim(),
+            phoneNew: $("editPhone").value.trim(),
+            notes: $("editNotes").value.trim()
           });
 
-          currentManagePhone = data.phone;
-          $("managePhone").value = data.phone;
+          if (!res || res.success === false) {
+            throw new Error(res?.message || "ไม่สามารถแก้ไขการจองได้");
+          }
 
-          showToast("อัปเดต Booking เรียบร้อยแล้ว");
-          $("infoBookingStatus").textContent = "Status: Updated";
-
+          showToast("แก้ไขการจองเรียบร้อยแล้ว");
         } catch (err) {
-          showToast("อัปเดตไม่สำเร็จ: " + (err.message || err));
+          showToast("เกิดข้อผิดพลาด: " + (err.message || err));
+        } finally {
+          setLoading(false);
+        }
+      });
+
+      $("cancelBookingBtn").addEventListener("click", async () => {
+        if (!currentManageBookingId) {
+          showToast("ไม่พบ Booking ที่ต้องการยกเลิก");
+          return;
+        }
+
+        const ok = confirm("ยืนยันการยกเลิกการจอง?");
+        if (!ok) return;
+
+        try {
+          setLoading(true);
+          const res = await callBackend({
+            action: "cancelBooking",
+            bookingId: currentManageBookingId,
+            phone: $("managePhone").value.trim()
+          });
+
+          if (!res || res.success === false) {
+            throw new Error(res?.message || "ไม่สามารถยกเลิกการจองได้");
+          }
+
+          $("manageResultBox").style.display = "none";
+          $("manageBookingId").value = "";
+          $("managePhone").value = "";
+          currentManageBookingId = "";
+
+          showToast("ยกเลิกการจองเรียบร้อยแล้ว");
+        } catch (err) {
+          showToast("เกิดข้อผิดพลาด: " + (err.message || err));
         } finally {
           setLoading(false);
         }
       });
     }
 
-    function bindManageButtons() {
-      $("cancelBookingBtn").addEventListener("click", async function () {
-        if (!currentManageBookingId || !currentManagePhone) {
-          showToast("ไม่พบข้อมูล Booking ที่ต้องการยกเลิก");
-          return;
-        }
-
-        const confirmed = confirm("ยืนยันการยกเลิก Booking นี้ใช่หรือไม่?");
-        if (!confirmed) return;
-
-        try {
-          setLoading(true, "กำลังยกเลิก Booking...");
-          await callApi({
-            action: "cancelBooking",
-            bookingId: currentManageBookingId,
-            phone: currentManagePhone
-          });
-
-          showToast("ยกเลิก Booking เรียบร้อยแล้ว");
-          $("infoBookingStatus").textContent = "Status: Cancelled";
-
-        } catch (err) {
-          showToast("ยกเลิกไม่สำเร็จ: " + (err.message || err));
-        } finally {
-          setLoading(false);
-        }
+    async function callBackend(payload) {
+      const response = await fetch(BACKEND_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(payload)
       });
 
-      $("backToManageSearchBtn").addEventListener("click", function () {
-        $("manageResultBox").style.display = "none";
-        $("manageEditForm").reset();
-        currentManageBookingId = "";
-        currentManagePhone = "";
-      });
+      const text = await response.text();
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error(text || "เชื่อมต่อ Backend ไม่สำเร็จ");
+      }
+
+      return data;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return "-";
+      const d = new Date(dateStr + "T00:00:00");
+      const day = String(d.getDate()).padStart(2, "0");
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const year = d.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+
+    function setLoading(show) {
+      $("loading").style.display = show ? "flex" : "none";
+    }
+
+    function showToast(message) {
+      const toast = $("toast");
+      toast.textContent = message;
+      toast.style.display = "block";
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => {
+        toast.style.display = "none";
+      }, 3200);
+    }
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
     }
   </script>
 </body>
