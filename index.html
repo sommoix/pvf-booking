@@ -1362,6 +1362,15 @@
       $("reserveBtn").classList.toggle("ready", ready);
     }
 
+    function generateClientBookingId() {
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      let code = "PЯ";
+      for (let i = 0; i < 4; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return code;
+    }
+
     function setupBookingForm() {
   $("bookingForm").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -1379,6 +1388,7 @@
       : $("guests").value;
 
     const bookingData = {
+      bookingId: generateClientBookingId(),
       date: $("date").value,
       time: selectedTime,
       name: $("name").value.trim() || lineDisplayName,
@@ -1392,20 +1402,16 @@
     try {
       setLoading(true);
 
-      const res = await callBackend({
+      await submitBookingNoWait({
         action: "createBooking",
         data: bookingData
       });
-
-      if (!res || res.success === false) {
-        throw new Error(res && res.message ? res.message : "ไม่สามารถจองได้");
-      }
 
       $("bookingSection").style.display = "none";
       $("successBox").style.display = "block";
 
       $("summaryBox").innerHTML = `
-        <div><b>Booking ID:</b> ${escapeHtml(res.bookingId || "-")}</div>
+        <div><b>Booking ID:</b> ${escapeHtml(bookingData.bookingId)}</div>
         <div><b>Name:</b> ${escapeHtml(bookingData.name)}</div>
         <div><b>Date:</b> ${escapeHtml(formatDate(bookingData.date))}</div>
         <div><b>Time:</b> ${escapeHtml(bookingData.time)}</div>
@@ -1721,6 +1727,43 @@ function scrollToMissingField(target) {
         document.body.appendChild(iframe);
         document.body.appendChild(form);
         form.submit();
+      });
+    }
+
+    function submitBookingNoWait(payload) {
+      return new Promise((resolve) => {
+        const iframeName = "pvf_submit_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+        const iframe = document.createElement("iframe");
+        const form = document.createElement("form");
+        const input = document.createElement("input");
+
+        iframe.name = iframeName;
+        iframe.style.display = "none";
+
+        form.method = "POST";
+        form.action = BACKEND_URL;
+        form.target = iframeName;
+        form.style.display = "none";
+        form.acceptCharset = "UTF-8";
+
+        input.type = "hidden";
+        input.name = "payload";
+        input.value = JSON.stringify({
+          requestId: iframeName,
+          body: payload
+        });
+
+        form.appendChild(input);
+        document.body.appendChild(iframe);
+        document.body.appendChild(form);
+        form.submit();
+
+        setTimeout(() => {
+          if (form.parentNode) form.parentNode.removeChild(form);
+          if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+        }, 12000);
+
+        setTimeout(resolve, 900);
       });
     }
 
