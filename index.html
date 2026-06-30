@@ -64,30 +64,28 @@
       letter-spacing: 5px;
       line-height: 1;
       color: #fff;
-      margin: 8px 0 14px;
+      margin: 18px 0 22px;
       text-shadow: 0 12px 28px rgba(0,0,0,0.22);
     }
 
     .hero {
-      min-height: 143px;
-      padding: 34px 26px 28px;
-      border-radius: var(--radius-xl);
-      background:
-        radial-gradient(circle at 24% 8%, rgba(255,255,255,0.12), transparent 30%),
-        linear-gradient(145deg, rgba(255,255,255,0.10), rgba(0,0,0,0.12)),
-        rgba(28, 4, 6, 0.44);
-      border: 1px solid rgba(255,255,255,0.16);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.18),
-        inset 0 -1px 0 rgba(255,255,255,0.04),
-        var(--shadow);
-      backdrop-filter: blur(16px) saturate(130%);
-      -webkit-backdrop-filter: blur(16px) saturate(130%);
       text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       margin-bottom: 18px;
+    }
+
+    .hero-title {
+      font-size: clamp(30px, 6vw, 56px);
+      font-weight: 300;
+      letter-spacing: 4px;
+      margin: 0 0 12px;
+      color: #fff;
+    }
+
+    .hero-sub {
+      font-size: 20px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.90);
+      margin: 0;
     }
 
     .tabs {
@@ -243,14 +241,6 @@
       padding: 20px 22px;
       font-size: 20px;
       line-height: 1.35;
-      outline: none;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.06),
-        0 6px 14px rgba(0,0,0,0.11);
-      appearance: none;
-      -webkit-appearance: none;
-    }
-
       outline: none;
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,0.06),
@@ -825,71 +815,74 @@
     }
 
     .footer-icon {
-      width: 22px;
-      height: 22px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex: 0 0 auto;
-    }
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
 
-    .footer-icon svg {
-      width: 22px;
-      height: 22px;
-      display: block;
-    }
+.footer-icon svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
 
-    .svg-phone svg {
-      fill: #ffffff;
-    }
+.svg-phone svg {
+  fill: #ffffff;
+}
 
-    .svg-line svg {
-      fill: #06c755;
-    }
+.svg-line svg {
+  fill: #06c755;
+}
 
-    .svg-instagram svg {
-      fill: #ffffff;
-    }
+.svg-instagram svg {
+  fill: #ffffff;
+}
 
-    .svg-tiktok svg {
-      fill: #ffffff;
-    }
+.svg-tiktok svg {
+  fill: #ffffff;
+}
 
-    .footer-pill {
-      gap: 10px;
-    }
+.footer-pill {
+  gap: 10px;
+}
 
-    .footer-pill:hover {
-      transform: translateY(-1px);
-    }
+.footer-pill:hover {
+  transform: translateY(-1px);
+}
 
-    .field-error {
-      border-color: rgba(255, 120, 126, 0.9) !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.10),
-        0 0 0 3px rgba(255, 80, 88, 0.22),
-        0 12px 28px rgba(214,31,38,0.22) !important;
-    }
 
-    .agree-error {
-      border-color: rgba(255, 120, 126, 0.9) !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.10),
-        0 0 0 3px rgba(255, 80, 88, 0.22),
-        0 12px 28px rgba(214,31,38,0.22) !important;
-    }
+.field-error {
+  border-color: rgba(255, 120, 126, 0.9) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 0 0 3px rgba(255, 80, 88, 0.22),
+    0 12px 28px rgba(214,31,38,0.22) !important;
+}
 
-    .shake-soft {
-      animation: shakeSoft .28s ease;
-    }
+.agree-error {
+  border-color: rgba(255, 120, 126, 0.9) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 0 0 3px rgba(255, 80, 88, 0.22),
+    0 12px 28px rgba(214,31,38,0.22) !important;
+}
 
-    @keyframes shakeSoft {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-4px); }
-      50% { transform: translateX(4px); }
-      75% { transform: translateX(-3px); }
-      100% { transform: translateX(0); }
-    }
+.shake-soft {
+  animation: shakeSoft .28s ease;
+}
+
+@keyframes shakeSoft {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-3px); }
+  100% { transform: translateX(0); }
+}
+    
+    
   </style>
 </head>
 
@@ -1035,6 +1028,211 @@
       </form>
     </section>
 
+    <section id="successBox" class="card success-box">
+      <div class="notes-title" style="justify-content:center; margin-bottom:12px;">
+        <span class="icon">✅</span>
+        <span>RESERVATION COMPLETED!</span>
+      </div>
+      <p style="text-align:center; margin:0; color:rgba(255,255,255,0.88);">การจองของคุณเสร็จสมบูรณ์แล้ว</p>
+
+      <div class="summary-box" id="summaryBox"></div>
+
+      <div class="btn-stack" style="margin-top:16px;">
+        <button class="secondary-btn" type="button" id="backHomeBtn">BACK TO RESERVATION</button>
+      </div>
+    </section>
+
+    <section id="manageSection" class="card manage-box">
+      <div class="field">
+        <div class="field-label">
+          <span class="icon">🎫</span>
+          <span>BOOKING ID OR EMAIL <span class="required">*</span></span>
+        </div>
+        <input type="text" id="manageIdentifier" placeholder="เช่น PЯ7K2Q หรือ your@email.com" />
+      </div>
+
+      <div class="btn-stack">
+        <button class="action-btn" type="button" id="findBookingBtn">FIND BOOKING</button>
+        <button class="ghost-btn" type="button" id="backToBookingBtn">BACK TO RESERVATION</button>
+      </div>
+
+      <div id="manageResultBox" class="manage-result-box" style="margin-top:18px;">
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">📅</span>
+            <span>DATE <span class="required">*</span></span>
+          </div>
+          <div class="date-wrap">
+            <input type="date" id="editDate" />
+            <span class="date-placeholder">วันที่ต้องการจอง</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">🕘</span>
+            <span>TIME <span class="required">*</span></span>
+          </div>
+          <div class="time-grid" id="editTimeGrid">
+            <button type="button" class="time-btn edit-time-btn" data-time="7:00 PM">7:00 PM</button>
+            <button type="button" class="time-btn edit-time-btn" data-time="7:30 PM">7:30 PM</button>
+            <button type="button" class="time-btn edit-time-btn" data-time="8:00 PM">8:00 PM</button>
+            <button type="button" class="time-btn edit-time-btn" data-time="8:30 PM">8:30 PM</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">👤</span>
+            <span>NAME <span class="required">*</span></span>
+          </div>
+          <input type="text" id="editName" />
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">👥</span>
+            <span>NUMBER OF GUESTS <span class="required">*</span></span>
+          </div>
+          <input type="number" id="editGuests" min="1" />
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">☎️</span>
+            <span>PHONE NUMBER <span class="required">*</span></span>
+          </div>
+          <input type="tel" id="editPhone" placeholder="เบอร์โทรศัพท์" />
+        </div>
+
+        <div class="field">
+          <div class="field-label">
+            <span class="icon">✏️</span>
+            <span>YOUR NOTES</span>
+          </div>
+          <textarea id="editNotes"></textarea>
+        </div>
+
+        <div class="btn-stack">
+          <button class="action-btn" type="button" id="updateBookingBtn">UPDATE BOOKING</button>
+          <button class="secondary-btn" type="button" id="cancelBookingBtn">CANCEL BOOKING</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-row">
+  <a class="footer-pill" href="tel:0954546596">
+    <span class="footer-icon svg-phone">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6.6 10.8c1.6 3.2 3.4 5 6.6 6.6l2.2-2.2c.3-.3.8-.4 1.2-.3 1.3.4 2.7.7 4.1.7.7 0 1.3.6 1.3 1.3v3.5c0 .7-.6 1.3-1.3 1.3C10.4 21.7 2.3 13.6 2.3 3.3 2.3 2.6 2.9 2 3.6 2h3.5c.7 0 1.3.6 1.3 1.3 0 1.4.2 2.8.7 4.1.1.4 0 .9-.3 1.2l-2.2 2.2Z"/>
+      </svg>
+    </span>
+    <span>095-454-6596</span>
+  </a>
+
+  <a class="footer-pill" href="https://instagram.com/private.fl.bkk" target="_blank">
+    <span class="footer-icon svg-instagram">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7.6 2h8.8C19.5 2 22 4.5 22 7.6v8.8c0 3.1-2.5 5.6-5.6 5.6H7.6C4.5 22 2 19.5 2 16.4V7.6C2 4.5 4.5 2 7.6 2Zm8.7 2H7.7C5.6 4 4 5.6 4 7.7v8.6C4 18.4 5.6 20 7.7 20h8.6c2.1 0 3.7-1.6 3.7-3.7V7.7C20 5.6 18.4 4 16.3 4ZM12 7.3A4.7 4.7 0 1 1 12 16.7 4.7 4.7 0 0 1 12 7.3Zm0 2A2.7 2.7 0 1 0 12 14.7 2.7 2.7 0 0 0 12 9.3Zm5-2.3a1.1 1.1 0 1 1 0 2.2A1.1 1.1 0 0 1 17 7Z"/>
+      </svg>
+    </span>
+    <span>@private.fl.bkk</span>
+  </a>
+
+  <a class="footer-pill" href="https://www.tiktok.com/@private.floor.bkk" target="_blank">
+    <span class="footer-icon svg-tiktok">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M15.7 2c.3 2.4 1.7 3.9 4.2 4.1v3.2c-1.5.1-2.9-.4-4.1-1.2v6.1c0 4.1-2.5 6.8-6.3 6.8-3.4 0-5.8-2.2-5.8-5.4 0-3.6 2.8-5.9 6.7-5.6v3.3c-1.8-.2-3.1.7-3.1 2.2 0 1.3 1 2.2 2.3 2.2 1.5 0 2.5-.9 2.5-3V2h3.6Z"/>
+      </svg>
+    </span>
+    <span>@private.floor.bkk</span>
+  </a>
+</div>
+
+      <div class="footer-thanks">
+        THANK YOU FOR CHOOSING <b>PЯIVATE FLOOR</b><br />
+        WE LOOK FORWARD TO SƎRVING YOU
+      </div>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="loading" id="loading">
+    <div class="loading-box">
+      <div class="spinner"></div>
+      <div>กำลังดำเนินการ...</div>
+    </div>
+  </div>
+
+  <script>
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyW3kim4LjNtrmm0sInqzBw5hcxBKdZyfuTw5m408eK82jFJ-rK0yegqYvgoTB4iHC7lw/exec";
+    const LIFF_ID = "2010532980-aTUcLXbx";
+
+    let selectedTime = "7:00 PM";
+    let editSelectedTime = "7:00 PM";
+    let lineUserId = "";
+    let currentManageBookingId = "";
+
+    const $ = (id) => document.getElementById(id);
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      setMinDate();
+      setupDatePlaceholders();
+      setupTabs();
+      setupTimeButtons("#timeGrid .time-btn", false);
+      setupTimeButtons("#editTimeGrid .edit-time-btn", true);
+      setupGuests();
+      setupBookingForm();
+      setupReserveButtonState();
+      setupManage();
+      setupBackButtons();
+      await initLiff();
+    });
+
+    function setupDatePlaceholders() {
+      bindDatePlaceholder("date");
+      bindDatePlaceholder("editDate");
+    }
+
+    function bindDatePlaceholder(inputId) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+
+      const wrap = input.closest(".date-wrap");
+      if (!wrap) return;
+
+      const update = () => {
+        wrap.classList.toggle("has-value", !!input.value);
+      };
+
+      input.addEventListener("change", update);
+      input.addEventListener("input", update);
+      input.addEventListener("blur", update);
+      update();
+    }
+
+    function setupTabs() {
+      $("bookingTabBtn").addEventListener("click", () => showSection("booking"));
+      $("manageTabBtn").addEventListener("click", () => showSection("manage"));
+    }
+
+    function showSection(type) {
+      const isBooking = type === "booking";
+      $("bookingTabBtn").classList.toggle("active", isBooking);
+      $("manageTabBtn").classList.toggle("active", !isBooking);
+      $("bookingSection").style.display = isBooking ? "block" : "none";
+      $("manageSection").style.display = isBooking ? "none" : "block";
+      $("successBox").style.display = "none";
+    }
+
+    function setupBackButtons() {
+      $("backHomeBtn").addEventListener("click", () => {
+        $("successBox").style.display = "none";
+        $("bookingSection").style.display = "block";
+        $("bookingForm").reset();
+        $("agree").checked = false;
         $("customGuests").style.display = "none";
         $("customGuests").required = false;
         updateReserveButtonState();
@@ -1108,6 +1306,9 @@
 
         const profile = await liff.getProfile();
         lineUserId = profile && profile.userId ? profile.userId : "";
+        if (profile && profile.displayName && $("name") && !$("name").value.trim()) {
+          $("name").placeholder = profile.displayName;
+        }
         updateLineStatus(!!lineUserId);
 
       } catch (err) {
@@ -1150,194 +1351,193 @@
     }
 
     function setupBookingForm() {
-      $("bookingForm").addEventListener("submit", async (e) => {
-        e.preventDefault();
+  $("bookingForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-        const validation = validateBookingForm();
+    const validation = validateBookingForm();
 
-        if (!validation.ok) {
-          showToast(validation.message);
-          scrollToMissingField(validation.target);
-          return;
-        }
-
-        const guestsValue = $("guests").value === "custom"
-          ? $("customGuests").value.trim()
-          : $("guests").value;
-
-        const bookingData = {
-          date: $("date").value,
-          time: selectedTime,
-          name: $("name").value.trim(),
-          guests: guestsValue,
-          phone: $("phone").value.trim(),
-          email: $("email").value.trim(),
-          notes: $("notes").value.trim(),
-          userId: lineUserId || "NO_LINE_USER_ID"
-        };
-
-        try {
-          setLoading(true);
-
-          const res = await callBackend({
-            action: "createBooking",
-            data: bookingData
-          });
-
-          if (!res || res.success === false) {
-            throw new Error(res && res.message ? res.message : "ไม่สามารถจองได้");
-          }
-
-          $("bookingSection").style.display = "none";
-          $("successBox").style.display = "block";
-
-          $("summaryBox").innerHTML = `
-            <div><b>Booking ID:</b> ${escapeHtml(res.bookingId || "-")}</div>
-            <div><b>Name:</b> ${escapeHtml(bookingData.name)}</div>
-            <div><b>Date:</b> ${escapeHtml(formatDate(bookingData.date))}</div>
-            <div><b>Time:</b> ${escapeHtml(bookingData.time)}</div>
-            <div><b>Guests:</b> ${escapeHtml(bookingData.guests)}</div>
-            <div><b>Phone:</b> ${escapeHtml(bookingData.phone)}</div>
-            <div><b>Email:</b> ${escapeHtml(bookingData.email)}</div>
-          `;
-
-          window.scrollTo({ top: 0, behavior: "smooth" });
-
-        } catch (err) {
-          showToast("เกิดข้อผิดพลาด: " + (err.message || err));
-        } finally {
-          setLoading(false);
-        }
-      });
+    if (!validation.ok) {
+      showToast(validation.message);
+      scrollToMissingField(validation.target);
+      return;
     }
 
-    function validateBookingForm() {
-      clearBookingErrors();
+    const guestsValue = $("guests").value === "custom"
+      ? $("customGuests").value.trim()
+      : $("guests").value;
 
-      const checks = [
-        {
-          id: "date",
-          target: $("date").closest(".field"),
-          message: "กรุณาเลือกวันที่ต้องการจอง"
-        },
-        {
-          id: "name",
-          target: $("name").closest(".field"),
-          message: "กรุณากรอกชื่อผู้จอง"
-        },
-        {
-          id: "guests",
-          target: $("guests").closest(".field"),
-          message: "กรุณาเลือกจำนวนแขก"
-        },
-        {
-          id: "phone",
-          target: $("phone").closest(".field"),
-          message: "กรุณากรอกเบอร์โทรศัพท์"
-        },
-        {
-          id: "email",
-          target: $("email").closest(".field"),
-          message: "กรุณากรอกอีเมล"
-        }
-      ];
+    const bookingData = {
+      date: $("date").value,
+      time: selectedTime,
+      name: $("name").value.trim(),
+      guests: guestsValue,
+      phone: $("phone").value.trim(),
+      email: $("email").value.trim(),
+      notes: $("notes").value.trim(),
+      userId: lineUserId || "NO_LINE_USER_ID"
+    };
 
-      for (const item of checks) {
-        const el = $(item.id);
-        if (!el || !String(el.value || "").trim()) {
-          markError(item.target);
-          return {
-            ok: false,
-            target: item.target,
-            message: item.message
-          };
-        }
+    try {
+      setLoading(true);
+
+      const res = await callBackend({
+        action: "createBooking",
+        data: bookingData
+      });
+
+      if (!res || res.success === false) {
+        throw new Error(res && res.message ? res.message : "ไม่สามารถจองได้");
       }
 
-      const emailValue = $("email").value.trim();
+      $("bookingSection").style.display = "none";
+      $("successBox").style.display = "block";
 
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
-        const target = $("email").closest(".field");
-        markError(target);
-        return {
-          ok: false,
-          target: target,
-          message: "กรุณากรอกอีเมลให้ถูกต้อง"
-        };
-      }
+      $("summaryBox").innerHTML = `
+        <div><b>Booking ID:</b> ${escapeHtml(res.bookingId || "-")}</div>
+        <div><b>Name:</b> ${escapeHtml(bookingData.name)}</div>
+        <div><b>Date:</b> ${escapeHtml(formatDate(bookingData.date))}</div>
+        <div><b>Time:</b> ${escapeHtml(bookingData.time)}</div>
+        <div><b>Guests:</b> ${escapeHtml(bookingData.guests)}</div>
+        <div><b>Phone:</b> ${escapeHtml(bookingData.phone)}</div>
+        <div><b>Email:</b> ${escapeHtml(bookingData.email)}</div>
+      `;
 
-      if ($("guests").value === "custom" && !$("customGuests").value.trim()) {
-        const target = $("customGuests").closest(".field");
-        markError(target);
-        return {
-          ok: false,
-          target: target,
-          message: "กรุณาระบุจำนวนแขก"
-        };
-      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
 
-      if (!$("agree").checked) {
-        const target = $("agree").closest(".notes-card");
-        markAgreeError(target);
-        return {
-          ok: false,
-          target: target,
-          message: "PLEASE READ OUR NOTES AND CHECK GOT IT! (อ่านเงื่อนไขแล้วกดรับทราบด้วยนะครับ)"
-        };
-      }
+    } catch (err) {
+      showToast("เกิดข้อผิดพลาด: " + (err.message || err));
+    } finally {
+      setLoading(false);
+    }
+  });
+}
 
+function validateBookingForm() {
+  clearBookingErrors();
+
+  const checks = [
+    {
+      id: "date",
+      target: $("date").closest(".field"),
+      message: "กรุณาเลือกวันที่ต้องการจอง"
+    },
+    {
+      id: "name",
+      target: $("name").closest(".field"),
+      message: "กรุณากรอกชื่อผู้จอง"
+    },
+    {
+      id: "guests",
+      target: $("guests").closest(".field"),
+      message: "กรุณาเลือกจำนวนแขก"
+    },
+    {
+      id: "phone",
+      target: $("phone").closest(".field"),
+      message: "กรุณากรอกเบอร์โทรศัพท์"
+    },
+    {
+      id: "email",
+      target: $("email").closest(".field"),
+      message: "กรุณากรอกอีเมล"
+    }
+  ];
+
+  for (const item of checks) {
+    const el = $(item.id);
+    if (!el || !String(el.value || "").trim()) {
+      markError(item.target);
       return {
-        ok: true,
-        target: null,
-        message: ""
+        ok: false,
+        target: item.target,
+        message: item.message
       };
     }
+  }
 
-    function clearBookingErrors() {
-      document.querySelectorAll(".field-error").forEach(el => {
-        el.classList.remove("field-error", "shake-soft");
-      });
+  const emailValue = $("email").value.trim();
 
-      document.querySelectorAll(".agree-error").forEach(el => {
-        el.classList.remove("agree-error", "shake-soft");
-      });
-    }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
+    const target = $("email").closest(".field");
+    markError(target);
+    return {
+      ok: false,
+      target: target,
+      message: "กรุณากรอกอีเมลให้ถูกต้อง"
+    };
+  }
 
-    function markError(target) {
-      if (!target) return;
-      target.classList.add("field-error", "shake-soft");
-    }
+  if ($("guests").value === "custom" && !$("customGuests").value.trim()) {
+    const target = $("customGuests").closest(".field");
+    markError(target);
+    return {
+      ok: false,
+      target: target,
+      message: "กรุณาระบุจำนวนแขก"
+    };
+  }
 
-    function markAgreeError(target) {
-      if (!target) return;
-      target.classList.add("agree-error", "shake-soft");
-    }
+  if (!$("agree").checked) {
+    const target = $("agree").closest(".notes-card");
+    markAgreeError(target);
+    return {
+      ok: false,
+      target: target,
+      message: "PLEASE READ OUR NOTES AND CHECK GOT IT! (อ่านเงื่อนไขแล้วกดรับทราบด้วยนะครับ)"
+    };
+  }
 
-    function scrollToMissingField(target) {
-      if (!target) return;
+  return {
+    ok: true,
+    target: null,
+    message: ""
+  };
+}
 
+function clearBookingErrors() {
+  document.querySelectorAll(".field-error").forEach(el => {
+    el.classList.remove("field-error", "shake-soft");
+  });
+
+  document.querySelectorAll(".agree-error").forEach(el => {
+    el.classList.remove("agree-error", "shake-soft");
+  });
+}
+
+function markError(target) {
+  if (!target) return;
+  target.classList.add("field-error", "shake-soft");
+}
+
+function markAgreeError(target) {
+  if (!target) return;
+  target.classList.add("agree-error", "shake-soft");
+}
+
+function scrollToMissingField(target) {
+  if (!target) return;
+
+  setTimeout(() => {
+    target.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+
+    const input = target.querySelector("input, select, textarea");
+    if (input && input.type !== "checkbox") {
       setTimeout(() => {
-        target.scrollIntoView({
-          behavior: "smooth",
-          block: "center"
-        });
-
-        const input = target.querySelector("input, select, textarea");
-        if (input && input.type !== "checkbox") {
-          setTimeout(() => {
-            input.focus({ preventScroll: true });
-          }, 420);
-        }
-      }, 80);
+        input.focus({ preventScroll: true });
+      }, 420);
     }
+  }, 80);
+}
 
     function setupManage() {
       $("findBookingBtn").addEventListener("click", async () => {
-        const bookingId = $("manageBookingId").value.trim().toUpperCase();
-        const phone = $("managePhone").value.trim();
+        const identifier = $("manageIdentifier").value.trim();
 
-        if (!bookingId || !phone) {
-          showToast("กรุณากรอก Booking ID และเบอร์โทร");
+        if (!identifier) {
+          showToast("กรุณากรอก Booking ID หรืออีเมล");
           return;
         }
 
@@ -1346,15 +1546,14 @@
 
           const res = await callBackend({
             action: "getBooking",
-            bookingId: bookingId,
-            phone: phone
+            identifier: identifier
           });
 
           if (!res || res.success === false || !res.booking) {
             throw new Error(res && res.message ? res.message : "ไม่พบข้อมูลการจอง");
           }
 
-          currentManageBookingId = bookingId;
+          currentManageBookingId = res.booking.bookingId || identifier;
 
           $("manageResultBox").style.display = "block";
           $("editDate").value = res.booking.date || "";
@@ -1400,8 +1599,7 @@
 
           const res = await callBackend({
             action: "updateBooking",
-            bookingId: currentManageBookingId,
-            phone: $("managePhone").value.trim(),
+            identifier: currentManageBookingId,
             data: updateData
           });
 
@@ -1432,8 +1630,7 @@
 
           const res = await callBackend({
             action: "cancelBooking",
-            bookingId: currentManageBookingId,
-            phone: $("managePhone").value.trim()
+            identifier: currentManageBookingId
           });
 
           if (!res || res.success === false) {
@@ -1441,8 +1638,7 @@
           }
 
           $("manageResultBox").style.display = "none";
-          $("manageBookingId").value = "";
-          $("managePhone").value = "";
+          $("manageIdentifier").value = "";
           currentManageBookingId = "";
 
           showToast("ยกเลิกการจองเรียบร้อยแล้ว");
