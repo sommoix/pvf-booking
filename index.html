@@ -222,6 +222,102 @@
       line-height: 1.55;
     }
 
+    .seat-map-preview {
+      margin-top: 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 26px;
+      overflow: hidden;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.015)),
+        rgba(8, 0, 1, 0.50);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        0 10px 22px rgba(0,0,0,0.14);
+    }
+
+    .seat-map-button {
+      width: 100%;
+      height: auto;
+      display: block;
+      border: 0;
+      border-radius: 0;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .seat-map-image-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 8.8;
+      background: rgba(0,0,0,0.18);
+      overflow: hidden;
+    }
+
+    .seat-map-image-wrap img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+      filter: saturate(1.02) contrast(1.02);
+    }
+
+    .seat-map-shade {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.00) 38%, rgba(0,0,0,0.58) 100%),
+        radial-gradient(circle at 50% 15%, rgba(255,255,255,0.12), transparent 45%);
+      pointer-events: none;
+    }
+
+    .seat-map-caption {
+      position: absolute;
+      left: 14px;
+      right: 14px;
+      bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: #fff;
+      pointer-events: none;
+    }
+
+    .seat-map-caption strong {
+      display: block;
+      font-size: 13px;
+      letter-spacing: 1.4px;
+      line-height: 1.1;
+    }
+
+    .seat-map-caption span {
+      display: block;
+      margin-top: 3px;
+      color: rgba(255,255,255,0.72);
+      font-size: 11px;
+      letter-spacing: 0.2px;
+    }
+
+    .seat-map-zoom {
+      flex: 0 0 auto;
+      min-width: 68px;
+      padding: 8px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
     input,
     select,
     textarea,
@@ -826,6 +922,77 @@
       box-shadow: var(--shadow);
     }
 
+    .seat-map-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(7,0,1,0.84);
+      z-index: 1000;
+      backdrop-filter: blur(18px) saturate(125%);
+      -webkit-backdrop-filter: blur(18px) saturate(125%);
+    }
+
+    .seat-map-modal.open {
+      display: flex;
+    }
+
+    .seat-map-modal-panel {
+      width: min(980px, 100%);
+      max-height: min(86vh, 760px);
+      border-radius: 30px;
+      overflow: hidden;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.10), rgba(255,255,255,0.03)),
+        rgba(26, 3, 4, 0.88);
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: 0 24px 70px rgba(0,0,0,0.52);
+    }
+
+    .seat-map-modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .seat-map-modal-title {
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: 1.5px;
+    }
+
+    .seat-map-close {
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.10);
+      color: #fff;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .seat-map-modal-body {
+      max-height: calc(min(86vh, 760px) - 67px);
+      overflow: auto;
+      background: rgba(0,0,0,0.20);
+    }
+
+    .seat-map-modal-body img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #fff;
+    }
+
     .spinner {
       width: 42px;
       height: 42px;
@@ -913,6 +1080,34 @@
 
       .field-label .icon {
         font-size: 22px;
+      }
+
+      .seat-map-preview {
+        border-radius: 22px;
+      }
+
+      .seat-map-image-wrap {
+        aspect-ratio: 16 / 10.5;
+      }
+
+      .seat-map-caption {
+        left: 12px;
+        right: 12px;
+        bottom: 10px;
+      }
+
+      .seat-map-caption strong {
+        font-size: 12px;
+      }
+
+      .seat-map-caption span {
+        font-size: 10px;
+      }
+
+      .seat-map-zoom {
+        min-width: 58px;
+        padding: 7px 9px;
+        font-size: 10px;
       }
 
       input[type="text"],
@@ -1169,6 +1364,21 @@
           <select id="tableRequest">
             <option value="">ไม่ระบุโต๊ะ</option>
           </select>
+          <div class="seat-map-preview">
+            <button class="seat-map-button" type="button" onclick="openSeatMap()">
+              <div class="seat-map-image-wrap">
+                <img src="./PRIVATE%20Seat-Maps.jpg" alt="PRIVATE FLOOR seating map" loading="lazy" />
+                <div class="seat-map-shade"></div>
+                <div class="seat-map-caption">
+                  <div>
+                    <strong>SEAT MAP</strong>
+                    <span>แตะเพื่อดูผังโต๊ะแบบเต็มจอ</span>
+                  </div>
+                  <div class="seat-map-zoom">VIEW</div>
+                </div>
+              </div>
+            </button>
+          </div>
           <div class="field-hint">สามารถปรับเปลี่ยน ต่อขยายโต๊ะ และเพิ่มเก้าอี้ได้ โปรดติดต่อแอดมิน</div>
         </div>
 
@@ -1323,6 +1533,21 @@
           <select id="editTableRequest">
             <option value="">ไม่ระบุโต๊ะ</option>
           </select>
+          <div class="seat-map-preview">
+            <button class="seat-map-button" type="button" onclick="openSeatMap()">
+              <div class="seat-map-image-wrap">
+                <img src="./PRIVATE%20Seat-Maps.jpg" alt="PRIVATE FLOOR seating map" loading="lazy" />
+                <div class="seat-map-shade"></div>
+                <div class="seat-map-caption">
+                  <div>
+                    <strong>SEAT MAP</strong>
+                    <span>แตะเพื่อดูผังโต๊ะแบบเต็มจอ</span>
+                  </div>
+                  <div class="seat-map-zoom">VIEW</div>
+                </div>
+              </div>
+            </button>
+          </div>
           <div class="field-hint">สามารถปรับเปลี่ยน ต่อขยายโต๊ะ และเพิ่มเก้าอี้ได้ โปรดติดต่อแอดมิน</div>
         </div>
 
@@ -1376,6 +1601,18 @@
         WE LOOK FORWARD TO SƎRVING YOU
       </div>
     </footer>
+  </div>
+
+  <div class="seat-map-modal" id="seatMapModal" onclick="handleSeatMapBackdrop(event)">
+    <div class="seat-map-modal-panel">
+      <div class="seat-map-modal-head">
+        <div class="seat-map-modal-title">PЯIVATE FLOOR SEAT MAP</div>
+        <button class="seat-map-close" type="button" onclick="closeSeatMap()" aria-label="Close seat map">×</button>
+      </div>
+      <div class="seat-map-modal-body">
+        <img src="./PRIVATE%20Seat-Maps.jpg" alt="PRIVATE FLOOR seating map full view" />
+      </div>
+    </div>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -1455,6 +1692,32 @@
       setupBackButtons();
       await initLiff();
     });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeSeatMap();
+      }
+    });
+
+    function openSeatMap() {
+      const modal = $("seatMapModal");
+      if (!modal) return;
+      modal.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeSeatMap() {
+      const modal = $("seatMapModal");
+      if (!modal) return;
+      modal.classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    function handleSeatMapBackdrop(event) {
+      if (event.target && event.target.id === "seatMapModal") {
+        closeSeatMap();
+      }
+    }
 
     function setupDatePlaceholders() {
       bindDatePlaceholder("date");
