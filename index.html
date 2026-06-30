@@ -903,7 +903,7 @@
     </div>
 
     <section id="bookingSection" class="card">
-      <form id="bookingForm">
+      <form id="bookingForm" novalidate>
         <div class="field">
           <div class="field-label">
             <span class="icon">📅</span>
@@ -933,7 +933,7 @@
             <span class="icon">👤</span>
             <span>NAME <span class="required">*</span></span>
           </div>
-          <input type="text" id="name" placeholder="ชื่อผู้จอง" required />
+          <input type="text" id="name" placeholder="ชื่อผู้จอง" />
         </div>
 
         <div class="field">
@@ -1675,39 +1675,52 @@ function scrollToMissingField(target) {
 
     function callBackend(payload) {
       return new Promise((resolve, reject) => {
-        const callbackName = "__pvfCallback_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-        const script = document.createElement("script");
+        const requestId = "pvf_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+        const iframeName = requestId + "_frame";
+        const iframe = document.createElement("iframe");
+        const form = document.createElement("form");
+        const input = document.createElement("input");
         const timer = setTimeout(() => {
           cleanup();
           reject(new Error("เชื่อมต่อ Backend ไม่สำเร็จ"));
-        }, 20000);
+        }, 25000);
 
         function cleanup() {
           clearTimeout(timer);
-          if (script.parentNode) script.parentNode.removeChild(script);
-          try {
-            delete window[callbackName];
-          } catch (err) {
-            window[callbackName] = undefined;
-          }
+          window.removeEventListener("message", onMessage);
+          if (form.parentNode) form.parentNode.removeChild(form);
+          if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
         }
 
-        window[callbackName] = (data) => {
+        function onMessage(event) {
+          const data = event.data || {};
+          if (!data || data.source !== "PVF_BOOKING_BACKEND" || data.requestId !== requestId) return;
           cleanup();
-          resolve(data);
-        };
+          resolve(data.result);
+        }
 
-        script.onerror = () => {
-          cleanup();
-          reject(new Error("Load failed"));
-        };
+        window.addEventListener("message", onMessage);
 
-        script.src = BACKEND_URL
-          + "?callback=" + encodeURIComponent(callbackName)
-          + "&payload=" + encodeURIComponent(JSON.stringify(payload))
-          + "&_=" + Date.now();
+        iframe.name = iframeName;
+        iframe.style.display = "none";
 
-        document.body.appendChild(script);
+        form.method = "POST";
+        form.action = BACKEND_URL;
+        form.target = iframeName;
+        form.style.display = "none";
+        form.acceptCharset = "UTF-8";
+
+        input.type = "hidden";
+        input.name = "payload";
+        input.value = JSON.stringify({
+          requestId: requestId,
+          body: payload
+        });
+
+        form.appendChild(input);
+        document.body.appendChild(iframe);
+        document.body.appendChild(form);
+        form.submit();
       });
     }
 
