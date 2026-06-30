@@ -215,6 +215,13 @@
       color: #ff777c;
     }
 
+    .field-hint {
+      margin-top: 10px;
+      color: rgba(255,255,255,0.66);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
     input,
     select,
     textarea,
@@ -1156,6 +1163,17 @@
 
         <div class="field">
           <div class="field-label">
+            <span class="icon">🍸</span>
+            <span>TABLE REQUEST</span>
+          </div>
+          <select id="tableRequest">
+            <option value="">ไม่ระบุโต๊ะ</option>
+          </select>
+          <div class="field-hint">สามารถปรับเปลี่ยน ต่อขยายโต๊ะ และเพิ่มเก้าอี้ได้ โปรดติดต่อแอดมิน</div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
             <span class="icon">✏️</span>
             <span>YOUR NOTES</span>
           </div>
@@ -1299,6 +1317,17 @@
 
         <div class="field">
           <div class="field-label">
+            <span class="icon">🍸</span>
+            <span>TABLE REQUEST</span>
+          </div>
+          <select id="editTableRequest">
+            <option value="">ไม่ระบุโต๊ะ</option>
+          </select>
+          <div class="field-hint">สามารถปรับเปลี่ยน ต่อขยายโต๊ะ และเพิ่มเก้าอี้ได้ โปรดติดต่อแอดมิน</div>
+        </div>
+
+        <div class="field">
+          <div class="field-label">
             <span class="icon">✏️</span>
             <span>YOUR NOTES</span>
           </div>
@@ -1361,6 +1390,47 @@
   <script>
     const BACKEND_URL = "https://script.google.com/macros/s/AKfycbyLzz4DhmkVzFcNHx3-udeHT8mPwyZCGX5Vvn95TFSs70DeQipIIptCE1aD_1cQ6XDL/exec";
     const LIFF_ID = "2010532980-aTUcLXbx";
+    const TABLE_OPTIONS = [
+      ["1", "Table 1 (2 ท่าน)"],
+      ["2", "Table 2 (2 ท่าน)"],
+      ["3", "Table 3 (2 ท่าน)"],
+      ["4", "Table 4 (2 ท่าน)"],
+      ["5", "Table 5 (2 ท่าน)"],
+      ["6", "Table 6 (2 ท่าน)"],
+      ["7", "Table 7 (2 ท่าน)"],
+      ["8", "Table 8 (2 ท่าน)"],
+      ["9", "Table 9 (2 ท่าน)"],
+      ["10", "Table 10 (2 ท่าน)"],
+      ["11", "Table 11 (2 ท่าน)"],
+      ["12", "Table 12 (2 ท่าน)"],
+      ["13", "Table 13 (2 ท่าน)"],
+      ["14", "Table 14 (2 ท่าน)"],
+      ["25", "Table 25 (2 ท่าน)"],
+      ["70", "Table 70 (2 ท่าน)"],
+      ["71", "Table 71 (2 ท่าน)"],
+      ["72", "Table 72 (2 ท่าน)"],
+      ["73", "Table 73 (2 ท่าน)"],
+      ["74", "Table 74 (2 ท่าน)"],
+      ["75", "Table 75 (2 ท่าน)"],
+      ["76", "Table 76 (2 ท่าน)"],
+      ["77", "Table 77 (2 ท่าน)"],
+      ["78", "Table 78 (2 ท่าน)"],
+      ["91", "Table 91 (2 ท่าน)"],
+      ["V1", "V1 (6-10 ท่าน)"],
+      ["V2", "V2 (4-8 ท่าน)"],
+      ["V3", "V3 (3-4 ท่าน)"],
+      ["V4", "V4 (5-8 ท่าน)"],
+      ["V5", "V5 (4-7 ท่าน)"],
+      ["V6", "V6 (3-4 ท่าน)"],
+      ["V7", "V7 (3-4 ท่าน)"],
+      ["BAR1", "BAR1 (1 ท่าน)"],
+      ["BAR2", "BAR2 (1 ท่าน)"],
+      ["BAR3", "BAR3 (1 ท่าน)"],
+      ["BAR4", "BAR4 (1 ท่าน)"],
+      ["BAR5", "BAR5 (1 ท่าน)"],
+      ["BAR6", "BAR6 (1 ท่าน)"],
+      ["BAR7", "BAR7 (1 ท่าน)"]
+    ];
 
     let selectedTime = "7:00 PM";
     let editSelectedTime = "7:00 PM";
@@ -1375,6 +1445,7 @@
       setMinDate();
       setupDatePlaceholders();
       setupTabs();
+      populateTableSelects();
       setupTimeButtons("#timeGrid .time-btn", false);
       setupTimeButtons("#editTimeGrid .edit-time-btn", true);
       setupGuests();
@@ -1405,6 +1476,20 @@
       input.addEventListener("input", update);
       input.addEventListener("blur", update);
       update();
+    }
+
+    function populateTableSelects() {
+      ["tableRequest", "editTableRequest"].forEach(id => {
+        const select = $(id);
+        if (!select) return;
+
+        const current = select.value;
+        select.innerHTML = '<option value="">ไม่ระบุโต๊ะ</option>'
+          + TABLE_OPTIONS.map(([value, label]) => {
+            return `<option value="${escapeHtml(value)}">${escapeHtml(label)}</option>`;
+          }).join("");
+        select.value = current;
+      });
     }
 
     function setupTabs() {
@@ -1485,6 +1570,7 @@
       try {
         if (typeof liff === "undefined") {
           updateLineStatus(false);
+          showToast("กรุณาเปิดผ่าน LINE เพื่อจองโต๊ะ");
           return;
         }
 
@@ -1495,6 +1581,7 @@
 
         if (!liff.isLoggedIn()) {
           updateLineStatus(false);
+          liff.login({ redirectUri: window.location.href });
           return;
         }
 
@@ -1506,11 +1593,53 @@
           updateReserveButtonState();
         }
         updateLineStatus(!!lineUserId);
+        await prefillCustomerProfile();
 
       } catch (err) {
         console.log("LIFF error:", err);
         updateLineStatus(false);
       }
+    }
+
+    async function prefillCustomerProfile() {
+      if (!lineUserId) return;
+
+      try {
+        const res = await callBackend({
+          action: "getCustomerProfile",
+          userId: lineUserId
+        });
+
+        if (!res || res.success === false || !res.profile) {
+          if (lineDisplayName && $("name") && !$("name").value.trim()) {
+            $("name").value = lineDisplayName;
+          }
+          updateReserveButtonState();
+          return;
+        }
+
+        const profile = res.profile;
+        setValueIfEmpty("name", profile.name || lineDisplayName);
+        setValueIfEmpty("phone", profile.phone);
+        setValueIfEmpty("email", profile.email);
+        setValueIfEmpty("notes", profile.notes);
+        setValueIfEmpty("tableRequest", profile.tableRequest);
+        updateReserveButtonState();
+      } catch (err) {
+        console.log("Profile prefill error:", err);
+        if (lineDisplayName && $("name") && !$("name").value.trim()) {
+          $("name").value = lineDisplayName;
+        }
+        updateReserveButtonState();
+      }
+    }
+
+    function setValueIfEmpty(id, value) {
+      const el = $(id);
+      if (!el || !value || String(el.value || "").trim()) return;
+      el.value = value;
+      el.dispatchEvent(new Event("change"));
+      el.dispatchEvent(new Event("input"));
     }
 
     function updateLineStatus(connected) {
@@ -1539,6 +1668,7 @@
       const nameReady = !!$("name").value.trim() || !!lineDisplayName;
       const emailReady = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($("email").value.trim());
       const ready = !!$("date").value
+        && !!lineUserId
         && nameReady
         && guestsReady
         && !!$("phone").value.trim()
@@ -1570,6 +1700,7 @@
       guests: guestsValue,
       phone: $("phone").value.trim(),
       email: $("email").value.trim(),
+      tableRequest: $("tableRequest").value.trim(),
       notes: $("notes").value.trim(),
       userId: lineUserId || "NO_LINE_USER_ID"
     };
@@ -1595,6 +1726,7 @@
         <div><b>Date:</b> ${escapeHtml(formatDate(bookingData.date))}</div>
         <div><b>Time:</b> ${escapeHtml(bookingData.time)}</div>
         <div><b>Guests:</b> ${escapeHtml(bookingData.guests)}</div>
+        ${bookingData.tableRequest ? `<div><b>Table Request:</b> ${escapeHtml(bookingData.tableRequest)}</div>` : ""}
         <div><b>Phone:</b> ${escapeHtml(bookingData.phone)}</div>
         <div><b>Email:</b> ${escapeHtml(bookingData.email)}</div>
       `;
@@ -1611,6 +1743,14 @@
 
 function validateBookingForm() {
   clearBookingErrors();
+
+  if (!lineUserId) {
+    return {
+      ok: false,
+      target: $("bookingSection"),
+      message: "กรุณาเปิดผ่าน LINE หรือล็อกอิน LINE ก่อนจอง"
+    };
+  }
 
   const checks = [
     {
@@ -1790,6 +1930,7 @@ function scrollToMissingField(target) {
           name: $("editName").value.trim(),
           guests: $("editGuests").value.trim(),
           phone: $("editPhone").value.trim(),
+          tableRequest: $("editTableRequest").value.trim(),
           notes: $("editNotes").value.trim()
         };
 
@@ -1905,6 +2046,7 @@ function scrollToMissingField(target) {
       $("editName").value = booking.name || "";
       $("editGuests").value = booking.guests || "";
       $("editPhone").value = booking.phone || "";
+      $("editTableRequest").value = booking.tableRequest || "";
       $("editNotes").value = booking.notes || "";
 
       editSelectedTime = booking.time || "7:00 PM";
