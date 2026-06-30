@@ -1024,7 +1024,7 @@
           </div>
         </div>
 
-        <button type="submit" class="action-btn" id="reserveBtn">RESERVE NOW</button>
+        <button type="submit" class="action-btn" id="reserveBtn">RƎSERVE NOW</button>
       </form>
     </section>
 
@@ -1049,6 +1049,14 @@
           <span>BOOKING ID OR EMAIL <span class="required">*</span></span>
         </div>
         <input type="text" id="manageIdentifier" placeholder="เช่น PЯ7K2Q หรือ your@email.com" />
+      </div>
+
+      <div class="field">
+        <div class="field-label">
+          <span class="icon">☎️</span>
+          <span>PHONE NUMBER <span class="required">*</span></span>
+        </div>
+        <input type="tel" id="managePhone" placeholder="เบอร์โทรที่ใช้จอง" />
       </div>
 
       <div class="btn-stack">
@@ -1173,6 +1181,7 @@
     let selectedTime = "7:00 PM";
     let editSelectedTime = "7:00 PM";
     let lineUserId = "";
+    let lineDisplayName = "";
     let currentManageBookingId = "";
 
     const $ = (id) => document.getElementById(id);
@@ -1306,8 +1315,10 @@
 
         const profile = await liff.getProfile();
         lineUserId = profile && profile.userId ? profile.userId : "";
-        if (profile && profile.displayName && $("name") && !$("name").value.trim()) {
-          $("name").placeholder = profile.displayName;
+        lineDisplayName = profile && profile.displayName ? profile.displayName : "";
+        if (lineDisplayName && $("name") && !$("name").value.trim()) {
+          $("name").placeholder = lineDisplayName;
+          updateReserveButtonState();
         }
         updateLineStatus(!!lineUserId);
 
@@ -1340,9 +1351,10 @@
       const guestsReady = $("guests").value === "custom"
         ? !!$("customGuests").value.trim()
         : !!$("guests").value;
+      const nameReady = !!$("name").value.trim() || !!lineDisplayName;
       const emailReady = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test($("email").value.trim());
       const ready = !!$("date").value
-        && !!$("name").value.trim()
+        && nameReady
         && guestsReady
         && !!$("phone").value.trim()
         && emailReady
@@ -1369,7 +1381,7 @@
     const bookingData = {
       date: $("date").value,
       time: selectedTime,
-      name: $("name").value.trim(),
+      name: $("name").value.trim() || lineDisplayName,
       guests: guestsValue,
       phone: $("phone").value.trim(),
       email: $("email").value.trim(),
@@ -1422,11 +1434,6 @@ function validateBookingForm() {
       message: "กรุณาเลือกวันที่ต้องการจอง"
     },
     {
-      id: "name",
-      target: $("name").closest(".field"),
-      message: "กรุณากรอกชื่อผู้จอง"
-    },
-    {
       id: "guests",
       target: $("guests").closest(".field"),
       message: "กรุณาเลือกจำนวนแขก"
@@ -1442,6 +1449,16 @@ function validateBookingForm() {
       message: "กรุณากรอกอีเมล"
     }
   ];
+
+  if (!$("name").value.trim() && !lineDisplayName) {
+    const target = $("name").closest(".field");
+    markError(target);
+    return {
+      ok: false,
+      target: target,
+      message: "กรุณากรอกชื่อผู้จอง"
+    };
+  }
 
   for (const item of checks) {
     const el = $(item.id);
@@ -1535,9 +1552,10 @@ function scrollToMissingField(target) {
     function setupManage() {
       $("findBookingBtn").addEventListener("click", async () => {
         const identifier = $("manageIdentifier").value.trim();
+        const phone = $("managePhone").value.trim();
 
-        if (!identifier) {
-          showToast("กรุณากรอก Booking ID หรืออีเมล");
+        if (!identifier || !phone) {
+          showToast("กรุณากรอก Booking ID/อีเมล และเบอร์โทร");
           return;
         }
 
@@ -1546,7 +1564,8 @@ function scrollToMissingField(target) {
 
           const res = await callBackend({
             action: "getBooking",
-            identifier: identifier
+            identifier: identifier,
+            phone: phone
           });
 
           if (!res || res.success === false || !res.booking) {
@@ -1600,6 +1619,7 @@ function scrollToMissingField(target) {
           const res = await callBackend({
             action: "updateBooking",
             identifier: currentManageBookingId,
+            phone: $("managePhone").value.trim(),
             data: updateData
           });
 
@@ -1630,7 +1650,8 @@ function scrollToMissingField(target) {
 
           const res = await callBackend({
             action: "cancelBooking",
-            identifier: currentManageBookingId
+            identifier: currentManageBookingId,
+            phone: $("managePhone").value.trim()
           });
 
           if (!res || res.success === false) {
@@ -1639,6 +1660,7 @@ function scrollToMissingField(target) {
 
           $("manageResultBox").style.display = "none";
           $("manageIdentifier").value = "";
+          $("managePhone").value = "";
           currentManageBookingId = "";
 
           showToast("ยกเลิกการจองเรียบร้อยแล้ว");
@@ -1651,22 +1673,42 @@ function scrollToMissingField(target) {
       });
     }
 
-    async function callBackend(payload) {
-      const response = await fetch(BACKEND_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8"
-        },
-        body: JSON.stringify(payload)
+    function callBackend(payload) {
+      return new Promise((resolve, reject) => {
+        const callbackName = "__pvfCallback_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+        const script = document.createElement("script");
+        const timer = setTimeout(() => {
+          cleanup();
+          reject(new Error("เชื่อมต่อ Backend ไม่สำเร็จ"));
+        }, 20000);
+
+        function cleanup() {
+          clearTimeout(timer);
+          if (script.parentNode) script.parentNode.removeChild(script);
+          try {
+            delete window[callbackName];
+          } catch (err) {
+            window[callbackName] = undefined;
+          }
+        }
+
+        window[callbackName] = (data) => {
+          cleanup();
+          resolve(data);
+        };
+
+        script.onerror = () => {
+          cleanup();
+          reject(new Error("Load failed"));
+        };
+
+        script.src = BACKEND_URL
+          + "?callback=" + encodeURIComponent(callbackName)
+          + "&payload=" + encodeURIComponent(JSON.stringify(payload))
+          + "&_=" + Date.now();
+
+        document.body.appendChild(script);
       });
-
-      const text = await response.text();
-
-      try {
-        return JSON.parse(text);
-      } catch (err) {
-        throw new Error(text || "เชื่อมต่อ Backend ไม่สำเร็จ");
-      }
     }
 
     function formatDate(dateStr) {
