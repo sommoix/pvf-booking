@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>PЯIVATE BOOK</title>
+  <title>PЯIVATE FLOOR</title>
 
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 
@@ -59,17 +59,18 @@
 
     .brand-top {
       text-align: center;
-      font-size: clamp(20px, 3.5vw, 36px);
+      font-size: clamp(13px, 1.8vw, 18px);
       font-weight: 850;
-      letter-spacing: 5px;
+      letter-spacing: 4px;
       line-height: 1;
       color: #fff;
-      margin: 18px 0 22px;
+      margin: 0;
       text-shadow: 0 12px 28px rgba(0,0,0,0.22);
     }
 
     .hero {
       text-align: center;
+      padding: 46px 18px 50px;
       margin-bottom: 18px;
     }
 
@@ -562,6 +563,71 @@
       color: #fff;
     }
 
+    .confirmation-title {
+      text-align: center;
+      font-size: clamp(22px, 5vw, 38px);
+      line-height: 1.35;
+      letter-spacing: 2px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 0 12px 28px rgba(0,0,0,0.25);
+    }
+
+    .email-confirm {
+      margin-top: 16px;
+      padding: 16px 18px;
+      border-radius: 24px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02)),
+        rgba(12, 0, 1, 0.48);
+      border: 1px solid rgba(255,255,255,0.13);
+      color: rgba(255,255,255,0.92);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 1.1px;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    .booking-list {
+      display: none;
+      margin-bottom: 16px;
+    }
+
+    .booking-list-title {
+      margin: 0 0 10px;
+      color: rgba(255,255,255,0.86);
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .booking-choice {
+      width: 100%;
+      margin: 0 0 10px;
+      padding: 14px 16px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 22px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.09), rgba(255,255,255,0.02)),
+        rgba(12, 0, 1, 0.44);
+      color: #fff;
+      text-align: left;
+      cursor: pointer;
+      font: inherit;
+      line-height: 1.55;
+    }
+
+    .booking-choice.active {
+      border-color: rgba(81, 240, 107, 0.82);
+      box-shadow: 0 0 0 3px rgba(81, 240, 107, 0.14);
+    }
+
+    .booking-choice b {
+      letter-spacing: 1px;
+    }
+
     .footer {
       margin-top: 22px;
       padding-top: 20px;
@@ -678,14 +744,12 @@
       }
 
       .brand-top {
-        font-size: 18px;
+        font-size: 12px;
         letter-spacing: 3px;
-        margin: 8px 0 12px;
       }
 
       .hero {
-        padding: 28px 18px 22px;
-        border-radius: 30px;
+        padding: 44px 18px 48px;
       }
 
       .hero-title {
@@ -889,12 +953,12 @@
 <body>
   <div class="page">
     <section class="hero">
-      <div class="brand-top">PЯIVATE BOOK</div>
+      <div class="brand-top">PЯIVATE FLOOR</div>
     </section>
 
     <div class="tabs">
-      <button class="tab-btn active" id="bookingTabBtn" type="button">BOOK</button>
-      <button class="tab-btn" id="manageTabBtn" type="button">MANAGE</button>
+      <button class="tab-btn active" id="bookingTabBtn" type="button">RƎSERVE</button>
+      <button class="tab-btn" id="manageTabBtn" type="button">MAИAGE</button>
     </div>
 
     <div class="status-pill disconnected" id="lineStatusPill">
@@ -1029,16 +1093,17 @@
     </section>
 
     <section id="successBox" class="card success-box">
-      <div class="notes-title" style="justify-content:center; margin-bottom:12px;">
-        <span class="icon">✅</span>
-        <span>RESERVATION COMPLETED!</span>
+      <div class="confirmation-title">
+        YOUR PЯIVATE BOOKING IS CONFIRMED.<br />
+        KEEP IT BETWEEN YOU AND YOUR GUESTS.
       </div>
-      <p style="text-align:center; margin:0; color:rgba(255,255,255,0.88);">การจองของคุณเสร็จสมบูรณ์แล้ว</p>
 
       <div class="summary-box" id="summaryBox"></div>
 
+      <div class="email-confirm">✉️ A CONFIRMATION EMAIL HAS BEEN SENT TO THE EMAIL ADDRESS YOU PROVIDED</div>
+
       <div class="btn-stack" style="margin-top:16px;">
-        <button class="secondary-btn" type="button" id="backHomeBtn">BACK TO RESERVATION</button>
+        <button class="secondary-btn" type="button" id="backHomeBtn">BACK TO RƎSERVATION</button>
       </div>
     </section>
 
@@ -1061,10 +1126,12 @@
 
       <div class="btn-stack">
         <button class="action-btn" type="button" id="findBookingBtn">FIND BOOKING</button>
-        <button class="ghost-btn" type="button" id="backToBookingBtn">BACK TO RESERVATION</button>
+        <button class="ghost-btn" type="button" id="backToBookingBtn">BACK TO RƎSERVATION</button>
       </div>
 
       <div id="manageResultBox" class="manage-result-box" style="margin-top:18px;">
+        <div id="manageBookingList" class="booking-list"></div>
+
         <div class="field">
           <div class="field-label">
             <span class="icon">📅</span>
@@ -1183,6 +1250,7 @@
     let lineUserId = "";
     let lineDisplayName = "";
     let currentManageBookingId = "";
+    let currentManageBookings = [];
 
     const $ = (id) => document.getElementById(id);
 
@@ -1568,30 +1636,25 @@ function scrollToMissingField(target) {
             phone: phone
           });
 
-          if (!res || res.success === false || !res.booking) {
+          if (!res || res.success === false || (!res.booking && !res.bookings)) {
             throw new Error(res && res.message ? res.message : "ไม่พบข้อมูลการจอง");
           }
 
-          currentManageBookingId = res.booking.bookingId || identifier;
-
+          currentManageBookings = Array.isArray(res.bookings)
+            ? res.bookings
+            : [res.booking].filter(Boolean);
           $("manageResultBox").style.display = "block";
-          $("editDate").value = res.booking.date || "";
-          $("editName").value = res.booking.name || "";
-          $("editGuests").value = res.booking.guests || "";
-          $("editPhone").value = res.booking.phone || "";
-          $("editNotes").value = res.booking.notes || "";
-
-          editSelectedTime = res.booking.time || "7:00 PM";
-
-          document.querySelectorAll("#editTimeGrid .edit-time-btn").forEach(btn => {
-            btn.classList.toggle("active", btn.dataset.time === editSelectedTime);
-          });
-
+          renderManageBookingList(currentManageBookings);
+          fillManageBooking(currentManageBookings[0] || null);
           setupDatePlaceholders();
-          showToast("พบข้อมูลการจองแล้ว");
+          showToast(currentManageBookings.length > 1
+            ? "พบหลายบุ๊กกิ้ง เลือกรายการที่ต้องการจัดการได้เลย"
+            : "พบข้อมูลการจองแล้ว");
 
         } catch (err) {
           $("manageResultBox").style.display = "none";
+          currentManageBookingId = "";
+          currentManageBookings = [];
           showToast("เกิดข้อผิดพลาด: " + (err.message || err));
         } finally {
           setLoading(false);
@@ -1662,6 +1725,7 @@ function scrollToMissingField(target) {
           $("manageIdentifier").value = "";
           $("managePhone").value = "";
           currentManageBookingId = "";
+          currentManageBookings = [];
 
           showToast("ยกเลิกการจองเรียบร้อยแล้ว");
 
@@ -1670,6 +1734,56 @@ function scrollToMissingField(target) {
         } finally {
           setLoading(false);
         }
+      });
+    }
+
+    function renderManageBookingList(bookings) {
+      const list = $("manageBookingList");
+      if (!list) return;
+
+      if (!bookings || bookings.length <= 1) {
+        list.style.display = "none";
+        list.innerHTML = "";
+        return;
+      }
+
+      list.style.display = "block";
+      list.innerHTML = `
+        <div class="booking-list-title">FOUND ${bookings.length} BOOKINGS</div>
+        ${bookings.map((booking, index) => `
+          <button class="booking-choice${index === 0 ? " active" : ""}" type="button" data-booking-index="${index}">
+            <b>${escapeHtml(booking.bookingId || "-")}</b><br />
+            ${escapeHtml(formatDate(booking.date))} · ${escapeHtml(booking.time || "-")} · ${escapeHtml(booking.guests || "-")} guests · ${escapeHtml(booking.status || "-")}
+          </button>
+        `).join("")}
+      `;
+
+      list.querySelectorAll(".booking-choice").forEach(btn => {
+        btn.addEventListener("click", () => {
+          list.querySelectorAll(".booking-choice").forEach(item => item.classList.remove("active"));
+          btn.classList.add("active");
+          fillManageBooking(bookings[Number(btn.dataset.bookingIndex)] || null);
+        });
+      });
+    }
+
+    function fillManageBooking(booking) {
+      if (!booking) {
+        currentManageBookingId = "";
+        return;
+      }
+
+      currentManageBookingId = booking.bookingId || "";
+      $("editDate").value = booking.date || "";
+      $("editName").value = booking.name || "";
+      $("editGuests").value = booking.guests || "";
+      $("editPhone").value = booking.phone || "";
+      $("editNotes").value = booking.notes || "";
+
+      editSelectedTime = booking.time || "7:00 PM";
+
+      document.querySelectorAll("#editTimeGrid .edit-time-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.time === editSelectedTime);
       });
     }
 
