@@ -1733,6 +1733,28 @@ function scrollToMissingField(target) {
     function submitBookingNoWait(payload) {
       return new Promise((resolve) => {
         const iframeName = "pvf_submit_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+        const packedPayload = JSON.stringify({
+          requestId: iframeName,
+          body: payload
+        });
+
+        try {
+          if (navigator.sendBeacon) {
+            navigator.sendBeacon(BACKEND_URL, JSON.stringify(payload));
+          }
+        } catch (err) {
+          console.log("sendBeacon failed:", err);
+        }
+
+        try {
+          const beacon = new Image();
+          beacon.src = BACKEND_URL
+            + "?payload=" + encodeURIComponent(packedPayload)
+            + "&_=" + Date.now();
+        } catch (err) {
+          console.log("image beacon failed:", err);
+        }
+
         const iframe = document.createElement("iframe");
         const form = document.createElement("form");
         const input = document.createElement("input");
@@ -1748,10 +1770,7 @@ function scrollToMissingField(target) {
 
         input.type = "hidden";
         input.name = "payload";
-        input.value = JSON.stringify({
-          requestId: iframeName,
-          body: payload
-        });
+        input.value = packedPayload;
 
         form.appendChild(input);
         document.body.appendChild(iframe);
