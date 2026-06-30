@@ -1362,15 +1362,6 @@
       $("reserveBtn").classList.toggle("ready", ready);
     }
 
-    function generateClientBookingId() {
-      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-      let code = "PЯ";
-      for (let i = 0; i < 4; i++) {
-        code += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return code;
-    }
-
     function setupBookingForm() {
   $("bookingForm").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -1388,7 +1379,6 @@
       : $("guests").value;
 
     const bookingData = {
-      bookingId: generateClientBookingId(),
       date: $("date").value,
       time: selectedTime,
       name: $("name").value.trim() || lineDisplayName,
@@ -1402,16 +1392,20 @@
     try {
       setLoading(true);
 
-      await submitBookingNoWait({
+      const res = await callBackend({
         action: "createBooking",
         data: bookingData
       });
+
+      if (!res || res.success === false) {
+        throw new Error(res && res.message ? res.message : "ไม่สามารถจองได้");
+      }
 
       $("bookingSection").style.display = "none";
       $("successBox").style.display = "block";
 
       $("summaryBox").innerHTML = `
-        <div><b>Booking ID:</b> ${escapeHtml(bookingData.bookingId)}</div>
+        <div><b>Booking ID:</b> ${escapeHtml(res.bookingId || "-")}</div>
         <div><b>Name:</b> ${escapeHtml(bookingData.name)}</div>
         <div><b>Date:</b> ${escapeHtml(formatDate(bookingData.date))}</div>
         <div><b>Time:</b> ${escapeHtml(bookingData.time)}</div>
@@ -1681,11 +1675,8 @@ function scrollToMissingField(target) {
 
     function callBackend(payload) {
       return new Promise((resolve, reject) => {
-        const requestId = "pvf_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-        const iframeName = requestId + "_frame";
-        const iframe = document.createElement("iframe");
-        const form = document.createElement("form");
-        const input = document.createElement("input");
+        const callbackName = "__pvfCallback_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+        const script = document.createElement("script");
         const timer = setTimeout(() => {
           cleanup();
           reject(new Error("เชื่อมต่อ Backend ไม่สำเร็จ"));
@@ -1693,96 +1684,30 @@ function scrollToMissingField(target) {
 
         function cleanup() {
           clearTimeout(timer);
-          window.removeEventListener("message", onMessage);
-          if (form.parentNode) form.parentNode.removeChild(form);
-          if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
-        }
-
-        function onMessage(event) {
-          const data = event.data || {};
-          if (!data || data.source !== "PVF_BOOKING_BACKEND" || data.requestId !== requestId) return;
-          cleanup();
-          resolve(data.result);
-        }
-
-        window.addEventListener("message", onMessage);
-
-        iframe.name = iframeName;
-        iframe.style.display = "none";
-
-        form.method = "POST";
-        form.action = BACKEND_URL;
-        form.target = iframeName;
-        form.style.display = "none";
-        form.acceptCharset = "UTF-8";
-
-        input.type = "hidden";
-        input.name = "payload";
-        input.value = JSON.stringify({
-          requestId: requestId,
-          body: payload
-        });
-
-        form.appendChild(input);
-        document.body.appendChild(iframe);
-        document.body.appendChild(form);
-        form.submit();
-      });
-    }
-
-    function submitBookingNoWait(payload) {
-      return new Promise((resolve) => {
-        const iframeName = "pvf_submit_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
-        const packedPayload = JSON.stringify({
-          requestId: iframeName,
-          body: payload
-        });
-
-        try {
-          if (navigator.sendBeacon) {
-            navigator.sendBeacon(BACKEND_URL, JSON.stringify(payload));
+          if (script.parentNode) script.parentNode.removeChild(script);
+          try {
+            delete window[callbackName];
+          } catch (err) {
+            window[callbackName] = undefined;
           }
-        } catch (err) {
-          console.log("sendBeacon failed:", err);
         }
 
-        try {
-          const beacon = new Image();
-          beacon.src = BACKEND_URL
-            + "?payload=" + encodeURIComponent(packedPayload)
-            + "&_=" + Date.now();
-        } catch (err) {
-          console.log("image beacon failed:", err);
-        }
+        window[callbackName] = (data) => {
+          cleanup();
+          resolve(data);
+        };
 
-        const iframe = document.createElement("iframe");
-        const form = document.createElement("form");
-        const input = document.createElement("input");
+        script.onerror = () => {
+          cleanup();
+          reject(new Error("โหลด Backend ไม่สำเร็จ กรุณาเช็ก Deploy ของ Apps Script"));
+        };
 
-        iframe.name = iframeName;
-        iframe.style.display = "none";
+        script.src = BACKEND_URL
+          + "?callback=" + encodeURIComponent(callbackName)
+          + "&payload=" + encodeURIComponent(JSON.stringify(payload))
+          + "&_=" + Date.now();
 
-        form.method = "POST";
-        form.action = BACKEND_URL;
-        form.target = iframeName;
-        form.style.display = "none";
-        form.acceptCharset = "UTF-8";
-
-        input.type = "hidden";
-        input.name = "payload";
-        input.value = packedPayload;
-
-        form.appendChild(input);
-        document.body.appendChild(iframe);
-        document.body.appendChild(form);
-        form.submit();
-
-        setTimeout(() => {
-          if (form.parentNode) form.parentNode.removeChild(form);
-          if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
-        }, 12000);
-
-        setTimeout(resolve, 900);
+        document.body.appendChild(script);
       });
     }
 
