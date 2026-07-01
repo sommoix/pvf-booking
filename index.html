@@ -724,6 +724,22 @@
       text-align: center;
     }
 
+    .pass-link {
+      display: none;
+      margin-top: 14px;
+      text-decoration: none;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 999px;
+      padding: 15px 18px;
+      color: #fff;
+      font-weight: 850;
+      letter-spacing: 1px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.16), rgba(255,255,255,0.04)),
+        rgba(0, 0, 0, 0.34);
+    }
+
     .booking-list {
       display: none;
       margin-bottom: 16px;
@@ -1444,7 +1460,8 @@
 
       <div class="summary-box" id="summaryBox"></div>
 
-      <div class="email-confirm">✉️ A CONFIRMATION EMAIL HAS BEEN SENT TO THE EMAIL ADDRESS YOU PROVIDED</div>
+      <div class="email-confirm" id="emailConfirmText">CONFIRMATION EMAIL STATUS IS CHECKING...</div>
+      <a class="pass-link" id="passLink" href="#" target="_blank" rel="noopener">ADD PRIVATE PASS</a>
 
       <div class="btn-stack" style="margin-top:16px;">
         <button class="secondary-btn" type="button" id="backHomeBtn">BACK TO RƎSERVATION</button>
@@ -1457,7 +1474,7 @@
           <span class="icon">🎫</span>
           <span>BOOKING ID OR EMAIL <span class="required">*</span></span>
         </div>
-        <input type="text" id="manageIdentifier" placeholder="เช่น PЯ7K2Q หรือ your@email.com" />
+        <input type="text" id="manageIdentifier" placeholder="เช่น PR7K2Q หรือ your@email.com" />
       </div>
 
       <div class="field">
@@ -1771,9 +1788,12 @@
 
     function setupBackButtons() {
       $("backHomeBtn").addEventListener("click", () => {
-        $("successBox").style.display = "none";
-        $("bookingSection").style.display = "block";
-        $("bookingForm").reset();
+      $("successBox").style.display = "none";
+      $("bookingSection").style.display = "block";
+      $("emailConfirmText").textContent = "CONFIRMATION EMAIL STATUS IS CHECKING...";
+      $("passLink").removeAttribute("href");
+      $("passLink").style.display = "none";
+      $("bookingForm").reset();
         $("agree").checked = false;
         $("customGuests").style.display = "none";
         $("customGuests").required = false;
@@ -1993,6 +2013,25 @@
         <div><b>Phone:</b> ${escapeHtml(bookingData.phone)}</div>
         <div><b>Email:</b> ${escapeHtml(bookingData.email)}</div>
       `;
+
+      const emailStatus = String(res.emailStatus || "").toLowerCase();
+      const emailText = $("emailConfirmText");
+      if (emailStatus === "sent") {
+        emailText.textContent = "A CONFIRMATION EMAIL HAS BEEN SENT TO THE EMAIL ADDRESS YOU PROVIDED.";
+      } else if (emailStatus === "failed") {
+        emailText.textContent = "YOUR BOOKING IS CONFIRMED. EMAIL DELIVERY FAILED, SO PLEASE KEEP YOUR BOOKING ID.";
+      } else {
+        emailText.textContent = "YOUR BOOKING IS CONFIRMED. PLEASE KEEP YOUR BOOKING ID.";
+      }
+
+      const passLink = $("passLink");
+      if (res.passUrl) {
+        passLink.href = res.passUrl;
+        passLink.style.display = "block";
+      } else {
+        passLink.removeAttribute("href");
+        passLink.style.display = "none";
+      }
 
       window.scrollTo({ top: 0, behavior: "smooth" });
 
